@@ -144,8 +144,6 @@ public class VistaTelegram {
             throw new ErrorEnConexionException(e.getMessage());
         }
         return answer;
-
-
     }
 
     /**

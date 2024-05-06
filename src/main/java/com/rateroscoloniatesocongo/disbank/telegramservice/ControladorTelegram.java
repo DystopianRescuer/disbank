@@ -1,5 +1,9 @@
 package com.rateroscoloniatesocongo.disbank.telegramservice;
 
+import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
+import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
+import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
+
 import java.util.HashMap;
 
 /**
@@ -56,7 +60,7 @@ public class ControladorTelegram {
         if(instance != null)
             return instance;
 
-        instance = new ControladorTelegram(ConfigReader.getField(telegram.token));
+        instance = new ControladorTelegram(ConfigReader.getInstance().getField("telegram.token"));
 
         return instance;
     }
