@@ -1,5 +1,6 @@
 package com.rateroscoloniatesocongo.disbank.telegramservice;
 
+import java.io.DataOutputStream;
 import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -104,8 +105,63 @@ public class VistaTelegram {
      *
      *  @return un arreglo de objetos Update con todos los datos que
      *  */
-    public static JSONArray recibirActualizacion(int offset){
+    public static JSONArray recibirActualizacion(int offset) throws ErrorEnConexionException {
+        //Formacion de la peticion
+        JSONObject peticion = new JSONObject();
+        peticion.append("offset", offset);
+        peticion.append("timeout", 10);
+
+        //Envio de peticion
+        URL url;
+        HttpURLConnection conexion;
+        JSONArray answer;
+        try{
+            url = (new URI("https://api.telegram.org/"+tokenBot+"/getUpdates")).toURL();
+            conexion = (HttpURLConnection)url.openConnection();
+            conexion.setRequestMethod(protocoloHTTP);
+            conexion.setRequestProperty("Content-Type", tipoDeRequest);
+            conexion.setDoOutput(true);
+
+            //Payload
+            DataOutputStream wr = new DataOutputStream(conexion.getOutputStream());
+            wr.writeBytes(peticion.toString());
+            wr.flush();
+            wr.close();
+
+            int respuesta = conexion.getResponseCode();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+
+            String line;
+            StringBuilder response = new StringBuilder();
+
+            while((line = reader.readLine()) != null){
+                response.append(line);
+            }
+            reader.close();
+
+            answer = new JSONArray(response.toString());
+        }catch(Exception e){
+            throw new ErrorEnConexionException(e.getMessage());
+        }
+        return answer;
+
 
     }
 
+    /**
+     * Envia un mensaje al chat asociado
+     *
+     * @param mensaje  el mensaje a enviar al chat asociado
+     *
+     * @throws ErrorEnConexionException cuando ocurre algo raro durante el envio del
+     * mensaje
+     */
+    public void enviarMensaje(String mensaje){
+        //Formacion del payload
+        JSONObject payload = new JSONObject();
+        payload.put("text", mensaje);
+        payload.put("chat_id", chatId);
+
+
+    }
 }
