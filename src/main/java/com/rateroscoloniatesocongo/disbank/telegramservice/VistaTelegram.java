@@ -16,7 +16,7 @@ import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnCo
 /**
  * Clase encargada de la parte de vista del servicio del bot de Telegram
  *
- * Cada chat activo con el bot de telegram deberá tener una instancia de esta clase activa, la cual funcionará como intercambio inicial de información entre los chats
+ * Cada chat activo con un asociado y el bot de telegram deberá tener una instancia de esta clase activa, la cual funcionará como intercambio inicial de información entre los chats
  * y la aplicación.
  *
  * Posee los siguientes atributos:
