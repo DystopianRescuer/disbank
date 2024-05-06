@@ -105,7 +105,7 @@ public class VistaTelegram {
      *  @return un arreglo de objetos Update con todos los datos que
      *  */
     public static JSONArray recibirActualizacion(int offset){
-
+        
     }
 
 }

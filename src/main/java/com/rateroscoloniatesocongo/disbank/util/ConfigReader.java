@@ -29,7 +29,7 @@ public class ConfigReader {
         }
     }
 
-    public ConfigReader getInstance() {
+    public static ConfigReader getInstance() {
         if(instance == null) {
             instance = new ConfigReader();
         }
