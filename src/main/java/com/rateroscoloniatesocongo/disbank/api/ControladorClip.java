@@ -42,7 +42,7 @@ public class ControladorClip {
 
     public static ControladorClip getInstance() {
         if(instance == null) {
-            instance = new ControladorClip(ConfigReader.getInstance().getField("clip.apikey"));
+            instance = new ControladorClip(ConfigReader.getField("clip.apikey"));
         }
         return instance;
     }

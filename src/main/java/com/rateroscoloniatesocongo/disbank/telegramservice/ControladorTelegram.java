@@ -62,7 +62,7 @@ public class ControladorTelegram {
         if(instance != null)
             return instance;
 
-        instance = new ControladorTelegram(ConfigReader.getInstance().getField("telegram.token"));
+        instance = new ControladorTelegram(ConfigReader.getField("telegram.token"));
 
         return instance;
     }
