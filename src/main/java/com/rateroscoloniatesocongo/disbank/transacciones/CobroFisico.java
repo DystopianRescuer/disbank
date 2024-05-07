@@ -1,5 +1,7 @@
 package com.rateroscoloniatesocongo.disbank.transacciones;
 
+import java.util.zip.ZipException;
+
 public class CobroFisico implements Cobro {
     @Override
     public double getPrecio() {

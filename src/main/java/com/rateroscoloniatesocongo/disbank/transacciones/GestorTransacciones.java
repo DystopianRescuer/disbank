@@ -22,17 +22,29 @@ public class GestorTransacciones {
         controladorClip = ControladorClip.getInstance();
     }
 
+    // Inicia el gestor de transacciones
     public void iniciar() {
         if(!iniciado) {
             // TBD
         }
     }
 
-    public boolean nuevaTransaccion(Asociado asociado, Cobro cobro) {
+    // TODO: hacer esto seguro, que no cualquiera pueda llamar
+    public void detener() {
+
+    }
+
+    public String nuevaTransaccion(Asociado asociado, Cobro cobro) {
         // Crea el objeto transacción
         // Se la da a Clip y espera la respuesta positiva de este
         // Si esto ocurrió correctamente entonces registra la transacción en pendientes
-        return false;
+        return "";
+    }
+
+
+    // TODO los argumentos que recibe
+    public void actualizarEstado() {
+        
     }
 
 

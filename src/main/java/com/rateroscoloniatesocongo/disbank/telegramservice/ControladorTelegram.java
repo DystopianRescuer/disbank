@@ -8,22 +8,22 @@ import java.util.HashMap;
 
 /**
  * Intermediario entre la API de telegram y el resto del programa
- *
+ * <p>
  * Funciona como una capa de abstraccion que nos permite convertir todas las
  * instrucciones enfocadas a usuario del resto del programa en los métodos necesarios
  * de la API de Telegram para comunicarnos con los mismos.
- *
+ * <p>
  * Debido a que la clase guarda la información relacional entre los usuarios y sus chatIds,
  * necesitamos que sea una clase Singleton.
- *
+ * <p>
  * Su constructor recibe como parámetro el token del bot que se va a utilizar durante la ejecución
  * del programa.
- *
+ * <p>
  * Trabaja estrechamente de la mano con el GestorTransacciones, pues estos dos son los que en principio
  * forman el puente de comunicación ambivalente entre la API de Telegram y el resto de la aplicación
- *
+ * <p>
  * Atributos:
- *
+ * <p>
  * - tokenBot : El token del bot que se usará para enviar y recibir mensajes. Se utiliza principalmente
  * para inicializar el ambito estático de {@link VistaTelegram}
  * - chats : Un HashMap que relaciona Clientes con su respectiva VistaTelegram, para tener una forma rápida

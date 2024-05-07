@@ -13,9 +13,14 @@ public class ControladorClip {
         this.apikey = apikey;
     }
 
+    // Hace la petición a la API de Clip para la nueva transacción, devuelve true si se registró correctamente
+    private boolean solicitarTransaccion() {
+        return false;
+    }
+
     public static ControladorClip getInstance() {
         if(instance == null) {
-            instance = new ControladorClip(ConfigReader.getField("clip.apikey"));
+            instance = new ControladorClip(ConfigReader.getInstance().getField("clip.apikey"));
         }
         return instance;
     }
