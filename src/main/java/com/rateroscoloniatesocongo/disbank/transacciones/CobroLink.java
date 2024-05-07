@@ -12,7 +12,7 @@ public class CobroLink implements Cobro {
     public CobroLink(int cantidad, String referencia) {
         this.cantidad = cantidad;
         this.referencia = referencia;
-        this.user = ConfigReader.getInstance().getField("clip.user");
+        this.user = ConfigReader.getField("clip.user");
         this.mensaje = "";
     }
 

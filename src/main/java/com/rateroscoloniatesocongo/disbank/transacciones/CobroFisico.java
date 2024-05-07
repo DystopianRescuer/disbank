@@ -11,7 +11,7 @@ public class CobroFisico implements Cobro {
     public CobroFisico(int cantidad, String referencia, String body) {
         this.cantidad = cantidad;
         this.referencia = referencia;
-        this.user = ConfigReader.getInstance().getField("clip.user");
+        this.user = ConfigReader.getField("clip.user");
         this.mensaje = "";
     }
 
