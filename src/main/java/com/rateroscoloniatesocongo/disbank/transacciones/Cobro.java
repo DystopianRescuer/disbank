@@ -2,7 +2,7 @@ package com.rateroscoloniatesocongo.disbank.transacciones;
 
 public interface Cobro {
 
-    double getPrecio();
+    String getAPI();
     String getBody();
-    void getPeticion();
+
 }
