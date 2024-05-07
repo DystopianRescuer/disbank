@@ -146,19 +146,61 @@ public class VistaTelegram {
         return answer;
     }
 
+    public static String getTokenBot() {
+        return tokenBot;
+    }
+
     /**
      * Envia un mensaje al chat asociado
      *
      * @param mensaje  el mensaje a enviar al chat asociado
      *
+     * @return el objeto Message que envia la API de Telegram para confirmar que el mensaje
+     *         ha sido enviado correctamente
+     *
      * @throws ErrorEnConexionException cuando ocurre algo raro durante el envio del
      * mensaje
      */
-    public void enviarMensaje(String mensaje){
+    public JSONObject enviarMensaje(String mensaje) throws ErrorEnConexionException{
         //Formacion del payload
         JSONObject payload = new JSONObject();
         payload.put("text", mensaje);
         payload.put("chat_id", chatId);
+
+        //Envio de peticion
+        URL url;
+        HttpURLConnection conexion;
+        JSONObject answer;
+        try{
+            url = (new URI("https://api.telegram.org/"+tokenBot+"/sendMessage")).toURL();
+            conexion = (HttpURLConnection)url.openConnection();
+            conexion.setRequestMethod(protocoloHTTP);
+            conexion.setRequestProperty("Content-Type", tipoDeRequest);
+            conexion.setDoOutput(true);
+
+            //Payload
+            DataOutputStream wr = new DataOutputStream(conexion.getOutputStream());
+            wr.writeBytes(payload.toString());
+            wr.flush();
+            wr.close();
+
+            int respuesta = conexion.getResponseCode();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+
+            String line;
+            StringBuilder response = new StringBuilder();
+
+            while((line = reader.readLine()) != null){
+                response.append(line);
+            }
+            reader.close();
+
+            answer = new JSONObject(response.toString());
+        }catch(Exception e){
+            throw new ErrorEnConexionException(e.getMessage());
+        }
+        return answer;
+
 
 
     }

@@ -1,6 +1,8 @@
 package com.rateroscoloniatesocongo.disbank.telegramservice;
 
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
+import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ConexionYaIniciadaException;
+import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 
@@ -44,7 +46,7 @@ public class ControladorTelegram {
     private GestorTransacciones gestorTransacciones;
 
     /** Singleton */
-    private ControladorTelegram(String tokenBot){
+    private ControladorTelegram(String tokenBot) throws ConexionYaIniciadaException, ErrorEnConexionException {
         this.tokenBot = tokenBot;
         VistaTelegram.setTokenBot(tokenBot);
         chats = new HashMap<>();
@@ -56,7 +58,7 @@ public class ControladorTelegram {
      *
      *  @return la instancia singleton del controlador
      *  */
-    public static ControladorTelegram getInstance(){
+    public static ControladorTelegram getInstance() throws ConexionYaIniciadaException, ErrorEnConexionException {
         if(instance != null)
             return instance;
 
