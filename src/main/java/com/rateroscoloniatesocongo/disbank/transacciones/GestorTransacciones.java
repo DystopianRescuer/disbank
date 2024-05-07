@@ -44,7 +44,7 @@ public class GestorTransacciones {
 
     // TODO los argumentos que recibe
     public void actualizarEstado() {
-        
+
     }
 
 
