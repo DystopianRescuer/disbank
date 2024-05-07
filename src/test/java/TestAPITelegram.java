@@ -2,6 +2,8 @@ import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.VistaTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ConexionYaIniciadaException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
+import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
+
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,6 +29,7 @@ public class TestAPITelegram {
      *  de la aplicacion
      *  */
     public TestAPITelegram() throws ConexionYaIniciadaException, ErrorEnConexionException {
+        ConfigReader.setRuta("config.properties");
         controladorTelegram = ControladorTelegram.getInstance();
 
     }
