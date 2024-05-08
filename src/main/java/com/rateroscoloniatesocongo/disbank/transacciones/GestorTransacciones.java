@@ -50,8 +50,12 @@ public class GestorTransacciones {
 
 
     // TODO los argumentos que recibe
-    public void actualizarEstado() {
-
+    public void actualizarEstado(Transaccion transaccion) {
+        // Checa el estado de la transaccion
+        // Si todo sale bien va y le avisa a telegram que todo salio bien para que le avise al usuario
+        // Actualiza lo que deba actualizar en base de datos
+        // Quita de su lista dependientes
+        // Esto de momento, checar/pensar si falta algo más
     }
 
 
