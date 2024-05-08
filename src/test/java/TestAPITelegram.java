@@ -29,7 +29,7 @@ public class TestAPITelegram {
      *  de la aplicacion
      *  */
     public TestAPITelegram() throws ConexionYaIniciadaException, ErrorEnConexionException {
-        ConfigReader.setRuta("/home/mrtaichi/Documents/Codigos/Modelado/disbank/config.properties");
+        ConfigReader.setRuta("config.properties");
         controladorTelegram = ControladorTelegram.getInstance();
 
     }

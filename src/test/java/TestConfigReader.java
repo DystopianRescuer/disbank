@@ -39,7 +39,8 @@ public class TestConfigReader {
         //Valores aleatorios pero guardados
         String valor1 = randomString();
         String valor2 = randomString();
-        try (OutputStream output = new FileOutputStream("config/test.properties")) {
+        try {
+            OutputStream output = new FileOutputStream("test.properties");
 
             Properties prop = new Properties();
 
@@ -53,7 +54,7 @@ public class TestConfigReader {
             io.printStackTrace();
         }
 
-        ConfigReader.setRuta("config/test.properties");
+        ConfigReader.setRuta("test.properties");
 
         Assert.assertTrue(ConfigReader.getField("1").equals(valor1));
         Assert.assertTrue(ConfigReader.getField("2").equals(valor2));

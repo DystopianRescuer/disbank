@@ -67,7 +67,7 @@ public class ControladorTelegram {
             return instance;
       
         try{
-            instance = new ControladorTelegram(ConfigReader.getField("telegram.token"));
+            instance = new ControladorTelegram(ConfigReader.getField("telegram.key"));
         }catch(ConexionYaIniciadaException e){
             //No hacer nada, no puede pasar
         }catch(ErrorEnConexionException e){
