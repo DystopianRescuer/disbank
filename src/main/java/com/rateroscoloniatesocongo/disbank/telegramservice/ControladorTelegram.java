@@ -1,8 +1,11 @@
 package com.rateroscoloniatesocongo.disbank.telegramservice;
 
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
+import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ConexionYaIniciadaException;
+import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -38,30 +41,50 @@ public class ControladorTelegram {
 
     private static ControladorTelegram instance;
 
+    public final JSONObject getMe;
     private final String tokenBot;
     private HashMap<Asociado, VistaTelegram> chats;
     private int offset;
     private GestorTransacciones gestorTransacciones;
 
     /** Singleton */
-    private ControladorTelegram(String tokenBot){
+    private ControladorTelegram(String tokenBot) throws ConexionYaIniciadaException, ErrorEnConexionException {
         this.tokenBot = tokenBot;
-        VistaTelegram.setTokenBot(tokenBot);
+        getMe = VistaTelegram.setTokenBot(tokenBot);
         chats = new HashMap<>();
         offset = 0;
     }
 
     /**
-     *  Obtiene la instancia singleton del controlador. La crea con el token del config si no existe
+     *  Obtiene la instancia singleton del controlador. La crea con el token del ConfigReader si no existe
      *
      *  @return la instancia singleton del controlador
+     *
+     *  @throws ErrorEnConexionException cuando existe un error en la conexion a Telegram
      *  */
-    public static ControladorTelegram getInstance(){
+    public static ControladorTelegram getInstance() throws ErrorEnConexionException{
         if(instance != null)
             return instance;
-
-        instance = new ControladorTelegram(ConfigReader.getField("telegram.token"));
+      
+        try{
+            instance = new ControladorTelegram(ConfigReader.getField("telegram.token"));
+        }catch(ConexionYaIniciadaException e){
+            //No hacer nada, no puede pasar
+        }catch(ErrorEnConexionException e){
+            throw e;
+        }
 
         return instance;
+    }
+
+    /**
+     * Da un objeto JSON con la informacion del bot al que estamos
+     * conectados. Es el getMe de la info de Telegram
+     *
+     * @return objeto JSON con info del bot de Telegram
+     */
+    public JSONObject getGetMe() {
+        return getMe;
+
     }
 }

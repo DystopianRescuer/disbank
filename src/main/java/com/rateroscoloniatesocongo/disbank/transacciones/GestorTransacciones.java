@@ -3,6 +3,7 @@ package com.rateroscoloniatesocongo.disbank.transacciones;
 import com.rateroscoloniatesocongo.disbank.clipservice.ControladorClip;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
+import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,13 +13,19 @@ public class GestorTransacciones {
     private static GestorTransacciones instance;
 
     private final List<Transaccion> pendientes;
-    private final ControladorTelegram controladorTelegram;
+    private ControladorTelegram controladorTelegram;
     private final ControladorClip controladorClip;
     private boolean iniciado;
 
     private GestorTransacciones() {
         pendientes = new LinkedList<>();
-        controladorTelegram = ControladorTelegram.getInstance();
+        try{
+            controladorTelegram = ControladorTelegram.getInstance();
+        }catch(ErrorEnConexionException e){
+            //Placeholder
+            //TODO: Desarrollar logica de este error
+        }
+
         controladorClip = ControladorClip.getInstance();
     }
 
