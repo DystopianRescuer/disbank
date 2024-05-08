@@ -1,31 +1,41 @@
 package com.rateroscoloniatesocongo.disbank.transacciones;
 
+import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
+
 import java.util.Optional;
+import java.util.TreeSet;
 
 public class Transaccion {
 
-    private String id, estado;
+    public enum Estado {
+        PENDIENTE, FINALIZADA
+    }
+
+    private Asociado asociado;
+    private String id, log;
     private Cobro cobro;
+    private Estado estado;
 
-    private Optional<String> log;
+    public Transaccion(Asociado asociado, String id, Cobro cobro) {
+        this.asociado = asociado;
+        this.id = id;
+        this.cobro = cobro;
+        this.estado = Estado.PENDIENTE;
+    }
 
-    Transaccion() {
-
+    public Asociado getAsociado() {
+        return asociado;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getEstado() {
+    public Estado getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(Estado estado) {
         this.estado = estado;
     }
 
@@ -33,15 +43,18 @@ public class Transaccion {
         return cobro;
     }
 
-    public void setCobro(Cobro cobro) {
-        this.cobro = cobro;
+    public boolean esLogVacio() {
+        return log == null;
     }
 
-    public Optional<String> getLog() {
+    public String getLog() {
         return log;
     }
 
-    public void setLog(Optional<String> log) {
-        this.log = log;
+    public void addLog(String log) {
+        if (esLogVacio()) {
+            log = "";
+        }
+        this.log += log + "\n";
     }
 }

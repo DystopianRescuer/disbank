@@ -1,6 +1,6 @@
 package com.rateroscoloniatesocongo.disbank.transacciones;
 
-import com.rateroscoloniatesocongo.disbank.api.ControladorClip;
+import com.rateroscoloniatesocongo.disbank.clipservice.ControladorClip;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
 

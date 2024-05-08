@@ -5,14 +5,15 @@ import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 public class CobroFisico implements Cobro {
 
     private static final String API = "paymentrequest";
+
     private int cantidad;
     private String user, referencia, mensaje;
 
-    public CobroFisico(int cantidad, String referencia, String body) {
+    public CobroFisico(int cantidad, String referencia, String mensaje) {
         this.cantidad = cantidad;
         this.referencia = referencia;
         this.user = ConfigReader.getField("clip.user");
-        this.mensaje = "";
+        this.mensaje = mensaje;
     }
 
 

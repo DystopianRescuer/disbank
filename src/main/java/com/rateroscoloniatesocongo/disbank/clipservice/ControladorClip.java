@@ -1,7 +1,7 @@
-package com.rateroscoloniatesocongo.disbank.api;
+package com.rateroscoloniatesocongo.disbank.clipservice;
 
+import com.rateroscoloniatesocongo.disbank.clipservice.excepciones.TransaccionNoRegistradaException;
 import com.rateroscoloniatesocongo.disbank.transacciones.Cobro;
-import com.rateroscoloniatesocongo.disbank.transacciones.CobroFisico;
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 
@@ -22,7 +22,7 @@ public class ControladorClip {
     }
 
     // Hace la petición a la API de Clip para la nueva transacción
-    public void solicitarTransaccion(Transaccion transaccion) throws IOException, InterruptedException {
+    public void solicitarTransaccion(Transaccion transaccion) throws IOException, InterruptedException, TransaccionNoRegistradaException {
 
         // Cobro a procesar
         Cobro cobro = transaccion.getCobro();
@@ -38,6 +38,9 @@ public class ControladorClip {
 
         // Body del response del request
         String body = response.body();
+        if (response.statusCode() != 200) {
+            throw new TransaccionNoRegistradaException("Response body: " + body);
+        }
     }
 
     public static ControladorClip getInstance() {
@@ -45,5 +48,9 @@ public class ControladorClip {
             instance = new ControladorClip(ConfigReader.getField("clip.apikey"));
         }
         return instance;
+    }
+
+    private void iniciarDeamonWebhook() {
+
     }
 }
