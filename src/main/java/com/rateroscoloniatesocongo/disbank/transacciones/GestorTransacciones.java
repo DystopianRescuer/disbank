@@ -7,7 +7,12 @@ import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnCo
 
 import java.util.LinkedList;
 import java.util.List;
-
+/**
+ * Proyecto 2 del curso de Modelado y Programacion.
+ * Clase GestorTransacciones.
+ * @author Rateros colonia tesocongo.
+ * @version Version 1.
+ */
 public class GestorTransacciones {
 
     private static GestorTransacciones instance;
@@ -19,13 +24,15 @@ public class GestorTransacciones {
 
     private GestorTransacciones() {
         pendientes = new LinkedList<>();
+        iniciado = false;
         try{
             controladorTelegram = ControladorTelegram.getInstance();
         }catch(ErrorEnConexionException e){
             //Placeholder
             //TODO: Desarrollar logica de este error
+            System.out.println("No se pudo establecer conexion con Telegram.");
+            System.exit(1);
         }
-
         controladorClip = ControladorClip.getInstance();
     }
 
@@ -33,6 +40,7 @@ public class GestorTransacciones {
     public void iniciar() {
         if(!iniciado) {
             // TBD
+            iniciado = true;
         }
     }
 
@@ -44,6 +52,7 @@ public class GestorTransacciones {
     public String nuevaTransaccion(Asociado asociado, Cobro cobro) {
         // Crea el objeto transacción
         // Se la da a Clip y espera la respuesta positiva de este
+        controladorClip.solicitarTransaccion();
         // Si esto ocurrió correctamente entonces registra la transacción en pendientes
         return "";
     }
