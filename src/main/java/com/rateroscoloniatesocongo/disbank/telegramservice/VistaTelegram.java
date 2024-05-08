@@ -67,7 +67,7 @@ public class VistaTelegram {
         tokenBot = token;
         URL url;
         HttpURLConnection conexion;
-        JSONObject answer;
+        JSONObject answer = null;
         try{
             url = (new URI("https://api.telegram.org/"+tokenBot+"/getMe")).toURL();
             conexion = (HttpURLConnection)url.openConnection();
@@ -86,7 +86,7 @@ public class VistaTelegram {
 
             answer = new JSONObject(response.toString());
         }catch(Exception e){
-            throw new ErrorEnConexionException(e.getMessage());
+            e.printStackTrace();
         }
 
         return answer;

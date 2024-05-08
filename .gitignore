@@ -5,3 +5,5 @@
 target
 NumeroTest.txt
 config.properties
+config/config.properties
+config/test.properties
