@@ -30,6 +30,6 @@ public class CobroLink implements Cobro {
         return String.format("{\"amount\":%d,\"currency\":\"%s\",\"purchase_description\":\"%s\"," +
                 "\"redirection_url\":{\"success\":\"%s\"," +
                 "\"error\":\"%s\"," +
-                "\"default\":\"%s\"}}", this.cantidad, CURRENCY, this.user, this.referencia, this.mensaje, urlSuccess, urlError, urlDefault);
+                "\"default\":\"%s\"}}", this.cantidad, CURRENCY, this.mensaje, urlSuccess, urlError, urlDefault);
     }
 }

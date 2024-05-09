@@ -2,13 +2,10 @@ package com.rateroscoloniatesocongo.disbank.transacciones;
 
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 
-import java.util.Optional;
-import java.util.TreeSet;
-
 public class Transaccion {
 
     public enum Estado {
-        PENDIENTE, FINALIZADA
+        PENDIENTE, PAGADA, FALLIDA
     }
 
     private Asociado asociado;
@@ -16,9 +13,8 @@ public class Transaccion {
     private Cobro cobro;
     private Estado estado;
 
-    public Transaccion(Asociado asociado, String id, Cobro cobro) {
+    public Transaccion(Asociado asociado, Cobro cobro) {
         this.asociado = asociado;
-        this.id = id;
         this.cobro = cobro;
         this.estado = Estado.PENDIENTE;
     }
@@ -29,6 +25,10 @@ public class Transaccion {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Estado getEstado() {

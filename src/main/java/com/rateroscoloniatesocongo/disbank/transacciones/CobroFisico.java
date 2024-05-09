@@ -16,7 +16,6 @@ public class CobroFisico implements Cobro {
         this.mensaje = mensaje;
     }
 
-
     @Override
     public String getAPI() {
         return API;
