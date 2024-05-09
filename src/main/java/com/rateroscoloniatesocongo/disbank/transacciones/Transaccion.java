@@ -5,7 +5,11 @@ import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 public class Transaccion {
 
     public enum Estado {
+<<<<<<< HEAD
         PENDIENTE, PAGADA, FALLIDA
+=======
+        PENDIENTE, FINALIZADA, FALLIDA
+>>>>>>> c1f1444 (modificaciones en gestor y transaccion)
     }
 
     private Asociado asociado;

@@ -1,6 +1,7 @@
 package com.rateroscoloniatesocongo.disbank.transacciones;
 
 import com.rateroscoloniatesocongo.disbank.clipservice.ControladorClip;
+import com.rateroscoloniatesocongo.disbank.clipservice.excepciones.TransaccionNoRegistradaException;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
@@ -30,8 +31,7 @@ public class GestorTransacciones {
         }catch(ErrorEnConexionException e){
             //Placeholder
             //TODO: Desarrollar logica de este error
-            System.out.println("No se pudo establecer conexion con Telegram.");
-            System.exit(1);
+            //mandar el mensaje pop de error a la interfaz
         }
         controladorClip = ControladorClip.getInstance();
     }
@@ -46,14 +46,21 @@ public class GestorTransacciones {
 
     // TODO: hacer esto seguro, que no cualquiera pueda llamar
     public void detener() {
-
+        //crear un Cortador 
     }
 
     public String nuevaTransaccion(Asociado asociado, Cobro cobro) {
         // Crea el objeto transacción
+        Transaccion transaccion = new Transaccion(asociado, cobro);
         // Se la da a Clip y espera la respuesta positiva de este
-        controladorClip.solicitarTransaccion();
+        try {
+            controladorClip.solicitarTransaccion();
+        } catch (TransaccionNoRegistradaException e) {
+            //mandar mensaje a telegram de que no se pudo registrar la transaccion
+            return "No se pudo registrar la transaccion."; // este es mientras hacemos el pquete 
+        }
         // Si esto ocurrió correctamente entonces registra la transacción en pendientes
+        pendientes.add(transaccion);
         return "";
     }
 
@@ -67,7 +74,17 @@ public class GestorTransacciones {
         // Esto de momento, checar/pensar si falta algo más
     }
 
-    public Transaccion getTransaccionPorId(String id) {
+    /**
+     * Metodo que busca y regresa una transaccion mediante su id.
+     * @param id. id de la transaccion buscada. (String)
+     * @return t. transaccion requerida. (Transaccion)
+     */
+    public Transaccion getTransaccionPorId(String id){
+        for(Transaccion t : pendientes){
+            if(t.getId().equals(id)){
+                return t;
+            }
+        }
         return null;
     }
 
