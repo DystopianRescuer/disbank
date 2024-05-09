@@ -83,7 +83,7 @@ public class ControladorTelegram {
 
     }
 
-    public void enviarMensaje(Mensaje mensaje){
+    public void enviarMensaje(Mensaje mensaje) {
 
     }
 

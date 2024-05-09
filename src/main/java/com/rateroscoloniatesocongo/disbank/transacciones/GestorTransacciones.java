@@ -6,6 +6,7 @@ import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 /**
@@ -72,10 +73,14 @@ public class GestorTransacciones {
         Transaccion transaccion = new Transaccion(asociado, cobro);
         // Se la da a Clip y espera la respuesta positiva de este
         try {
-            controladorClip.solicitarTransaccion();
+            controladorClip.solicitarTransaccion(null);
         } catch (TransaccionNoRegistradaException e) {
             //mandar mensaje a telegram de que no se pudo registrar la transaccion
             return "No se pudo registrar la transaccion."; // este es mientras hacemos el pquete 
+        } catch (IOException e) {
+            // TODO
+        } catch (InterruptedException e) {
+            // TODO
         }
         // Si esto ocurrió correctamente entonces registra la transacción en pendientes
         pendientes.add(transaccion);
