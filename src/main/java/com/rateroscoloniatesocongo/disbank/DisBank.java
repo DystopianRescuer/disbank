@@ -6,6 +6,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
+public class DisBank extends Application {
     public static final String RUTA_CONFIG = "config/config.properties";
 
     public static void main(String[] args) {
@@ -13,7 +16,7 @@ import javafx.stage.Stage;
         launch();
     }
 
-    //@Override
+    @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("panelcontrol.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
