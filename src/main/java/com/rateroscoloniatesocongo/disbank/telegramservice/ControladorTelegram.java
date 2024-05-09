@@ -15,6 +15,8 @@ import java.util.HashMap;
  * Funciona como una capa de abstraccion que nos permite convertir todas las
  * instrucciones enfocadas a usuario del resto del programa en los métodos necesarios
  * de la API de Telegram para comunicarnos con los mismos.
+ *
+ * Es asi mismo el que inicializa la parte estática de {@link VistaTelegram} y verifica que todo haya salido bien ahí
  * <p>
  * Debido a que la clase guarda la información relacional entre los usuarios y sus chatIds,
  * necesitamos que sea una clase Singleton.
@@ -75,6 +77,14 @@ public class ControladorTelegram {
         }
 
         return instance;
+    }
+
+    private void generarNuevaTransaccion(double cobro, String tipoDeCobro){
+
+    }
+
+    public void enviarMensaje(Mensaje mensaje){
+
     }
 
     /**

@@ -40,7 +40,7 @@ public class TestConfigReader {
         String valor1 = randomString();
         String valor2 = randomString();
         try {
-            OutputStream output = new FileOutputStream("test.properties");
+            OutputStream output = new FileOutputStream("config/test.properties");
 
             Properties prop = new Properties();
 
@@ -54,7 +54,7 @@ public class TestConfigReader {
             io.printStackTrace();
         }
 
-        ConfigReader.setRuta("test.properties");
+        ConfigReader.setRuta("config/test.properties");
 
         Assert.assertTrue(ConfigReader.getField("1").equals(valor1));
         Assert.assertTrue(ConfigReader.getField("2").equals(valor2));

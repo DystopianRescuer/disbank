@@ -2,8 +2,7 @@ package com.rateroscoloniatesocongo.disbank;
 
 public class DisBank {
 
-    // TODO llenar esto
-    public static final String RUTA_CONFIG = "";
+    public static final String RUTA_CONFIG = "config/config.properties";
 
     public static void main(String[] args) {
         // Manda a llamar a la GUI en FX, desde ahí el admin hace la inicialización
