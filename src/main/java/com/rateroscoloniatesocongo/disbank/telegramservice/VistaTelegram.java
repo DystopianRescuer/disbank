@@ -1,6 +1,7 @@
 package com.rateroscoloniatesocongo.disbank.telegramservice;
 
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -64,30 +65,38 @@ public class VistaTelegram {
         if(tokenBot != null)
             throw new ConexionYaIniciadaException();
 
+        //Formacion de conexion
         tokenBot = token;
         URL url;
         HttpURLConnection conexion;
         JSONObject answer = null;
         try{
-            url = (new URI("https://api.telegram.org/"+tokenBot+"/getMe")).toURL();
+            url = (new URI("https://api.telegram.org/bot"+tokenBot+"/getMe")).toURL();
             conexion = (HttpURLConnection)url.openConnection();
             conexion.setRequestMethod(protocoloHTTP);
-            conexion.setRequestProperty("Content-Type", tipoDeRequest);
+            conexion.setDoInput(true);
+        }catch(Exception e){
+            throw new ErrorEnConexionException(e.getClass() + ": " + e.getLocalizedMessage());
+        }
+
+        //Recibiendo la respuesta
+        StringBuilder response = null;
+        try{
             int respuesta = conexion.getResponseCode();
             BufferedReader reader = new BufferedReader(new InputStreamReader(conexion.getInputStream()));
 
             String line;
-            StringBuilder response = new StringBuilder();
+            response = new StringBuilder();
 
             while((line = reader.readLine()) != null){
                 response.append(line);
             }
             reader.close();
-
-            answer = new JSONObject(response.toString());
-        }catch(Exception e){
-            e.printStackTrace();
+        }catch(IOException e){
+            throw new ErrorEnConexionException(e.getClass() + ": " + e.getLocalizedMessage());
         }
+
+        answer = new JSONObject(response.toString());
 
         return answer;
 
@@ -116,7 +125,7 @@ public class VistaTelegram {
         HttpURLConnection conexion;
         JSONArray answer;
         try{
-            url = (new URI("https://api.telegram.org/"+tokenBot+"/getUpdates")).toURL();
+            url = (new URI("https://api.telegram.org/bot"+tokenBot+"/getUpdates")).toURL();
             conexion = (HttpURLConnection)url.openConnection();
             conexion.setRequestMethod(protocoloHTTP);
             conexion.setRequestProperty("Content-Type", tipoDeRequest);
@@ -172,7 +181,7 @@ public class VistaTelegram {
         HttpURLConnection conexion;
         JSONObject answer;
         try{
-            url = (new URI("https://api.telegram.org/"+tokenBot+"/sendMessage")).toURL();
+            url = (new URI("https://api.telegram.org/bot"+tokenBot+"/sendMessage")).toURL();
             conexion = (HttpURLConnection)url.openConnection();
             conexion.setRequestMethod(protocoloHTTP);
             conexion.setRequestProperty("Content-Type", tipoDeRequest);
