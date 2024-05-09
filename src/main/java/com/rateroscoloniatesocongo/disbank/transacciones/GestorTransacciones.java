@@ -15,14 +15,21 @@ import java.util.List;
  * @version Version 1.
  */
 public class GestorTransacciones {
-
+    /** Unica instancia de GestorTransacciones*/
     private static GestorTransacciones instance;
 
+    /** Lista de transacciones pendientes */
     private final List<Transaccion> pendientes;
+    /** Unica instancia de ControladorTelegram */
     private ControladorTelegram controladorTelegram;
+    /** Unica instancia de ControladorClip */
     private final ControladorClip controladorClip;
+    /** Nos dice si ya fue iniciado o no */
     private boolean iniciado;
 
+    /**
+     * Inicializa atributos e instancia a ControladorTelegram y a ControladorClip
+     */
     private GestorTransacciones() {
         pendientes = new LinkedList<>();
         iniciado = false;
@@ -36,7 +43,9 @@ public class GestorTransacciones {
         controladorClip = ControladorClip.getInstance();
     }
 
-    // Inicia el gestor de transacciones
+    /**
+     * Metodo que inicia al GestorTransacciones
+     */
     public void iniciar() {
         if(!iniciado) {
             // TBD
@@ -44,11 +53,20 @@ public class GestorTransacciones {
         }
     }
 
-    // TODO: hacer esto seguro, que no cualquiera pueda llamar
+    /**
+     * Metodo que detiene al GestorTransacciones y crea un Cortador para hacer el
+     * corte del dia.
+     */
     public void detener() {
         //crear un Cortador 
     }
 
+    /**
+     * Metodo para solicitar nueva transaccion a controladorClip
+     * @param asociado 
+     * @param cobro
+     * @return
+     */
     public String nuevaTransaccion(Asociado asociado, Cobro cobro) {
         // Crea el objeto transacción
         Transaccion transaccion = new Transaccion(asociado, cobro);
@@ -64,8 +82,10 @@ public class GestorTransacciones {
         return "";
     }
 
-
-    // TODO los argumentos que recibe
+    /**
+     * 
+     * @param transaccion
+     */
     public void actualizarEstado(Transaccion transaccion) {
         // Checa el estado de la transaccion
         // Si todo sale bien va y le avisa a telegram que todo salio bien para que le avise al usuario
@@ -88,7 +108,10 @@ public class GestorTransacciones {
         return null;
     }
 
-
+    /**
+     * Devuelve la unica instancia de GestorTransacciones.
+     * @return instance. (GestorTransacciones).
+     */
     public static GestorTransacciones getInstance() {
         if(instance == null) {
             instance = new GestorTransacciones();
