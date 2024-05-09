@@ -2,7 +2,6 @@ package com.rateroscoloniatesocongo.disbank.clipservice;
 
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -11,7 +10,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class GetNewRequestsRunnable implements Runnable {
+public class GetNewClipUpdatesRunnable implements Runnable {
 
     private static final String UUID = ConfigReader.getField("webhook.uuid");
 
@@ -56,7 +55,6 @@ public class GetNewRequestsRunnable implements Runnable {
         try {
             response = peticionUltimoRequest();
         } catch (IOException | InterruptedException e) {
-            // TODO
             throw new RuntimeException(e);
         }
 

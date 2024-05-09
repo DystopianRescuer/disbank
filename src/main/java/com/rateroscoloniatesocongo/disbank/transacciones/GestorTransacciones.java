@@ -58,6 +58,10 @@ public class GestorTransacciones {
         // Esto de momento, checar/pensar si falta algo más
     }
 
+    public Transaccion getTransaccionPorId(String id) {
+        return null;
+    }
+
 
     public static GestorTransacciones getInstance() {
         if(instance == null) {
