@@ -94,7 +94,11 @@ public class ControladorTelegram {
         return instance;
     }
 
-    /**
+    private void generarNuevaTransaccion(double cobro, String tipoDeCobro){
+
+    }
+
+     /**
      *  Envia un mensaje con las especificaciones dadas desde el objeto Mensaje
      *
      *  Metodo para el backend
@@ -103,7 +107,7 @@ public class ControladorTelegram {
      *  @throws ErrorEnConexionException si existe un error en la conexion a Telegram
      *
      *  */
-    public void enviarMensaje(Mensaje mensaje) throws ErrorEnConexionException{
+    public void enviarMensaje(Mensaje mensaje) throws ErrorEnConexionException {
 
     }
 
