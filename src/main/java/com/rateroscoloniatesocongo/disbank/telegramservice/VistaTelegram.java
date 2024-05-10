@@ -123,7 +123,7 @@ public class VistaTelegram {
         //Envio de peticion
         URL url;
         HttpURLConnection conexion;
-        JSONArray answer;
+        JSONObject answer;
         try{
             url = (new URI("https://api.telegram.org/bot"+tokenBot+"/getUpdates")).toURL();
             conexion = (HttpURLConnection)url.openConnection();
@@ -148,11 +148,11 @@ public class VistaTelegram {
             }
             reader.close();
 
-            answer = new JSONArray(response.toString());
+            answer = new JSONObject(response.toString());
         }catch(Exception e){
             throw new ErrorEnConexionException(e.getMessage());
         }
-        return answer;
+        return answer.getJSONArray("result");
     }
 
     public static String getTokenBot() {

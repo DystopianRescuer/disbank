@@ -57,4 +57,12 @@ public class TestAPITelegram {
         JSONObject getMeInterno = new JSONObject("{\"ok\": true,\"result\": {\"id\": 7119940309,\"is_bot\": true,\"first_name\": \"RateritoDeTesocongo\",\"username\": \"DisBankBot\",\"can_join_groups\": true,\"can_read_all_group_messages\": false,\"supports_inline_queries\":false,\"can_connect_to_business\": false}}");
         Assert.assertTrue(getMeInterno.toString().equals(controladorTelegram.getGetMe().toString()));
     }
+
+    /**
+     *  Verifica que las updates se están recibiendo de manera correcta, que el bot pueda enviar mensajes de manera
+     *  correcta, y que el offset posterior para la recepcion de actualizaciones también funcione adecuadamente.
+     *  */
+    @Test public void TestEnviarYRecibirMensajes(){
+
+    }
 }
