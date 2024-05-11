@@ -6,8 +6,13 @@ public class CobroLink implements Cobro {
 
     private static final String API = "checkout", CURRENCY = "MXN";
 
-    private int cantidad;
-    private String user, referencia, mensaje, urlDefault, urlSuccess, urlError;
+    private final int cantidad;
+    private final String user;
+    private final String referencia;
+    private final String mensaje;
+    private final String urlDefault;
+    private final String urlSuccess;
+    private final String urlError;
 
     public CobroLink(int cantidad, String referencia, String mensaje) {
         this.cantidad = cantidad;

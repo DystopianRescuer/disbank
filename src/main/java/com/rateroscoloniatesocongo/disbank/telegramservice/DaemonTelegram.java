@@ -71,8 +71,8 @@ public class DaemonTelegram extends Thread{
         Asociado asociado = controlador.buscarAsociado(chatID);
 
         if(asociado == null){
-            if(!mensaje.equals("/start"))
-                return;
+            if(!mensaje.equals("/start")) {
+            }
             else{
                 if(mensaje.equals("marco")){
                     new VistaTelegram(chatID).enviarMensaje("polo");
