@@ -33,8 +33,7 @@ public class Asociado {
      * @param banco. nombre de banco del asociado (String)
      * @param id. id del asociado (int)
      */
-    public Asociado(String chatId, String nombre, String cuenta, String banco, int id){
-        this.chatId = chatId;
+    public Asociado(String nombre, String cuenta, String banco, int id){
         this.nombre = nombre;
         this.cuenta = cuenta;
         this.banco = banco;

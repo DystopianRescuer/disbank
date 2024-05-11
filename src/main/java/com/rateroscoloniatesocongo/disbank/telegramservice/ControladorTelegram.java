@@ -104,7 +104,11 @@ public class ControladorTelegram {
         return instance;
     }
 
-    /**
+    private void generarNuevaTransaccion(double cobro, String tipoDeCobro){
+
+    }
+
+     /**
      *  Envia un mensaje con las especificaciones dadas desde el objeto Mensaje
      *
      *  En situaciones optimas, este es el unico metodo necesario para enviar mensajes a los asociados desde cualquier parte
@@ -117,7 +121,7 @@ public class ControladorTelegram {
      *  @throws ErrorEnConexionException si existe un error en la conexion a Telegram
      *
      *  */
-    public void enviarMensaje(Mensaje mensaje) throws ErrorEnConexionException{
+    public void enviarMensaje(Mensaje mensaje) throws ErrorEnConexionException {
 
     }
 
