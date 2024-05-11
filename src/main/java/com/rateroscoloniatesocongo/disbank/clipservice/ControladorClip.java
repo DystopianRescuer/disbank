@@ -56,16 +56,16 @@ public class ControladorClip {
         GestorTransacciones.getInstance().actualizarEstado(transaccion);
     }
 
+    // Pone a un Scheduler a correr cada 10 segundos un hilo que checa si hay actualizaciones
+    private void iniciarEscuchador() {
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        service.schedule(GetNewClipUpdatesRunnable::new, 10, TimeUnit.SECONDS);
+    }
+
     public static ControladorClip getInstance() {
         if(instance == null) {
             instance = new ControladorClip(ConfigReader.getField("clip.apikey"));
         }
         return instance;
-    }
-
-    // Pone a un Scheduler a correr cada 10 segundos un hilo que checa si hay actualizaciones
-    private void iniciarEscuchador() {
-        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-        service.schedule(GetNewClipUpdatesRunnable::new, 10, TimeUnit.SECONDS);
     }
 }
