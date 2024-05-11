@@ -20,6 +20,8 @@ public class Asociado {
     String banco;
     /** id del asociado */
     int id;
+    /** Indicador de que el asociado está recibiendo ayuda (Para el telegram service) */
+    public boolean recibiendoAyuda;
     /** Lista de transacciones hechas en el dia del asociado */
     transient ArrayList <Transaccion> transaccionesDia;
 
