@@ -3,6 +3,7 @@ package com.rateroscoloniatesocongo.disbank.telegramservice;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ConexionYaIniciadaException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
+import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.SolicitudNoEncontradaException;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 
@@ -57,6 +58,9 @@ public class ControladorTelegram {
     private GestorTransacciones gestorTransacciones;
     private Thread daemon;
 
+    public static final String noRegistroPendiente = "No te encuentras registrado como asociado, ve con el administrador de Disbank para más detalles";
+    public static final String instruccionNoReconocida = "La instruccion enviada no es reconocida, escribe Comandos para la lista de comandos";
+
     /** Singleton */
     private ControladorTelegram(String tokenBot) throws ConexionYaIniciadaException, ErrorEnConexionException {
         this.tokenBot = tokenBot;
@@ -97,7 +101,11 @@ public class ControladorTelegram {
     /**
      *  Envia un mensaje con las especificaciones dadas desde el objeto Mensaje
      *
-     *  Metodo para el backend
+     *  En situaciones optimas, este es el unico metodo necesario para enviar mensajes a los asociados desde cualquier parte
+     *  del programa, excepto en algunos casos donde no fue considerado conveniente por la innecesaria inmediatez de algunos eventos
+     *  inmediatos que se pueden manejar ahi mismo (hay algunos ejemplos en {@link DaemonTelegram})
+     *
+     *  Metodo para el backend y para el mismo controlador
      *
      *
      *  @throws ErrorEnConexionException si existe un error en la conexion a Telegram
@@ -138,10 +146,10 @@ public class ControladorTelegram {
     }
 
     /**
-     *  Registra una nueva interaccion con un chatID que no se encuentra registrado en los chats actuales
+     *  Registra una nueva interaccion con un chatID que no se encuentra registrado en los chats actuales.
      *
-     *  Busca en la base de datos en busca del asociado vinculado al chatID, si no existe entonces intenta setearlo a algun
-     *  asociado pendiente de registro con BaseDatos.setChatID.
+     *  Saca el asociado vinculado a dicho chatID y le crea una VistaTelegram para el resto de la ejecución, hasta su corte
+     *
      *  */
     protected void registrarNuevaInteraccion(String chatID){
 
@@ -176,6 +184,10 @@ public class ControladorTelegram {
 
     }
 
+    protected void mensajeAyuda(Asociado asociado, String mensaje){
+
+    }
+
     /**
      *  Retorna un arreglo JSON con las actualizaciones recibidas del bot desde la ultima llamada al metodo
      *
@@ -202,6 +214,10 @@ public class ControladorTelegram {
      *  @return Asociado de la lista de chats que está vinculado a ese chatID
      *  */
     protected Asociado buscarAsociado(String chatID){
+
+    }
+
+    protected void registrarNuevoAsociado(String chatID) throws SolicitudNoEncontradaException{
 
     }
 
