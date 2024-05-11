@@ -45,6 +45,10 @@ import java.util.HashMap;
  * - daemon : El hilo daemon encargado de regularmente conseguir las updates de la API de telegram. Para motivos de debug solamente,
  * tiene su getter.
  *
+ * Asi mismo, tambien tiene su coleccion de mensajes rapidos como Strings finales, los cuales no sirven para otra cosa más que para
+ * que el {@link DaemonTelegram} pueda usarlos en esos casos en los que, por la complejidad de la respuesta, no es necesario
+ * crear un objeto Mensaje
+ *
  */
 public class ControladorTelegram {
 
@@ -58,6 +62,7 @@ public class ControladorTelegram {
     private GestorTransacciones gestorTransacciones;
     private Thread daemon;
 
+    //Mensajes rapidos
     public static final String noRegistroPendiente = "No te encuentras registrado como asociado, ve con el administrador de Disbank para más detalles";
     public static final String instruccionNoReconocida = "La instruccion enviada no es reconocida, escribe Comandos para la lista de comandos";
 
@@ -69,6 +74,7 @@ public class ControladorTelegram {
         offset = 0;
         chatIds = new HashMap<>();
         daemon = new DaemonTelegram(this);
+        daemon.setDaemon(true);
         daemon.start();
     }
 
