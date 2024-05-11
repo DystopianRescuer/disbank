@@ -52,11 +52,11 @@ public class ControladorTelegram {
 
     public final JSONObject getMe;
     private final String tokenBot;
-    private HashMap<Asociado, VistaTelegram> chats;
-    private HashMap<String, Asociado> chatIds;
+    private final HashMap<Asociado, VistaTelegram> chats;
+    private final HashMap<String, Asociado> chatIds;
     private int offset;
     private GestorTransacciones gestorTransacciones;
-    private Thread daemon;
+    private final Thread daemon;
 
     public static final String noRegistroPendiente = "No te encuentras registrado como asociado, ve con el administrador de Disbank para más detalles";
     public static final String instruccionNoReconocida = "La instruccion enviada no es reconocida, escribe Comandos para la lista de comandos";
@@ -86,13 +86,11 @@ public class ControladorTelegram {
     public static ControladorTelegram getInstance() throws ErrorEnConexionException{
         if(instance != null)
             return instance;
-      
+
         try{
             instance = new ControladorTelegram(ConfigReader.getField("telegram.key"));
         }catch(ConexionYaIniciadaException e){
             //No hacer nada, no puede pasar
-        }catch(ErrorEnConexionException e){
-            throw e;
         }
 
         return instance;
@@ -127,7 +125,6 @@ public class ControladorTelegram {
      */
     public JSONObject getGetMe() {
         return getMe;
-
     }
 
     //Metodos debug
@@ -218,7 +215,7 @@ public class ControladorTelegram {
      *  @return Asociado de la lista de chats que está vinculado a ese chatID
      *  */
     protected Asociado buscarAsociado(String chatID){
-
+        return null;
     }
 
     protected void registrarNuevoAsociado(String chatID) throws SolicitudNoEncontradaException{
@@ -235,6 +232,6 @@ public class ControladorTelegram {
      *  @return VistaTelegram de la lista de chats que está vinculado a ese Asociado
      *  */
     private VistaTelegram buscarVistaTelegram(Asociado asociado){
-
+        return null;
     }
 }

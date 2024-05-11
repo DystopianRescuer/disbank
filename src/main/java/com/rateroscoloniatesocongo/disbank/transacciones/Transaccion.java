@@ -8,9 +8,9 @@ public class Transaccion {
         PENDIENTE, PAGADA, FALLIDA
     }
 
-    private Asociado asociado;
+    private final Asociado asociado;
     private String id, log;
-    private Cobro cobro;
+    private final Cobro cobro;
     private Estado estado;
 
     public Transaccion(Asociado asociado, Cobro cobro) {

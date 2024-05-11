@@ -20,7 +20,6 @@ public class DisBank extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("panelcontrol.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setMaximized(true);
         stage.setTitle("Disbank - Panel de Control");
         stage.setScene(scene);
         stage.show();

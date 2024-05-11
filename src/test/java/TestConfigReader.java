@@ -28,7 +28,7 @@ public class TestConfigReader {
      *  */
     @Test
     public void TestGetField() {
-        Assert.assertTrue(ConfigReader.getField("aa") == null);
+        Assert.assertNull(ConfigReader.getField("aa"));
     }
 
     /**
@@ -56,8 +56,8 @@ public class TestConfigReader {
 
         ConfigReader.setRuta("config/test.properties");
 
-        Assert.assertTrue(ConfigReader.getField("1").equals(valor1));
-        Assert.assertTrue(ConfigReader.getField("2").equals(valor2));
-        Assert.assertTrue(ConfigReader.getField("z") == null);
+        Assert.assertEquals(ConfigReader.getField("1"), valor1);
+        Assert.assertEquals(ConfigReader.getField("2"), valor2);
+        Assert.assertNull(ConfigReader.getField("z"));
     }
 }

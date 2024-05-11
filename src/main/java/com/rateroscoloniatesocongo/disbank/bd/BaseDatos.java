@@ -42,9 +42,9 @@ public class BaseDatos {
      * @return true si existe el asociado con id = idAsociado, 
      *         false en otro caso
      */
-    public bool setChatId(int idAsociado, String chatId){
+    public boolean setChatId(int idAsociado, String chatId){
         for(Asociado a : asociados){
-            if(a.getId().equals(id)){
+            if(a.getId() == idAsociado){
                 a.setChatId(chatId);
                 chatIdAsociado.put(chatId, a);
                 return true;

@@ -6,8 +6,10 @@ public class CobroFisico implements Cobro {
 
     private static final String API = "paymentrequest";
 
-    private int cantidad;
-    private String user, referencia, mensaje;
+    private final int cantidad;
+    private final String user;
+    private final String referencia;
+    private final String mensaje;
 
     public CobroFisico(int cantidad, String referencia, String mensaje) {
         this.cantidad = cantidad;

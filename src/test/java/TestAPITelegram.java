@@ -28,7 +28,7 @@ public class TestAPITelegram {
      *  Y el ControladorTelegram se construye con el token de la configuracion
      *  de la aplicacion
      *  */
-    public TestAPITelegram() throws ConexionYaIniciadaException, ErrorEnConexionException {
+    public TestAPITelegram() throws ErrorEnConexionException {
         ConfigReader.setRuta("config/config.properties");
         controladorTelegram = ControladorTelegram.getInstance();
 
@@ -44,7 +44,7 @@ public class TestAPITelegram {
             VistaTelegram.setTokenBot("a");
             Assert.fail();
         }catch(Exception e){
-            Assert.assertTrue(e.getClass() == ConexionYaIniciadaException.class);
+            Assert.assertSame(e.getClass(), ConexionYaIniciadaException.class);
         }
         Assert.assertEquals(tokenBot, VistaTelegram.getTokenBot());
     }
@@ -55,7 +55,7 @@ public class TestAPITelegram {
     @Test public void TestGetMe() {
         //Verifica que la conexion con el bot es correcta
         JSONObject getMeInterno = new JSONObject("{\"ok\": true,\"result\": {\"id\": 7119940309,\"is_bot\": true,\"first_name\": \"RateritoDeTesocongo\",\"username\": \"DisBankBot\",\"can_join_groups\": true,\"can_read_all_group_messages\": false,\"supports_inline_queries\":false,\"can_connect_to_business\": false}}");
-        Assert.assertTrue(getMeInterno.toString().equals(controladorTelegram.getGetMe().toString()));
+        Assert.assertEquals(getMeInterno.toString(), controladorTelegram.getGetMe().toString());
     }
 
     /**
