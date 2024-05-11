@@ -10,11 +10,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class GetNewClipUpdatesRunnable implements Runnable {
+public class GetClipUpdatesRunnable implements Runnable {
 
     private static final String UUID = ConfigReader.getField("webhook.uuid");
 
-    // TODO: hacerlo recursivo, no es necesario ya que no puede haber varias actualizaciones al mismo tiempo, solo hay una terminal, pero se vuelve más robusto a futuro
     private HttpResponse<String> peticionUltimoRequest() throws IOException, InterruptedException {
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -52,20 +51,19 @@ public class GetNewClipUpdatesRunnable implements Runnable {
         // Pide el último request, si consigue un código 200 entonces lo guarda y pide a la API eliminar ese request y acaba la ejecución
         HttpResponse<String> response;
         JSONObject fullRequest;
+
         try {
-            response = peticionUltimoRequest();
+            while ((response = peticionUltimoRequest()) != null) {
+                fullRequest = new JSONObject(response.body());
+
+                // Pasa el mensaje de Clip al método que lo procesa
+                checarClipUpdate(fullRequest.getJSONObject("content"));
+
+                // Una vez procesado, elimina el request de la cola de Webhook.site
+                eliminarRequest(fullRequest.getString("uuid"));
+            }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
-        }
-
-        if(response != null) {
-            fullRequest = new JSONObject(response.body());
-
-            // Pasa el mensaje de Clip al método que lo procesa
-            checarClipUpdate(fullRequest.getJSONObject("content"));
-
-            // Una vez procesado, elimina el request de la cola de Webhook.site
-            eliminarRequest(fullRequest.getString("uuid"));
         }
     }
 
