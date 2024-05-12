@@ -2,8 +2,7 @@ package com.rateroscoloniatesocongo.disbank.bd;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import javax.swing.text.html.HTMLDocument.Iterator;
+import java.util.Iterator;
 
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 
@@ -56,8 +55,7 @@ public class BaseDatos {
     }
 
     public Iterator getIterador(){
-        Iterator<Asociado> it = asociados.iterator();
-        return it;
+        return asociados.iterator();
     }
 
 }

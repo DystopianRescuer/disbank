@@ -1,6 +1,10 @@
 package com.rateroscoloniatesocongo.disbank.modelo;
 
 import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
+import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
+import com.rateroscoloniatesocongo.disbank.clipservice.ControladorClip;
+import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
+import com.rateroscoloniatesocongo.disbank.util.Avisador;
 
 public class Cortador {
     /** Unica instancia de ControladorTelegram */
@@ -15,7 +19,7 @@ public class Cortador {
         try{
             controladorTelegram = ControladorTelegram.getInstance();
         }catch(ErrorEnConexionException e){
-            mandarErrorFatal("No se pudo establecer conexion con Telegram.");
+            Avisador.mandarErrorFatal("No se pudo establecer conexion con Telegram.");
         }
         controladorClip = ControladorClip.getInstance();
     }

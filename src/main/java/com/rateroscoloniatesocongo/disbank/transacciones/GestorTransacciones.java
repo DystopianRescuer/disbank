@@ -38,7 +38,7 @@ public class GestorTransacciones {
         try{
             controladorTelegram = ControladorTelegram.getInstance();
         }catch(ErrorEnConexionException e){
-            mandarErrorFatal("No se pudo establecer conexion con Telegram.");
+            Avisador.mandarErrorFatal("No se pudo establecer conexion con Telegram.");
         }
         controladorClip = ControladorClip.getInstance();
     }
