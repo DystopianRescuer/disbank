@@ -3,6 +3,8 @@ package com.rateroscoloniatesocongo.disbank.bd;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.text.html.HTMLDocument.Iterator;
+
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 
 /**
@@ -26,7 +28,7 @@ public class BaseDatos {
     /**
      * Busca y regresa un asociado mediante su chatId
      * @param chatId
-     * @return asociado buscado o null si no exta registrado.
+     * @return asociado buscado o null si no esta registrado.
      */
     public Asociado buscarPorChatId(String chatId){
         if(chatIdAsociado.containsKey(chatId)){
@@ -51,6 +53,11 @@ public class BaseDatos {
             }
         }
         return false;
+    }
+
+    public Iterator getIterador(){
+        Iterator<Asociado> it = asociados.iterator();
+        return it;
     }
 
 }

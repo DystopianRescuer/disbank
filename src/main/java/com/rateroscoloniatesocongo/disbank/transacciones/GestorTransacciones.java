@@ -5,6 +5,7 @@ import com.rateroscoloniatesocongo.disbank.clipservice.excepciones.TransaccionNo
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
+import com.rateroscoloniatesocongo.disbank.util.Avisador;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -37,9 +38,7 @@ public class GestorTransacciones {
         try{
             controladorTelegram = ControladorTelegram.getInstance();
         }catch(ErrorEnConexionException e){
-            //Placeholder
-            //TODO: Desarrollar logica de este error
-            //mandar el mensaje pop de error a la interfaz
+            mandarErrorFatal("No se pudo establecer conexion con Telegram.");
         }
         controladorClip = ControladorClip.getInstance();
     }
