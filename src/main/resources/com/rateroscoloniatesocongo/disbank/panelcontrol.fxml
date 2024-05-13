@@ -5,8 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0"
-            prefWidth="843.0" xmlns="http://javafx.com/javafx/17.0.2-ea">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="410.0" prefWidth="843.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1">
     <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="21.0" prefHeight="369.0" prefWidth="200.0" spacing="10.0">
         <Label text="Información y Control">
         <font>
@@ -38,34 +37,28 @@
         </HBox>
         <TableView fixedCellSize="2.0" prefHeight="332.0" prefWidth="372.0" />
     </VBox>
-   <Pane layoutX="575.0" layoutY="23.0">
-      <children>
-         <VBox prefHeight="369.0" prefWidth="259.0" />
-         <VBox prefHeight="369.0" prefWidth="259.0" />
-          <VBox alignment="TOP_CENTER" prefHeight="369.0" prefWidth="259.0" spacing="10.0">
-            <children>
-               <Label prefHeight="22.0" prefWidth="194.0" text="Registro de Asociado">
-                  <font>
-                     <Font name="JetBrains Mono ExtraBold Italic" size="16.0" />
-                  </font></Label>
-               <VBox alignment="CENTER" prefHeight="246.0" prefWidth="259.0" spacing="15.0">
-                  <children>
-                     <TextField promptText="Nombre" />
-                     <TextField promptText="Cuenta CLABE" />
-                     <TextField promptText="Banco" />
-                     <TextField promptText="Telegram User" />
-                     <TextField promptText="Nombre de su puesto" />
-                     <CheckBox mnemonicParsing="false" text="Le sabe al shitpost" />
-                  </children></VBox>
-               <VBox alignment="CENTER" prefHeight="34.0" prefWidth="194.0">
-                  <children>
-                     <ProgressIndicator prefHeight="27.0" prefWidth="59.0" />
-                     <Label text="Registrando asociado..." />
-                  </children>
-               </VBox>
-               <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="86.0" text="Registrar" />
-            </children>
-         </VBox>
-      </children>
-   </Pane>
+    <Pane layoutX="575.0" layoutY="23.0">
+        <VBox prefHeight="369.0" prefWidth="259.0"/>
+        <VBox prefHeight="369.0" prefWidth="259.0"/>
+        <VBox alignment="TOP_CENTER" prefHeight="369.0" prefWidth="259.0" spacing="10.0">
+            <Label prefHeight="22.0" prefWidth="194.0" text="Registro de Asociado">
+                <font>
+                    <Font name="JetBrains Mono ExtraBold Italic" size="16.0"/>
+                </font>
+            </Label>
+            <VBox alignment="CENTER" prefHeight="246.0" prefWidth="259.0" spacing="15.0">
+                <TextField promptText="Nombre"/>
+                <TextField promptText="Cuenta CLABE"/>
+                <TextField promptText="Banco"/>
+                <TextField promptText="Telegram User"/>
+                <TextField promptText="Nombre de su puesto"/>
+                <CheckBox mnemonicParsing="false" text="Le sabe al shitpost"/>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="34.0" prefWidth="194.0">
+                <ProgressIndicator prefHeight="27.0" prefWidth="59.0"/>
+                <Label text="Registrando asociado..."/>
+            </VBox>
+            <Button mnemonicParsing="false" prefHeight="24.0" prefWidth="86.0" text="Registrar"/>
+        </VBox>
+    </Pane>
 </AnchorPane>

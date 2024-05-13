@@ -12,7 +12,9 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Optional;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ControladorClip {
 
@@ -26,7 +28,7 @@ public class ControladorClip {
     }
 
     // Hace la petición a la API de Clip para la nueva transacción
-    public void solicitarTransaccion(Transaccion transaccion) throws IOException, InterruptedException, TransaccionNoRegistradaException {
+    public Optional<String> solicitarTransaccion(Transaccion transaccion) throws IOException, InterruptedException, TransaccionNoRegistradaException {
         // Cobro a procesar
         Cobro cobro = transaccion.getCobro();
         // Request a realizar
@@ -38,14 +40,19 @@ public class ControladorClip {
                 .method("POST", HttpRequest.BodyPublishers.ofString(cobro.getBody()))
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        JSONObject jsonResponse = new JSONObject(response.body());
 
         // Body del response del request
         String body = response.body();
         if (response.statusCode() != 200) {
-            throw new TransaccionNoRegistradaException("Response body: " + body);
+            throw new TransaccionNoRegistradaException("Respuesta: " + response.statusCode() + ". Response body: " + body);
         }
 
-        transaccion.setId(new JSONObject(body).getString("payment_request_code"));
+        if(cobro.getRespuestaKey().isPresent()) {
+            return Optional.of(jsonResponse.getString(cobro.getRespuestaKey().get()));
+        }
+
+        return Optional.empty();
     }
 
     // Default para que solo pueda ser llamado dentro del package de clipservice

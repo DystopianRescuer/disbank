@@ -2,27 +2,29 @@ package com.rateroscoloniatesocongo.disbank.transacciones;
 
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 
+import java.util.Optional;
+import java.util.UUID;
+
 public class CobroLink implements Cobro {
 
     private static final String API = "checkout", CURRENCY = "MXN";
 
     private final int cantidad;
-    private final String user;
-    private final String referencia;
-    private final String mensaje;
-    private final String urlDefault;
-    private final String urlSuccess;
-    private final String urlError;
+    private final String mensaje, urlDefault, urlSuccess, urlError, ID;
 
-    public CobroLink(int cantidad, String referencia, String mensaje) {
+    public CobroLink(int cantidad, String mensaje) {
         this.cantidad = cantidad;
-        this.referencia = referencia;
-        this.user = ConfigReader.getField("clip.user");
         this.mensaje = mensaje;
+        this.ID = UUID.randomUUID().toString();
 
         this.urlDefault = ConfigReader.getField("clip.url.default");
         this.urlSuccess = ConfigReader.getField("clip.url.success");
         this.urlError = ConfigReader.getField("clip.urs.error");
+    }
+
+    @Override
+    public String getID() {
+        return ID;
     }
 
     @Override
@@ -31,10 +33,19 @@ public class CobroLink implements Cobro {
     }
 
     @Override
+    public Optional<String> getRespuestaKey() {
+        return Optional.of("qr_image_url");
+    }
+
+    @Override
     public String getBody() {
-        return String.format("{\"amount\":%d,\"currency\":\"%s\",\"purchase_description\":\"%s\"," +
+        return String.format("{\"amount\":%s,\"currency\":\"%s\"," +
+                "\"purchase_description\":\"%s\"," +
                 "\"redirection_url\":{\"success\":\"%s\"," +
                 "\"error\":\"%s\"," +
-                "\"default\":\"%s\"}}", this.cantidad, CURRENCY, this.mensaje, urlSuccess, urlError, urlDefault);
+                "\"default\":\"%s\"}," +
+                "\"metadata\":{\"me_reference_id\":\"%s\"},\"override_settings\":{\"currency\":{\"show_currency_code\":true}," +
+                "\"payment_method\":[\"CARD\"],\"locale\":\"es-MX\",\"enable_tip\":false}}",
+                this.cantidad, CURRENCY, this.mensaje, urlSuccess, urlError, urlDefault, ID);
     }
 }

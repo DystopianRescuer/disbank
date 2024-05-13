@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 public class Avisador {
 
     // Para que los mensajes no dejen en espera el programa hacemos un pool de hilos
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(5);
+    private static final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public static void mandarAviso(String mensaje) {
         executorService.submit(() -> JOptionPane.showMessageDialog(null, mensaje, "Aviso", JOptionPane.INFORMATION_MESSAGE));
