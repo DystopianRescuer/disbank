@@ -1,6 +1,7 @@
 package com.rateroscoloniatesocongo.disbank.transacciones;
 
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
+import java.util.Optional;
 
 public class Transaccion {
 
@@ -12,6 +13,15 @@ public class Transaccion {
     private String log;
     private final Cobro cobro;
     private Estado estado;
+    private Optional<String> link;
+
+    public Optional<String> getLink() {
+        return link;
+    }
+
+    public void setLink(Optional<String> link) {
+        this.link = link;
+    }
 
     public Transaccion(Asociado asociado, Cobro cobro) {
         this.asociado = asociado;
