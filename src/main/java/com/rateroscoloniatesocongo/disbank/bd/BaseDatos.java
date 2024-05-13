@@ -58,7 +58,7 @@ public class BaseDatos {
      * Regresa un iterador para iterar a los asociados
      * @return iterator.
      */
-    public Iterator getIterador(){
+    public Iterator<Asociado> getIterador(){
         return asociados.iterator();
     }
 
