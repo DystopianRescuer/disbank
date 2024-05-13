@@ -62,4 +62,21 @@ public class BaseDatos {
         return asociados.iterator();
     }
 
+    /**
+     * Metodo que agrega un asociado a la bd.
+     * @param a. asociado que se agregara. (Asociado)
+     */
+    public void agregarAsociado(Asociado a){
+        asociados.add(a);
+    }
+
+    /**
+     * Borra el asociado de la bd.
+     * @param a. asociado que se quiere borrar. (Asociado)
+     */
+    public void borrarAsociado(Asociado a){
+        chatIdAsociado.remove(a.getChatId());
+        asociados.remove(a); 
+    }
+
 }
