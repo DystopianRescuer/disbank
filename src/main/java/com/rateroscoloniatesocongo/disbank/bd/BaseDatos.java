@@ -20,7 +20,7 @@ public class BaseDatos {
     /**Map que relaciona el ChatId con su Asociado */
     public static HashMap<String, Asociado> chatIdAsociado = new HashMap<>();
 
-    public BaseDatos(){
+    private BaseDatos(){
 
     }
 
@@ -29,7 +29,7 @@ public class BaseDatos {
      * @param chatId
      * @return asociado buscado o null si no esta registrado.
      */
-    public Asociado buscarPorChatId(String chatId){
+    public static Asociado buscarPorChatId(String chatId){
         if(chatIdAsociado.containsKey(chatId)){
             return chatIdAsociado.get(chatId);
         }
@@ -38,12 +38,12 @@ public class BaseDatos {
 
     /**
      * Le asocia su chatId a un asociado registrado por el admin
-     * @param idAsociado. id del asociado (int)
-     * @param chatId. chatId que se le asignara al Asociado
+     * @param idAsociado id del asociado (int)
+     * @param chatId chatId que se le asignara al Asociado
      * @return true si existe el asociado con id = idAsociado, 
      *         false en otro caso
      */
-    public boolean setChatId(int idAsociado, String chatId){
+    public static boolean setChatId(int idAsociado, String chatId){
         for(Asociado a : asociados){
             if(a.getId() == idAsociado){
                 a.setChatId(chatId);
@@ -58,7 +58,7 @@ public class BaseDatos {
      * Regresa un iterador para iterar a los asociados
      * @return iterator.
      */
-    public Iterator<Asociado> getIterador(){
+    public static Iterator<Asociado> getIterador(){
         return asociados.iterator();
     }
 
@@ -66,7 +66,7 @@ public class BaseDatos {
      * Metodo que agrega un asociado a la bd.
      * @param a. asociado que se agregara. (Asociado)
      */
-    public void agregarAsociado(Asociado a){
+    public static void agregarAsociado(Asociado a){
         asociados.add(a);
     }
 
@@ -74,7 +74,7 @@ public class BaseDatos {
      * Borra el asociado de la bd.
      * @param a. asociado que se quiere borrar. (Asociado)
      */
-    public void borrarAsociado(Asociado a){
+    public static void borrarAsociado(Asociado a){
         chatIdAsociado.remove(a.getChatId());
         asociados.remove(a); 
     }

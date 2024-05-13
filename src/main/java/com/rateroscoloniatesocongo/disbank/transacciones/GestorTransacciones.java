@@ -11,23 +11,35 @@ import com.rateroscoloniatesocongo.disbank.util.Avisador;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+
 /**
  * Proyecto 2 del curso de Modelado y Programacion.
  * Clase GestorTransacciones.
+ *
  * @author Rateros colonia tesocongo.
  * @version Version 1.
  */
 public class GestorTransacciones {
-    /** Unica instancia de GestorTransacciones*/
+    /**
+     * Unica instancia de GestorTransacciones
+     */
     private static GestorTransacciones instance;
 
-    /** Lista de transacciones pendientes */
+    /**
+     * Lista de transacciones pendientes
+     */
     private final List<Transaccion> pendientes;
-    /** Unica instancia de ControladorTelegram */
+    /**
+     * Unica instancia de ControladorTelegram
+     */
     private ControladorTelegram controladorTelegram;
-    /** Unica instancia de ControladorClip */
+    /**
+     * Unica instancia de ControladorClip
+     */
     private final ControladorClip controladorClip;
-    /** Nos dice si ya fue iniciado o no */
+    /**
+     * Nos dice si ya fue iniciado o no
+     */
     private boolean iniciado;
 
     /**
@@ -36,9 +48,9 @@ public class GestorTransacciones {
     private GestorTransacciones() {
         pendientes = new LinkedList<>();
         iniciado = false;
-        try{
+        try {
             controladorTelegram = ControladorTelegram.getInstance();
-        }catch(ErrorEnConexionException e){
+        } catch (ErrorEnConexionException e) {
             Avisador.mandarErrorFatal("No se pudo establecer conexion con Telegram.");
         }
         controladorClip = ControladorClip.getInstance();
@@ -48,7 +60,7 @@ public class GestorTransacciones {
      * Metodo que inicia al GestorTransacciones
      */
     public void iniciar() {
-        if(!iniciado) {
+        if (!iniciado) {
             // TBD
             iniciado = true;
         }
@@ -67,7 +79,8 @@ public class GestorTransacciones {
 
     /**
      * Metodo para solicitar nueva transaccion a controladorClip
-     * @param asociado 
+     *
+     * @param asociado
      * @param cobro
      * @return
      */
@@ -79,10 +92,8 @@ public class GestorTransacciones {
             controladorClip.solicitarTransaccion(null);
         } catch (TransaccionNoRegistradaException e) {
             //mandar mensaje a telegram de que no se pudo registrar la transaccion
-            return "No se pudo registrar la transaccion."; // este es mientras hacemos el pquete 
-        } catch (IOException e) {
-            // TODO
-        } catch (InterruptedException e) {
+            return "No se pudo registrar la transaccion."; // este es mientras hacemos el pquete
+        } catch (IOException | InterruptedException e) {
             // TODO
         }
         // Si esto ocurrió correctamente entonces registra la transacción en pendientes
@@ -91,7 +102,6 @@ public class GestorTransacciones {
     }
 
     /**
-     * 
      * @param transaccion
      */
     public void actualizarEstado(Transaccion transaccion) {
@@ -104,12 +114,13 @@ public class GestorTransacciones {
 
     /**
      * Metodo que busca y regresa una transaccion mediante su id.
-     * @param id. id de la transaccion buscada. (String)
+     *
+     * @param id id de la transaccion buscada. (String)
      * @return t. transaccion requerida. (Transaccion)
      */
-    public Transaccion getTransaccionPorId(String id){
-        for(Transaccion t : pendientes){
-            if(t.getId().equals(id)){
+    public Transaccion getTransaccionPorId(String id) {
+        for (Transaccion t : pendientes) {
+            if (t.getId().equals(id)) {
                 return t;
             }
         }
@@ -118,10 +129,11 @@ public class GestorTransacciones {
 
     /**
      * Devuelve la unica instancia de GestorTransacciones.
+     *
      * @return instance. (GestorTransacciones).
      */
     public static GestorTransacciones getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new GestorTransacciones();
         }
         return instance;

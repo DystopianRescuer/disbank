@@ -17,16 +17,16 @@ import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnCo
 
 /**
  * Clase encargada de la parte de vista del servicio del bot de Telegram
- *
+ * <p>
  * Cada chat activo con un asociado y el bot de telegram deberá tener una instancia de esta clase activa, la cual funcionará como intercambio inicial de información entre los chats
  * y la aplicación.
- *
+ * <p>
  * Posee los siguientes atributos:
  * - tokenBot :  El token para establecer la comunicación con el bot de telegram. Es una variable estática que deberá setearse una vez al inicio del programa, y no
  *               debe cambiar durante la ejecución del mismo.
  * - chatId   :  Cada instancia de esta clase tendrá asociado un chatId al cual enviará mensajes con el metodo enviarMensaje(). Tampoco debe cambiar durante la vida de la instancia,
  *               por lo que, también es una variable final.
- *
+ * <p>
  * De metodos, es una clase relativamente simple, pues su responsabilidad no es otra que enviar y recibir mensajes al bot de telegram. Y justamente, los métodos que existen son
  * para realizar este cometido
  *
@@ -104,7 +104,7 @@ public class VistaTelegram {
 
     /**
      *  Recibe un arreglo de Updates del bot de telegram segun el offset dado
-     *
+     * <p>
      *  Es estatico porque no necesitamos que todas las instancias posean este metodo de manera particular
      *  Está configurado para utilizar la feature de long polling que nos ofrece la API de telegram (porque no se
      *  usar webhooks pero pues hay que ser un poquito buena onda con el spam a las APIs)

@@ -10,12 +10,11 @@ public class Cortador {
     /** Unica instancia de ControladorTelegram */
     private ControladorTelegram controladorTelegram;
     /** Unica instancia de ControladorClip */
-    private ControladorClip controladorClip;
+    private final ControladorClip controladorClip;
     /** Base de datos */
     private BaseDatos bd;
 
-    public Cortador(){
-        bd = new BaseDatos();
+    public Cortador() {
         try{
             controladorTelegram = ControladorTelegram.getInstance();
         }catch(ErrorEnConexionException e){

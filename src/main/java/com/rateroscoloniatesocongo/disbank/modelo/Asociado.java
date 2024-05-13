@@ -27,18 +27,17 @@ public class Asociado {
 
     /**
      * Metodo constructor Asociado que inicializa los atributos
-     * @param chat_id. chat id del asociado (String)
-     * @param nombre. nombre del asociado (String)
-     * @param cuenta. cuenta de banco del asociado (String)
-     * @param banco. nombre de banco del asociado (String)
-     * @param id. id del asociado (int)
+     * @param nombre nombre del asociado (String)
+     * @param cuenta cuenta de banco del asociado (String)
+     * @param banco nombre de banco del asociado (String)
+     * @param id id del asociado (int)
      */
     public Asociado(String nombre, String cuenta, String banco, int id){
         this.nombre = nombre;
         this.cuenta = cuenta;
         this.banco = banco;
         this.id = id;
-        transaccionesDia = new ArrayList <Transaccion> ();
+        transaccionesDia = new ArrayList<>();
     }
 
     /**

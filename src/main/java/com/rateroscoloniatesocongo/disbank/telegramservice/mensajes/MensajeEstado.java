@@ -8,7 +8,7 @@ import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion.Estado;
  */
 public class MensajeEstado extends Mensaje{
 
-    private String mensaje;
+    private final String mensaje;
 
     public static final String transaccionExitosa = "La transaccion con id %s ha sido efectuada exitosamente";
     public static final String transaccionPendiente = "La transaccion con id %s sigue pendiente";
@@ -17,17 +17,11 @@ public class MensajeEstado extends Mensaje{
 
     MensajeEstado(Asociado asociado, String idTransaccion, Estado estadoTransaccion){
         this.asociado = asociado;
-        String tmp = null;
-        switch(estadoTransaccion){
-            case PENDIENTE:
-                tmp = transaccionPendiente;
-                break;
-            case PAGADA:
-                tmp = transaccionExitosa;
-                break;
-            case FALLIDA:
-                tmp = transaccionFallida;
-        }
+        String tmp = switch (estadoTransaccion) {
+            case PENDIENTE -> transaccionPendiente;
+            case PAGADA -> transaccionExitosa;
+            case FALLIDA -> transaccionFallida;
+        };
         this.mensaje = String.format(tmp, idTransaccion);
     }
 

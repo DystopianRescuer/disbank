@@ -11,17 +11,17 @@ import java.util.regex.Pattern;
 
 /**
  * Hilo daemon del controlador de Telegram
- *
+ * <p>
  * Está destinado a correr durante toda la ejecución, recibiendo las Updates del bot mediante long polling y destinandolas a
  * los metodos asignados para este motivo del {@link ControladorTelegram}
  *
  * Tiene acceso privilegiado a varios métodos del ControladorTelegram que están destinados a funcionar exclusivamente para esta
  * clase.
- *
+ * <p>
  * Se podria discutir que este es el controlador de telegram real, pero la clase {@link ControladorTelegram} es la que llama a la
  * existencia a este mismo hilo, el cual solamente asume la tarea de escuchar activamente las updates del bot y canalizarlas a los
  * metodos y procedimientos correspondientes
- *
+ * <p>
  * Atributos:
  * -controlador : La instancia del controlador que estará recibiendo todas las ordenes a lo largo de la ejecución del programa
  */
@@ -107,7 +107,7 @@ public class DaemonTelegram extends Thread{
                     }else{
                         String[] detallesCobro = buscarCobro(mensaje);
                         if(detallesCobro != null){
-                            controlador.generarNuevaTransaccion(Double.parseDouble(detallesCobro[0]), detallesCobro[1], asociado);
+                            controlador.generarNuevaTransaccion(Integer.parseInt(detallesCobro[0]), detallesCobro[1], asociado);
                             return;
                         }
 
