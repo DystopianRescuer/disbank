@@ -6,13 +6,15 @@ import com.rateroscoloniatesocongo.disbank.clipservice.ControladorClip;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Cortador {
     /** Unica instancia de ControladorTelegram */
     private ControladorTelegram controladorTelegram;
     /** Unica instancia de ControladorClip */
     private final ControladorClip controladorClip;
-    /** Base de datos */
-    private BaseDatos bd;
 
     public Cortador() {
         try{

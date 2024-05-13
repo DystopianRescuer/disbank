@@ -66,8 +66,9 @@ public class BaseDatos {
      * Metodo que agrega un asociado a la bd.
      * @param a. asociado que se agregara. (Asociado)
      */
-    public static void agregarAsociado(Asociado a){
-        asociados.add(a);
+    public static void agregarAsociado(String nombre, String cuenta, String banco, String nombreComercio, String usuarioTelegram){
+        Asociado asociado = new Asociado(nombre, cuenta, banco, nombreComercio, usuarioTelegram);
+        asociados.add(asociado);
     }
 
     /**

@@ -15,6 +15,7 @@ public class Asociado {
     /** nombre del asociado*/
     String nombre;
     /** cuenta del asociado */
+    String nombreComercio;
     String cuenta;
     /** nombre de banco del asociado */
     String banco;
@@ -32,11 +33,12 @@ public class Asociado {
      * @param banco nombre de banco del asociado (String)
      * @param id id del asociado (int)
      */
-    public Asociado(String nombre, String cuenta, String banco, int id){
+    public Asociado(String nombre, String cuenta, String banco, String nombreComercio, String usuarioTelegram){
         this.nombre = nombre;
         this.cuenta = cuenta;
         this.banco = banco;
-        this.id = id;
+        this.nombreComercio = nombreComercio;
+        this.usuarioTelegram = usuarioTelegram;
         transaccionesDia = new ArrayList<>();
     }
 
