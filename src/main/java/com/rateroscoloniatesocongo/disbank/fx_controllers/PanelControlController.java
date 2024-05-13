@@ -6,6 +6,7 @@ import com.rateroscoloniatesocongo.disbank.util.Avisador;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -24,6 +25,8 @@ public class PanelControlController {
     public TextField nombre, clabe, telegramUser, nombreComercio, banco;
     @FXML
     public VBox registrandoUsuario;
+    @FXML
+    public CheckBox comisionCheck;
 
 
     @FXML
@@ -43,7 +46,7 @@ public class PanelControlController {
 
     @FXML
     public void onSearchBarUpdate(ActionEvent actionEvent) {
-        if(estaEnBlanco(searchBar)) {
+        if (estaEnBlanco(searchBar)) {
             // Pone el normal
         } else {
             // Pone los resultados de búsqueda
@@ -60,7 +63,7 @@ public class PanelControlController {
 
     @FXML
     public void onRegistrarUsuarioAttempt(ActionEvent actionEvent) {
-        if(estaEnBlanco(nombre) || estaEnBlanco(clabe) || estaEnBlanco(banco) || estaEnBlanco(nombreComercio) || estaEnBlanco(telegramUser)) {
+        if (estaEnBlanco(nombre) || estaEnBlanco(clabe) || estaEnBlanco(banco) || estaEnBlanco(nombreComercio) || estaEnBlanco(telegramUser)) {
             Avisador.mandarAviso("Debes llenar todos los campos");
             return;
         }
