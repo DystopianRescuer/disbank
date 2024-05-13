@@ -25,7 +25,7 @@ public class Cortador {
     }
 
     public void cortar(){
-
+        //vaciar en txt las transacciones del dia
+        // mensaje corte a los asociados via telegram
     }
-
 }

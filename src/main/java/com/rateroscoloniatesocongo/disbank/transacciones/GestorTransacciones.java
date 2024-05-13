@@ -3,6 +3,7 @@ package com.rateroscoloniatesocongo.disbank.transacciones;
 import com.rateroscoloniatesocongo.disbank.clipservice.ControladorClip;
 import com.rateroscoloniatesocongo.disbank.clipservice.excepciones.TransaccionNoRegistradaException;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
+import com.rateroscoloniatesocongo.disbank.modelo.Cortador;
 import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
@@ -58,7 +59,10 @@ public class GestorTransacciones {
      * corte del dia.
      */
     public void detener() {
-        //crear un Cortador 
+        iniciado = false;
+        Cortador cortador = new Cortador();
+        cortador.cortar();
+        instance = null;
     }
 
     /**
