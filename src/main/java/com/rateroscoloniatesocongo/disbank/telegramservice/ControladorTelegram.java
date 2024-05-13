@@ -1,9 +1,13 @@
 package com.rateroscoloniatesocongo.disbank.telegramservice;
 
+import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ConexionYaIniciadaException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.SolicitudNoEncontradaException;
+import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.Mensaje;
+import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.MensajeFactory;
+import com.rateroscoloniatesocongo.disbank.transacciones.CobroFactory;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 
@@ -45,6 +49,10 @@ import java.util.HashMap;
  * - daemon : El hilo daemon encargado de regularmente conseguir las updates de la API de telegram. Para motivos de debug solamente,
  * tiene su getter.
  *
+ * Asi mismo, tambien tiene su coleccion de mensajes rapidos como Strings finales, los cuales no sirven para otra cosa más que para
+ * que el {@link DaemonTelegram} pueda usarlos en esos casos en los que, por la complejidad de la respuesta, no es necesario
+ * crear un objeto Mensaje
+ *
  */
 public class ControladorTelegram {
 
@@ -58,6 +66,7 @@ public class ControladorTelegram {
     private GestorTransacciones gestorTransacciones;
     private final Thread daemon;
 
+    //Mensajes rapidos
     public static final String noRegistroPendiente = "No te encuentras registrado como asociado, ve con el administrador de Disbank para más detalles";
     public static final String instruccionNoReconocida = "La instruccion enviada no es reconocida, escribe Comandos para la lista de comandos";
 
@@ -69,6 +78,7 @@ public class ControladorTelegram {
         offset = 0;
         chatIds = new HashMap<>();
         daemon = new DaemonTelegram(this);
+        daemon.setDaemon(true);
         daemon.start();
     }
 
@@ -96,10 +106,6 @@ public class ControladorTelegram {
         return instance;
     }
 
-    private void generarNuevaTransaccion(double cobro, String tipoDeCobro){
-
-    }
-
      /**
      *  Envia un mensaje con las especificaciones dadas desde el objeto Mensaje
      *
@@ -115,6 +121,8 @@ public class ControladorTelegram {
      *  */
     public void enviarMensaje(Mensaje mensaje) throws ErrorEnConexionException {
 
+        VistaTelegram enviador = buscarVistaTelegram(mensaje.getAsociado);
+        enviador.enviarMensaje(mensaje.darMensaje());
     }
 
     /**
@@ -144,6 +152,19 @@ public class ControladorTelegram {
      *  */
     protected void generarNuevaTransaccion(double cobro, String tipoDeCobro, Asociado asociado){
 
+        String resultado = GestorTransacciones.getInstance()
+            .nuevaTransaccion(asociado, CobroFactory
+                              .generaCobro(tipoDeCobro, cobro));
+
+        if(resultado.equals("No se pudo registrar la transaccion")){
+            try{
+                buscarVistaTelegram(asociado)
+                .enviarMensaje(resultado);
+            }catch (ErrorEnConexionException e){
+                //Bailó berta, se cayó todo mano
+                //TODO: Implementar aviso al admin
+            }
+        }
     }
 
     /**
@@ -154,6 +175,9 @@ public class ControladorTelegram {
      *  */
     protected void registrarNuevaInteraccion(String chatID){
 
+        Asociado asociado = BaseDatos.busacarPorChatId(chatID);
+        chats.put(asociado, new VistaTelegram(chatID));
+        chatIds.put(chatID, asociado);
     }
 
 
@@ -164,6 +188,7 @@ public class ControladorTelegram {
      *  */
     protected void cortePersonal(Asociado asociado){
 
+
     }
 
     /**
@@ -173,7 +198,11 @@ public class ControladorTelegram {
      *
      *  */
     protected void darComandos(Asociado asociado){
-
+        try{
+            enviarMensaje(MensajeFactory.nuevoMensaje("Comandos", asociado));
+        }catch(ErrorEnConexionException e){
+            //TODO: Implementar aviso al admin
+        }
     }
 
     /**
@@ -182,11 +211,16 @@ public class ControladorTelegram {
      *  @param chatID que la solicita
      *  */
     protected void pedirAyuda(Asociado asociado){
-
+        asociado.recibiendoAyuda = true;
+        //TODO: Implementar chat personal con el admin
     }
 
     protected void mensajeAyuda(Asociado asociado, String mensaje){
-
+        try{
+            buscarVistaTelegram(asociado).enviarMensaje(mensaje);
+        }catch(ErrorEnConexionException e){
+            //TODO: Implementar aviso al admin
+        }
     }
 
     /**
