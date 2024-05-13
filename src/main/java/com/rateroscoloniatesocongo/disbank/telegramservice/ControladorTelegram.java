@@ -1,9 +1,13 @@
 package com.rateroscoloniatesocongo.disbank.telegramservice;
 
+import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ConexionYaIniciadaException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.SolicitudNoEncontradaException;
+import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.Mensaje;
+import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.MensajeFactory;
+import com.rateroscoloniatesocongo.disbank.transacciones.CobroFactory;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 
@@ -104,10 +108,6 @@ public class ControladorTelegram {
         return instance;
     }
 
-    private void generarNuevaTransaccion(double cobro, String tipoDeCobro){
-
-    }
-
      /**
      *  Envia un mensaje con las especificaciones dadas desde el objeto Mensaje
      *
@@ -123,6 +123,8 @@ public class ControladorTelegram {
      *  */
     public void enviarMensaje(Mensaje mensaje) throws ErrorEnConexionException {
 
+        VistaTelegram enviador = buscarVistaTelegram(mensaje.getAsociado);
+        enviador.enviarMensaje(mensaje.darMensaje());
     }
 
     /**
@@ -153,6 +155,19 @@ public class ControladorTelegram {
      *  */
     protected void generarNuevaTransaccion(double cobro, String tipoDeCobro, Asociado asociado){
 
+        String resultado = GestorTransacciones.getInstance()
+            .nuevaTransaccion(asociado, CobroFactory
+                              .generaCobro(tipoDeCobro, cobro));
+
+        if(resultado.equals("No se pudo registrar la transaccion")){
+            try{
+                buscarVistaTelegram(asociado)
+                .enviarMensaje(resultado);
+            }catch (ErrorEnConexionException e){
+                //Bailó berta, se cayó todo mano
+                //TODO: Implementar aviso al admin
+            }
+        }
     }
 
     /**
@@ -163,6 +178,9 @@ public class ControladorTelegram {
      *  */
     protected void registrarNuevaInteraccion(String chatID){
 
+        Asociado asociado = BaseDatos.busacarPorChatId(chatID);
+        chats.put(asociado, new VistaTelegram(chatID));
+        chatIds.put(chatID, asociado);
     }
 
 
@@ -173,6 +191,7 @@ public class ControladorTelegram {
      *  */
     protected void cortePersonal(Asociado asociado){
 
+
     }
 
     /**
@@ -182,7 +201,11 @@ public class ControladorTelegram {
      *
      *  */
     protected void darComandos(Asociado asociado){
-
+        try{
+            enviarMensaje(MensajeFactory.nuevoMensaje("Comandos", asociado));
+        }catch(ErrorEnConexionException e){
+            //TODO: Implementar aviso al admin
+        }
     }
 
     /**
@@ -191,11 +214,16 @@ public class ControladorTelegram {
      *  @param chatID que la solicita
      *  */
     protected void pedirAyuda(Asociado asociado){
-
+        asociado.recibiendoAyuda = true;
+        //TODO: Implementar chat personal con el admin
     }
 
     protected void mensajeAyuda(Asociado asociado, String mensaje){
-
+        try{
+            buscarVistaTelegram(asociado).enviarMensaje(mensaje);
+        }catch(ErrorEnConexionException e){
+            //TODO: Implementar aviso al admin
+        }
     }
 
     /**
