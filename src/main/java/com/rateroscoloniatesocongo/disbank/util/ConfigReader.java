@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
-import java.util.PrimitiveIterator;
 import java.util.Properties;
 
 public class ConfigReader {
@@ -18,7 +16,7 @@ public class ConfigReader {
     }
 
     public static String getField(String key) {
-        if(ruta != null) {
+        if (ruta != null) {
             return cargarConfig(ruta).getProperty(key);
         }
         return null;

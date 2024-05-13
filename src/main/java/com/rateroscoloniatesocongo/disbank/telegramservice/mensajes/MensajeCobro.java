@@ -5,7 +5,7 @@ import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 
 /**
  * Mensaje para notificarle al Asociado que su solicitud de cobro se ha realizado exitosamente, y notificarle el resultado
- *
+ * <p>
  * Si la transaccion por la que fue solicitada es de link de cobro, se creará el mensaje correspondiente para darle el link de cobro
  * al {@link Asociado}
  *
@@ -14,8 +14,8 @@ import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
  */
 public class MensajeCobro extends Mensaje{
 
-    private String idTransaccion;
-    private String link;
+    private final String idTransaccion;
+    private final String link;
 
     private final String formatoLink = "La transaccion con el id: %s ha sido generada. \nEste es el link para cobrarla: %s";
     private final String formatoTerminal = "La transaccion con el id: %s ha sido generada. Dile a tu cliente que vaya con el cobrador y le diga el id de la misma";
@@ -32,7 +32,7 @@ public class MensajeCobro extends Mensaje{
     public MensajeCobro(Asociado asociado, Optional<String> link, String idTransaccion){
         this.asociado = asociado;
         this.idTransaccion = idTransaccion;
-        this.link = link.isPresent()? link.get() : null;
+        this.link = link.orElse(null);
     }
 
     @Override

@@ -22,7 +22,7 @@ import java.util.HashMap;
  * Funciona como una capa de abstraccion que nos permite convertir todas las
  * instrucciones enfocadas a usuario del resto del programa en los métodos necesarios
  * de la API de Telegram para comunicarnos con los mismos.
- *
+ * <p>
  * Es asi mismo el que inicializa la parte estática de {@link VistaTelegram} y verifica que todo haya salido bien ahí
  * <p>
  * Debido a que la clase guarda la información relacional entre los usuarios y sus chatIds,
@@ -48,7 +48,7 @@ import java.util.HashMap;
  * una comunicacion ambivalente entre ambos.
  * - daemon : El hilo daemon encargado de regularmente conseguir las updates de la API de telegram. Para motivos de debug solamente,
  * tiene su getter.
- *
+ * <p>
  * Asi mismo, tambien tiene su coleccion de mensajes rapidos como Strings finales, los cuales no sirven para otra cosa más que para
  * que el {@link DaemonTelegram} pueda usarlos en esos casos en los que, por la complejidad de la respuesta, no es necesario
  * crear un objeto Mensaje
@@ -108,11 +108,11 @@ public class ControladorTelegram {
 
      /**
      *  Envia un mensaje con las especificaciones dadas desde el objeto Mensaje
-     *
+     * <p>
      *  En situaciones optimas, este es el unico metodo necesario para enviar mensajes a los asociados desde cualquier parte
      *  del programa, excepto en algunos casos donde no fue considerado conveniente por la innecesaria inmediatez de algunos eventos
      *  inmediatos que se pueden manejar ahi mismo (hay algunos ejemplos en {@link DaemonTelegram})
-     *
+     * <p>
      *  Metodo para el backend y para el mismo controlador
      *
      *
@@ -150,7 +150,7 @@ public class ControladorTelegram {
      *  @param tipoDeCobro   tipo de cobro a pedir (terminal o link)
      *  @param asociado      el asociado al cual está vinculado el cobro (de quien proviene la solicitud)
      *  */
-    protected void generarNuevaTransaccion(double cobro, String tipoDeCobro, Asociado asociado){
+    protected void generarNuevaTransaccion(int cobro, String tipoDeCobro, Asociado asociado){
 
         String resultado = GestorTransacciones.getInstance()
             .nuevaTransaccion(asociado, CobroFactory
@@ -169,13 +169,13 @@ public class ControladorTelegram {
 
     /**
      *  Registra una nueva interaccion con un chatID que no se encuentra registrado en los chats actuales.
-     *
+     * <p>
      *  Saca el asociado vinculado a dicho chatID y le crea una VistaTelegram para el resto de la ejecución, hasta su corte
-     *
+     * <p>
      *  */
     protected void registrarNuevaInteraccion(String chatID){
 
-        Asociado asociado = BaseDatos.busacarPorChatId(chatID);
+        Asociado asociado = BaseDatos.buscarPorChatId(chatID);
         chats.put(asociado, new VistaTelegram(chatID));
         chatIds.put(chatID, asociado);
     }
@@ -183,7 +183,7 @@ public class ControladorTelegram {
 
     /**
      *  Realiza el corte personal del asociado registrado al chatID.
-     *
+     * <p>
      *  Esto solamente significa, hasta el momento, que dejamos de guardar su VistaTelegram, por motivos de optimizacion
      *  */
     protected void cortePersonal(Asociado asociado){
@@ -225,7 +225,7 @@ public class ControladorTelegram {
 
     /**
      *  Retorna un arreglo JSON con las actualizaciones recibidas del bot desde la ultima llamada al metodo
-     *
+     * <p>
      *  Está destinado para ser usado desde el hilo daemon encargado del controlador.
      *
      *  @return ArregloJSON con las actualizaciones recibidas del bot desde la ultima llamada al metodo
@@ -243,7 +243,7 @@ public class ControladorTelegram {
 
     /**
      *  Busca el asociado vinculado a ese chatID. Necesitamos que el hilo daemon acceda al resto de metodos con esta información
-     *
+     * <p>
      *  Está destinado para ser usado desde el hilo daemon del controlador
      *
      *  @return Asociado de la lista de chats que está vinculado a ese chatID

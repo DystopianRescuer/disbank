@@ -4,7 +4,7 @@ import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 
 /**
  * Un mensaje de los comandos disponibles para el usuario. Se ve de la siguiente manera:
- *
+ * <p>
  * Comandos disponibles:
  * - Iniciar ventas : Para iniciar tu dia de ventas y comenzar a generar tus solicitudes de cobro
  * - Cerrar ventas : Cuando termines tu dia de ventas, usa este comando para solicitar tu corte personal y ver tus ventas realizadas

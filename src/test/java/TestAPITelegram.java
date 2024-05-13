@@ -11,7 +11,7 @@ import org.junit.Test;
 /**
  *  Pruebas unitarias para los metodos de la {@link com.rateroscoloniatesocongo.disbank.telegramservice.VistaTelegram}
  *  y ControladorTelegram
- *
+ * <p>
  *  1. TestSetTokenBot
  *  2. TestRecibirActualizacion
  *  3.
@@ -23,7 +23,7 @@ public class TestAPITelegram {
 
     /**
      *  Inicializa ControladorTelegram para cada prueba
-     *
+     * <p>
      *  La vista ejemplo se construye con el numero guardado en NumeroTest.txt
      *  Y el ControladorTelegram se construye con el token de la configuracion
      *  de la aplicacion

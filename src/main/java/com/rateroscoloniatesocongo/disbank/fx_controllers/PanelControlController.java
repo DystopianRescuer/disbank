@@ -1,5 +1,6 @@
 package com.rateroscoloniatesocongo.disbank.fx_controllers;
 
+import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
 import javafx.event.ActionEvent;
@@ -7,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
 public class PanelControlController {
@@ -54,6 +54,7 @@ public class PanelControlController {
     public void onCorteRequest(ActionEvent actionEvent) {
         // Crea un cortador y lo pone a chambear
         botonCorte.setDisable(true);
+        GestorTransacciones.getInstance().detener();
         Avisador.mandarAviso("Corte de día realizado.");
     }
 
