@@ -9,7 +9,7 @@ public class Transaccion {
     }
 
     private final Asociado asociado;
-    private String id, log;
+    private String log;
     private final Cobro cobro;
     private Estado estado;
 
@@ -24,11 +24,7 @@ public class Transaccion {
     }
 
     public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        return cobro.getID();
     }
 
     public Estado getEstado() {

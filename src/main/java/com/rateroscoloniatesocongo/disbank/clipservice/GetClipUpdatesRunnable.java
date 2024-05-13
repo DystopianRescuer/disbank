@@ -29,7 +29,7 @@ public class GetClipUpdatesRunnable implements Runnable {
     }
 
     private void checarClipUpdate(JSONObject jsonObject) {
-        ControladorClip.getInstance().actualizarTransaccion(jsonObject.getString("transaction_id"),
+        ControladorClip.getInstance().actualizarTransaccion(jsonObject.getString("merch_inv_id"),
                 jsonObject.getJSONObject("payment_request_detail").getString("status_description").equals("Completed") ?
                 Transaccion.Estado.PAGADA : Transaccion.Estado.FALLIDA);
     }
