@@ -27,14 +27,13 @@ public class Asociado {
     /** Indicador de que el asociado está recibiendo ayuda (Para el telegram service) */
     public boolean recibiendoAyuda;
     /** Lista de transacciones hechas en el dia del asociado */
-    transient ArrayList <Transaccion> transaccionesDia;
+    transient ArrayList<Transaccion> transaccionesDia;
 
     /**
      * Metodo constructor Asociado que inicializa los atributos
      * @param nombre nombre del asociado (String)
      * @param cuenta cuenta de banco del asociado (String)
      * @param banco nombre de banco del asociado (String)
-     * @param id id del asociado (int)
      */
     public Asociado(String nombre, String cuenta, String banco, String nombreComercio, String usuarioTelegram){
         this.nombre = nombre;
@@ -119,9 +118,9 @@ public class Asociado {
 
     /**
      * Modifica el id del asociado.
-     * @param id. nuevo id del asociado (int)
+     * @param id nuevo id del asociado (int)
      */
-    public void setId(int id){
+    public void setId(int id) {
         this.id = id;
     }
 

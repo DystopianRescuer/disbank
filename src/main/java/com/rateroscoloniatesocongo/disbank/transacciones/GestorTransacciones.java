@@ -8,6 +8,8 @@ import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.MensajeFactory;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -26,6 +28,8 @@ public class GestorTransacciones {
      */
     private static GestorTransacciones instance;
 
+
+    private ObservableList<Transaccion> transaccionesTotales;
     /**
      * Lista de transacciones pendientes
      */
@@ -47,6 +51,7 @@ public class GestorTransacciones {
      * Inicializa atributos e instancia a ControladorTelegram y a ControladorClip
      */
     private GestorTransacciones() {
+        transaccionesTotales = FXCollections.observableArrayList();
         pendientes = new LinkedList<>();
         iniciado = false;
         try {
@@ -101,10 +106,15 @@ public class GestorTransacciones {
         pendientes.add(transaccion);
         try{
             controladorTelegram.enviarMensaje(MensajeFactory.nuevoMensaje("Cobro", asociado, transaccion));
-        }catch (ErrorEnConexionException e){
+        }catch (ErrorEnConexionException e) {
             // TODO error en la terminal admin
         }
+        transaccionesTotales.add(transaccion);
         return "";
+    }
+
+    public ObservableList<Transaccion> getTransaccionesTotales() {
+        return transaccionesTotales;
     }
 
     /**

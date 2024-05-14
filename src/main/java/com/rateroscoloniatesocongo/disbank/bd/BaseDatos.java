@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
+import com.sun.javafx.collections.ImmutableObservableList;
+import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 
 /**
  * Proyecto 2 del curso Modelado y Programacion
@@ -16,12 +21,13 @@ public class BaseDatos {
     // Cada cosa de aquí es estática
 
     /**Lista de asociados registrados*/
-    public static ArrayList<Asociado> asociados;
+    public static ObservableList<Asociado> asociados;
     /**Map que relaciona el ChatId con su Asociado */
     public static HashMap<String, Asociado> chatIdAsociado = new HashMap<>();
 
     private BaseDatos(){
-
+        asociados = FXCollections.observableArrayList();
+        chatIdAsociado = new HashMap<>();
     }
 
     /**
@@ -54,6 +60,10 @@ public class BaseDatos {
         return false;
     }
 
+    public static ObservableList<Asociado> getAsociados() {
+        return asociados;
+    }
+
     /**
      * Regresa un iterador para iterar a los asociados
      * @return iterator.
@@ -73,7 +83,7 @@ public class BaseDatos {
 
     /**
      * Borra el asociado de la bd.
-     * @param a. asociado que se quiere borrar. (Asociado)
+     * @param a asociado que se quiere borrar. (Asociado)
      */
     public static void borrarAsociado(Asociado a){
         chatIdAsociado.remove(a.getChatId());
