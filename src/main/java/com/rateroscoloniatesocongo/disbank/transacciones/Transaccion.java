@@ -6,7 +6,7 @@ import java.util.Optional;
 public class Transaccion {
 
     public enum Estado {
-        PENDIENTE, PAGADA, FALLIDA
+        PENDIENTE, PAGADA, FALLIDA;
     }
 
     private final Asociado asociado;
@@ -14,6 +14,7 @@ public class Transaccion {
     private final Cobro cobro;
     private Estado estado;
     private Optional<String> link;
+    private String id;
 
     public Optional<String> getLink() {
         return link;
@@ -27,6 +28,7 @@ public class Transaccion {
         this.asociado = asociado;
         this.cobro = cobro;
         this.estado = Estado.PENDIENTE;
+        this.id = cobro.getID();
     }
 
     public Asociado getAsociado() {
@@ -34,7 +36,7 @@ public class Transaccion {
     }
 
     public String getId() {
-        return cobro.getID();
+        return this.id;
     }
 
     public Estado getEstado() {
