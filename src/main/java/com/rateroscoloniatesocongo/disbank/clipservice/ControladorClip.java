@@ -30,15 +30,13 @@ public class ControladorClip {
 
     // Hace la petición a la API de Clip para la nueva transacción
     public Optional<String> solicitarTransaccion(Transaccion transaccion) throws IOException, InterruptedException, TransaccionNoRegistradaException {
-        // Cobro a procesar
-        Cobro cobro = transaccion.getCobro();
         // Request a realizar
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api-gw.payclip.com/" + cobro.getAPI()))
+                .uri(URI.create("https://api-gw.payclip.com/" + transaccion.getAPI()))
                 .header("accept", "application/vnd.com.payclip.v2+json")
                 .header("content-type", "application/json; charset=UTF-8")
                 .header("x-api-key", this.apikey)
-                .method("POST", HttpRequest.BodyPublishers.ofString(cobro.getBody()))
+                .method("POST", HttpRequest.BodyPublishers.ofString(transaccion.getBody()))
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         JSONObject jsonResponse = new JSONObject(response.body());
@@ -49,8 +47,8 @@ public class ControladorClip {
             throw new TransaccionNoRegistradaException("Respuesta: " + response.statusCode() + ". Response body: " + body);
         }
 
-        if(cobro.getRespuestaKey().isPresent()) {
-            return Optional.of(jsonResponse.getString(cobro.getRespuestaKey().get()));
+        if(transaccion.getRespuestaKey().isPresent()) {
+            return Optional.of(jsonResponse.getString(transaccion.getRespuestaKey().get()));
         }
 
         return Optional.empty();

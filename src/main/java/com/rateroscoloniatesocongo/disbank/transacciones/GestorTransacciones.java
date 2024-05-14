@@ -79,16 +79,18 @@ public class GestorTransacciones {
     public void detener() {
         iniciado = false;
         Cortador cortador = new Cortador();
-        cortador.cortar();
+        cortador.corteDiario();
         instance = null;
     }
 
     /**
      * Metodo para solicitar nueva transaccion a controladorClip
+     * Es ejecutado principalmente por el controladorTelegram. El cual es el que genera el Cobro. Luego, se construye el resto
+     * del objeto Transaccion con ayuda del controladorClip.
      *
-     * @param asociado
-     * @param cobro
-     * @return
+     * @param asociado el asociado que está solicitando la transaccion
+     * @param cobro el objeto Cobro que compondrá a la nueva transaccion
+     * @return Una
      */
     public String nuevaTransaccion(Asociado asociado, Cobro cobro) {
         // Crea el objeto transacción

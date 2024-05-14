@@ -235,8 +235,10 @@ public class ControladorTelegram {
     protected JSONArray getUpdates() throws ErrorEnConexionException{
         JSONArray respuesta;
         respuesta = VistaTelegram.recibirActualizacion(offset);
+        if(respuesta.length() == 0)
+            return null;
         JSONObject ultimoRecibido = respuesta.getJSONObject(respuesta.length()-1);
-        offset = ultimoRecibido.getInt("update_id");
+        offset = ultimoRecibido.getInt("update_id") +1;
 
         return respuesta;
     }
