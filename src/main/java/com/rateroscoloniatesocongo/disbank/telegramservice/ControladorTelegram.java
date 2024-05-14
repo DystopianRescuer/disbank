@@ -9,6 +9,7 @@ import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.Mensaje;
 import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.MensajeFactory;
 import com.rateroscoloniatesocongo.disbank.transacciones.CobroFactory;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
+import com.rateroscoloniatesocongo.disbank.util.Avisador;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 
 import org.json.JSONArray;
@@ -100,7 +101,7 @@ public class ControladorTelegram {
         try{
             instance = new ControladorTelegram(ConfigReader.getField("telegram.key"));
         }catch(ConexionYaIniciadaException e){
-            //No hacer nada, no puede pasar
+            Avisador.mandarErrorFatal(e.getMessage());
         }
 
         return instance;
@@ -161,8 +162,7 @@ public class ControladorTelegram {
                 buscarVistaTelegram(asociado)
                 .enviarMensaje(resultado);
             }catch (ErrorEnConexionException e){
-                //Bailó berta, se cayó todo mano
-                //TODO: Implementar aviso al admin
+                Avisador.mandarErrorFatal(e.getMessage());
             }
         }
     }
@@ -201,7 +201,7 @@ public class ControladorTelegram {
         try{
             enviarMensaje(MensajeFactory.nuevoMensaje("Comandos", asociado));
         }catch(ErrorEnConexionException e){
-            //TODO: Implementar aviso al admin
+            Avisador.mandarErrorFatal(e.getMessage());
         }
     }
 
@@ -219,7 +219,7 @@ public class ControladorTelegram {
         try{
             buscarVistaTelegram(asociado).enviarMensaje(mensaje);
         }catch(ErrorEnConexionException e){
-            //TODO: Implementar aviso al admin
+            Avisador.mandarErrorFatal(e.getMessage());
         }
     }
 
