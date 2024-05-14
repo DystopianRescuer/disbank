@@ -25,8 +25,13 @@ public class Cortador {
         controladorClip = ControladorClip.getInstance();
     }
 
-    public void cortar(){
+    public void corteDiario(){
         //vaciar en txt las transacciones del dia
         // mensaje corte a los asociados via telegram
+    }
+
+    public void cortePersonal(Asociado asociado){
+        //Enviar un corte preliminar al asociado invocado.
+        //Solo fabrica el mensaje y envialo con enviarMensaje()
     }
 }
