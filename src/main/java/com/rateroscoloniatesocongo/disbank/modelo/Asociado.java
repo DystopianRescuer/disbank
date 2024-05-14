@@ -15,8 +15,11 @@ public class Asociado {
     /** nombre del asociado*/
     String nombre;
     /** cuenta del asociado */
-    String nombreComercio;
     String cuenta;
+    /** usuario de telegram del Asociado */
+    String usuarioTelegram;
+    /** nombre del comercio del asociado */
+    String nombreComercio;
     /** nombre de banco del asociado */
     String banco;
     /** id del asociado */
