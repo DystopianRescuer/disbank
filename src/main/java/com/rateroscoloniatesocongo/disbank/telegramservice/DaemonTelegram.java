@@ -44,6 +44,9 @@ public class DaemonTelegram extends Thread{
                 //TODO : Pensar en como implementar un posible error en conexion con la API
             }
 
+            if(updates == null)
+                continue;
+
             for(int i = 0; i<updates.length() ; i++){
                 JSONObject update = updates.getJSONObject(i);
                 JSONObject mensaje = update.optJSONObject("message");
@@ -52,7 +55,7 @@ public class DaemonTelegram extends Thread{
                     continue;
 
                 //Obteniendo chatID y texto del mensaje
-                String chatID = mensaje.getJSONObject("chat").getString("id");
+                String chatID = String.valueOf(mensaje.getJSONObject("chat").getLong("id"));
                 String text = mensaje.getString("text");
                 try{
                     actuar(chatID, text);
@@ -71,17 +74,16 @@ public class DaemonTelegram extends Thread{
         Asociado asociado = controlador.buscarAsociado(chatID);
 
         if(asociado == null){
-            if(!mensaje.equals("/start")) {
-            }
-            else{
-                if(mensaje.equals("marco")){
-                    new VistaTelegram(chatID).enviarMensaje("polo");
-                }
-                try{
-                    controlador.registrarNuevoAsociado(chatID);
-                }catch(SolicitudNoEncontradaException e){
-                    new VistaTelegram(chatID).enviarMensaje(ControladorTelegram.noRegistroPendiente);
-                }
+            switch(mensaje){
+                case "/start":
+                    try{
+                        controlador.registrarNuevoAsociado(chatID);
+                    }catch(SolicitudNoEncontradaException e){
+                        new VistaTelegram(chatID).enviarMensaje(ControladorTelegram.noRegistroPendiente);
+                    }
+                    break;
+                case "marco":
+                    JSONObject a = new VistaTelegram(chatID).enviarMensaje("polo");
             }
         }else{
             switch(mensaje){

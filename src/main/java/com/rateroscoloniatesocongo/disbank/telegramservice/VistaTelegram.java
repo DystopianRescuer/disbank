@@ -117,8 +117,8 @@ public class VistaTelegram {
     public static JSONArray recibirActualizacion(int offset) throws ErrorEnConexionException {
         //Formacion de la peticion
         JSONObject peticion = new JSONObject();
-        peticion.append("offset", offset);
-        peticion.append("timeout", 10);
+        peticion.put("offset", offset);
+        peticion.put("timeout", 10);
 
         //Envio de peticion
         URL url;

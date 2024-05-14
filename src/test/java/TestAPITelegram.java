@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.VistaTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ConexionYaIniciadaException;
@@ -63,6 +65,9 @@ public class TestAPITelegram {
      *  correcta, y que el offset posterior para la recepcion de actualizaciones también funcione adecuadamente.
      *  */
     @Test public void TestEnviarYRecibirMensajes(){
+
+        //Placeholder
+        new Scanner(System.in).next();
 
     }
 }

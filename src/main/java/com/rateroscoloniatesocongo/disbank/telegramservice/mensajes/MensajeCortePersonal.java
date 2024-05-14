@@ -10,7 +10,7 @@ public class MensajeCortePersonal extends Mensaje{
     static final String mensaje = "Tu corte personal del dia de hoy:\n %s \nESTE CORTE ES PRELIMINAR. EL CORTE DEFINITIVO SE DA AL FINAL DEL DIA";
     String infoCorte;
 
-	MensajeCortePersonal(Asociado asociado, String infoCorte){
+    MensajeCortePersonal(Asociado asociado, String infoCorte){
         this.asociado = asociado;
         this.infoCorte = infoCorte;
     }
