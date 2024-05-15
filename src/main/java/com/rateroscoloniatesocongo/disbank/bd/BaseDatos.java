@@ -1,6 +1,5 @@
 package com.rateroscoloniatesocongo.disbank.bd;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -31,6 +30,14 @@ public class BaseDatos {
     private BaseDatos(){
         asociados = FXCollections.observableArrayList();
         chatIdAsociado = new HashMap<>();
+    }
+
+    public static void guarda(){
+
+    }
+
+    public static void carga(){
+
     }
 
     /**
