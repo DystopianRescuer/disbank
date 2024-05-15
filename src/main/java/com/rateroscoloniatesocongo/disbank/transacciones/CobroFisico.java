@@ -20,6 +20,11 @@ public class CobroFisico implements Cobro {
     }
 
     @Override
+    public String getCantidad(){
+        return "$"+cantidad + " MXN";
+    }
+
+    @Override
     public String getID() {
         return ID;
     }
