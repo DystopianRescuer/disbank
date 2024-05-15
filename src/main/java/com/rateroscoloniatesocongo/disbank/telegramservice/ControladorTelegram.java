@@ -2,6 +2,7 @@ package com.rateroscoloniatesocongo.disbank.telegramservice;
 
 import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
+import com.rateroscoloniatesocongo.disbank.modelo.Cortador;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ConexionYaIniciadaException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.SolicitudNoEncontradaException;
@@ -9,6 +10,7 @@ import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.Mensaje;
 import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.MensajeFactory;
 import com.rateroscoloniatesocongo.disbank.transacciones.CobroFactory;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
+import com.rateroscoloniatesocongo.disbank.util.Avisador;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 
 import org.json.JSONArray;
@@ -100,7 +102,7 @@ public class ControladorTelegram {
         try{
             instance = new ControladorTelegram(ConfigReader.getField("telegram.key"));
         }catch(ConexionYaIniciadaException e){
-            //No hacer nada, no puede pasar
+            Avisador.mandarErrorFatal(e.getMessage());
         }
 
         return instance;
@@ -110,8 +112,8 @@ public class ControladorTelegram {
      *  Envia un mensaje con las especificaciones dadas desde el objeto Mensaje
      * <p>
      *  En situaciones optimas, este es el unico metodo necesario para enviar mensajes a los asociados desde cualquier parte
-     *  del programa, excepto en algunos casos donde no fue considerado conveniente por la innecesaria inmediatez de algunos eventos
-     *  inmediatos que se pueden manejar ahi mismo (hay algunos ejemplos en {@link DaemonTelegram})
+     *  del programa, excepto en algunos casos donde no fue considerado conveniente por la obvia inmediatez de algunos eventos
+     *  cuyos mensajes se pueden manejar ahi mismo (hay algunos ejemplos en {@link DaemonTelegram})
      * <p>
      *  Metodo para el backend y para el mismo controlador
      *
@@ -152,7 +154,7 @@ public class ControladorTelegram {
      *  */
     protected void generarNuevaTransaccion(int cobro, String tipoDeCobro, Asociado asociado){
 
-        String resultado = GestorTransacciones.getInstance()
+        String resultado = gestorTransacciones
             .nuevaTransaccion(asociado, CobroFactory
                               .generaCobro(tipoDeCobro, cobro));
 
@@ -161,8 +163,7 @@ public class ControladorTelegram {
                 buscarVistaTelegram(asociado)
                 .enviarMensaje(resultado);
             }catch (ErrorEnConexionException e){
-                //Bailó berta, se cayó todo mano
-                //TODO: Implementar aviso al admin
+                Avisador.mandarErrorFatal(e.getMessage());
             }
         }
     }
@@ -187,8 +188,10 @@ public class ControladorTelegram {
      *  Esto solamente significa, hasta el momento, que dejamos de guardar su VistaTelegram, por motivos de optimizacion
      *  */
     protected void cortePersonal(Asociado asociado){
-
-
+        Cortador cortador = new Cortador();
+        cortador.cortePersonal(asociado);
+        chats.remove(asociado);
+        chatIds.remove(asociado.getChatId());
     }
 
     /**
@@ -201,7 +204,7 @@ public class ControladorTelegram {
         try{
             enviarMensaje(MensajeFactory.nuevoMensaje("Comandos", asociado));
         }catch(ErrorEnConexionException e){
-            //TODO: Implementar aviso al admin
+            Avisador.mandarErrorFatal(e.getMessage());
         }
     }
 
@@ -216,10 +219,11 @@ public class ControladorTelegram {
     }
 
     protected void mensajeAyuda(Asociado asociado, String mensaje){
+        //TODO: IDEM
         try{
             buscarVistaTelegram(asociado).enviarMensaje(mensaje);
         }catch(ErrorEnConexionException e){
-            //TODO: Implementar aviso al admin
+            Avisador.mandarErrorFatal(e.getMessage());
         }
     }
 
@@ -251,11 +255,12 @@ public class ControladorTelegram {
      *  @return Asociado de la lista de chats que está vinculado a ese chatID
      *  */
     protected Asociado buscarAsociado(String chatID){
-        return null;
+        return chatIds.get(chatID);
     }
 
     protected void registrarNuevoAsociado(String chatID) throws SolicitudNoEncontradaException{
-
+        BaseDatos.setChatId(BaseDatos.getAsociadoPendiente(), chatID);
+        BaseDatos.setAsociadoPendiente(0);
     }
 
     //Metodos privados
@@ -268,6 +273,6 @@ public class ControladorTelegram {
      *  @return VistaTelegram de la lista de chats que está vinculado a ese Asociado
      *  */
     private VistaTelegram buscarVistaTelegram(Asociado asociado){
-        return null;
+        return chats.get(asociado);
     }
 }

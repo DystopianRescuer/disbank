@@ -23,6 +23,11 @@ public class CobroLink implements Cobro {
     }
 
     @Override
+    public String getCantidad() {
+        return "$"+cantidad + " " + CURRENCY;
+    }
+
+    @Override
     public String getID() {
         return ID;
     }

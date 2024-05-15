@@ -8,6 +8,8 @@ import java.util.Optional;
  *  */
 public interface Cobro {
 
+    String getCantidad();
+
     String getAPI();
 
     String getID();

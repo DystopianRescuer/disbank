@@ -37,13 +37,15 @@ public class MensajeFactory {
 
     public static Mensaje nuevoMensaje(String tipo, Asociado asociado, Object contenido){
 
-        if (tipo.equals("Cobro")) {
-            try {
-                Transaccion transaccion = (Transaccion) contenido;
-                return new MensajeCobro(asociado, transaccion.getLink(), transaccion.getId());
-            } catch (ClassCastException e) {
-                //Se va a default
-            }
+        if (tipo.equals("Cobro") || tipo.equals("Estado")) {
+            Transaccion transaccion = (Transaccion) contenido;
+            return switch (tipo){
+                case "Cobro" -> new MensajeCobro(asociado, transaccion.getLink(), transaccion.getIdTransaccion());
+                case "Estado" -> new MensajeEstado(asociado, transaccion.getIdTransaccion(), transaccion.getEstado());
+                default -> null;
+            };
+        }else{
+            //Futuros mensajes que reciban otro contenido
         }
         return null;
     }

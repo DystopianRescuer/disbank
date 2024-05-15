@@ -150,7 +150,7 @@ public class VistaTelegram {
 
             answer = new JSONObject(response.toString());
         }catch(Exception e){
-            throw new ErrorEnConexionException(e.getMessage());
+            throw new ErrorEnConexionException("Error al conectarse con Telegram");
         }
         return answer.getJSONArray("result");
     }
@@ -206,7 +206,7 @@ public class VistaTelegram {
 
             answer = new JSONObject(response.toString());
         }catch(Exception e){
-            throw new ErrorEnConexionException(e.getMessage());
+            throw new ErrorEnConexionException("Error al conectar con Telegram");
         }
         return answer;
 

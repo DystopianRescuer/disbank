@@ -3,6 +3,7 @@ package com.rateroscoloniatesocongo.disbank.telegramservice;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.SolicitudNoEncontradaException;
+import com.rateroscoloniatesocongo.disbank.util.Avisador;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,7 +42,7 @@ public class DaemonTelegram extends Thread{
             try{
                 updates = controlador.getUpdates();
             }catch (ErrorEnConexionException e){
-                //TODO : Pensar en como implementar un posible error en conexion con la API
+                Avisador.mandarErrorFatal(e.getMessage());
             }
 
             if(updates == null)
@@ -60,7 +61,7 @@ public class DaemonTelegram extends Thread{
                 try{
                     actuar(chatID, text);
                 }catch (ErrorEnConexionException e){
-                    //TODO : IDEM;
+                    Avisador.mandarErrorFatal(e.getMessage());
                 }
 
             }
