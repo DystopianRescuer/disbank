@@ -9,10 +9,10 @@ public class CobroLink implements Cobro {
 
     private static final String API = "checkout", CURRENCY = "MXN";
 
-    private final int cantidad;
+    private final double cantidad;
     private final String mensaje, urlDefault, urlSuccess, urlError, ID;
 
-    public CobroLink(int cantidad, String mensaje) {
+    public CobroLink(double cantidad, String mensaje) {
         this.cantidad = cantidad;
         this.mensaje = mensaje;
         this.ID = UUID.randomUUID().toString();
@@ -44,7 +44,7 @@ public class CobroLink implements Cobro {
 
     @Override
     public String getBody() {
-        return String.format("{\"amount\":%s,\"currency\":\"%s\"," +
+        return String.format("{\"amount\":%f,\"currency\":\"%s\"," +
                 "\"purchase_description\":\"%s\"," +
                 "\"redirection_url\":{\"success\":\"%s\"," +
                 "\"error\":\"%s\"," +

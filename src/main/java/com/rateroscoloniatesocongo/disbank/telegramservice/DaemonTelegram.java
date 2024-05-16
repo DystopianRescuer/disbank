@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
  * Atributos:
  * -controlador : La instancia del controlador que estará recibiendo todas las ordenes a lo largo de la ejecución del programa
  */
-public class DaemonTelegram extends Thread{
+public class DaemonTelegram extends Thread {
 
     ControladorTelegram controlador;
 
@@ -75,8 +75,6 @@ public class DaemonTelegram extends Thread{
         Asociado asociado = controlador.buscarAsociado(chatID);
 
         if(asociado == null) {
-            Avisador.mandarAviso("Mensaje: " + mensaje + "sin asociado");
-            controlador.registrarNuevaInteraccion(chatID);
             switch(mensaje) {
                 case "Iniciar ventas":
                     controlador.registrarNuevaInteraccion(chatID);
@@ -113,7 +111,7 @@ public class DaemonTelegram extends Thread{
                     }else{
                         String[] detallesCobro = buscarCobro(mensaje);
                         if(detallesCobro != null){
-                            controlador.generarNuevaTransaccion(Integer.parseInt(detallesCobro[0]), detallesCobro[1], asociado);
+                            controlador.generarNuevaTransaccion(Double.parseDouble(detallesCobro[0]), detallesCobro[1], asociado);
                             return;
                         }
 

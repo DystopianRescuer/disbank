@@ -15,6 +15,7 @@ import java.net.http.HttpResponse;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 public class ControladorClip {
@@ -65,7 +66,7 @@ public class ControladorClip {
     // Pone a un Scheduler a correr cada 10 segundos un hilo que checa si hay actualizaciones
     private void iniciarEscuchador() {
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-        service.schedule(GetClipUpdatesRunnable::new, 10, TimeUnit.SECONDS);
+        service.schedule(new GetClipUpdatesRunnable(), 10, TimeUnit.SECONDS);
     }
 
     public static ControladorClip getInstance() {

@@ -122,8 +122,7 @@ public class ControladorTelegram {
      *
      *  */
     public void enviarMensaje(Mensaje mensaje) throws ErrorEnConexionException {
-
-        VistaTelegram enviador = buscarVistaTelegram(mensaje.getAsociado);
+        VistaTelegram enviador = buscarVistaTelegram(mensaje.getAsociado());
         enviador.enviarMensaje(mensaje.darMensaje());
     }
 
@@ -152,9 +151,9 @@ public class ControladorTelegram {
      *  @param tipoDeCobro   tipo de cobro a pedir (terminal o link)
      *  @param asociado      el asociado al cual está vinculado el cobro (de quien proviene la solicitud)
      *  */
-    protected void generarNuevaTransaccion(int cobro, String tipoDeCobro, Asociado asociado){
+    protected void generarNuevaTransaccion(double cobro, String tipoDeCobro, Asociado asociado){
 
-        String resultado = gestorTransacciones
+        String resultado = GestorTransacciones.getInstance()
             .nuevaTransaccion(asociado, CobroFactory
                               .generaCobro(tipoDeCobro, cobro));
 
@@ -204,8 +203,12 @@ public class ControladorTelegram {
      *  */
     protected void darComandos(Asociado asociado){
         try{
-            enviarMensaje(MensajeFactory.nuevoMensaje("Comandos", asociado));
+            Mensaje mensaje = MensajeFactory.nuevoMensaje("Comandos", asociado);
+            System.out.println(mensaje.getAsociado());
+            System.out.println(mensaje.darMensaje());
+            enviarMensaje(mensaje);
         }catch(ErrorEnConexionException e){
+            e.printStackTrace();
             Avisador.mandarErrorFatal(e.getMessage());
         }
     }
@@ -263,7 +266,6 @@ public class ControladorTelegram {
     protected void registrarNuevoAsociado(String chatID) throws SolicitudNoEncontradaException{
         BaseDatos.setChatId(BaseDatos.getAsociadoPendiente(), chatID);
         BaseDatos.setAsociadoPendiente(-1);
-        Avisador.mandarAviso("hola" + chatID);
     }
 
     //Metodos privados

@@ -8,11 +8,11 @@ public class CobroFisico implements Cobro {
 
     private static final String API = "paymentrequest";
 
-    private final int cantidad;
+    private final double cantidad;
     private final String user;
     private final String mensaje, ID;
 
-    public CobroFisico(int cantidad, String mensaje) {
+    public CobroFisico(double cantidad, String mensaje) {
         this.cantidad = cantidad;
         this.user = ConfigReader.getField("clip.user");
         this.mensaje = mensaje;
@@ -36,6 +36,6 @@ public class CobroFisico implements Cobro {
 
     @Override
     public String getBody() {
-        return String.format("{\"amount\":%d,\"assigned_user\":\"%s\",\"reference\":\"%s\",\"message\":\"%s\"}", this.cantidad, this.user, this.ID, this.mensaje);
+        return String.format("{\"amount\":%f,\"assigned_user\":\"%s\",\"reference\":\"%s\",\"message\":\"%s\"}", this.cantidad, this.user, this.ID, this.mensaje);
     }
 }
