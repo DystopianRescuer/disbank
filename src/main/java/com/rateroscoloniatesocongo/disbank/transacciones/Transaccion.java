@@ -16,19 +16,19 @@ public class Transaccion {
     private Optional<String> link;
     private String id;
 
+    public Transaccion(Asociado asociado, Cobro cobro) {
+        this.asociado = asociado;
+        this.cobro = cobro;
+        this.estado = Estado.PENDIENTE;
+        this.id = cobro.getID();
+    }
+
     public Optional<String> getLink() {
         return link;
     }
 
     public void setLink(Optional<String> link) {
         this.link = link;
-    }
-
-    public Transaccion(Asociado asociado, Cobro cobro) {
-        this.asociado = asociado;
-        this.cobro = cobro;
-        this.estado = Estado.PENDIENTE;
-        this.id = cobro.getID();
     }
 
     public Asociado getAsociado() {
@@ -51,10 +51,6 @@ public class Transaccion {
         return cobro.getAPI();
     }
 
-    public String getID(){
-        return cobro.getID();
-    }
-
     public Optional<String> getRespuestaKey() {
         return cobro.getRespuestaKey();
     }
@@ -65,6 +61,10 @@ public class Transaccion {
 
     public boolean esLogVacio() {
         return log == null;
+    }
+
+    public String getTipoCobro() {
+        return cobro.getClass().getSimpleName().replace("Cobro", "");
     }
 
     public String getLog() {

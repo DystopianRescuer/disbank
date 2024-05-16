@@ -21,6 +21,6 @@ public class Avisador {
 
     public static void mandarErrorFatal(String mensaje) {
         JOptionPane.showMessageDialog(null, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-        Platform.exit();
+        System.exit(-1);
     }
 }

@@ -1,7 +1,10 @@
 package com.rateroscoloniatesocongo.disbank;
 
+import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
+import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -13,6 +16,8 @@ public class DisBank extends Application {
 
     public static void main(String[] args) {
         ConfigReader.setRuta(RUTA_CONFIG);
+        BaseDatos.carga();
+        GestorTransacciones.getInstance().iniciar();
         launch();
     }
 
@@ -23,5 +28,11 @@ public class DisBank extends Application {
         stage.setTitle("Disbank - Panel de Control");
         stage.setScene(scene);
         stage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        System.exit(0);
     }
 }

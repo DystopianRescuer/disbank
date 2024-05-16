@@ -44,7 +44,7 @@ public class Cortador {
             dumpTxt.append(transacciones);
         }
 
-        String diaHoy = LocalDate.now().toString() + ".txt";
+        String diaHoy = LocalDate.now() + ".txt";
         try (PrintWriter out = new PrintWriter("cortesDiarios/" + diaHoy)){
             out.println(dumpTxt.toString());
         }catch(Exception e){

@@ -5,15 +5,12 @@ import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 
 public class PanelControlController {
@@ -36,8 +33,11 @@ public class PanelControlController {
     public CheckBox comisionCheck;
     @FXML
     public Button eliminarAsociadoBoton;
+    @FXML
     public TableColumn<Transaccion, String> columnaIdTransaccion, columnaAsociadoTransaccion, columnaTipoTransaccion, columnaEstadoTransaccion;
+    @FXML
     public TableColumn<Asociado, String> columnaIdAsociado, columnaNombreAsociado, columnaPuestoAsociado;
+    public PieChart ventasTipo, ventasEstado;
 
     @FXML
     public void onInfoButtonClick(ActionEvent actionEvent) {
@@ -80,14 +80,15 @@ public class PanelControlController {
         registrandoUsuario.setVisible(true);
         BaseDatos.agregarAsociado(nombre.getText(), clabe.getText(), banco.getText(), nombreComercio.getText(), telegramUser.getText());
         registrandoUsuario.setVisible(false);
+        Avisador.mandarAviso("Usuario registrado exitosamente");
     }
 
     @FXML
     public void initialize() {
         // Inicialización de la tabla de transacciones
-        columnaIdTransaccion.setCellValueFactory(columnaEstadoTransaccion -> new SimpleStringProperty(columnaEstadoTransaccion.getValue().getId()));
+        columnaIdTransaccion.setCellValueFactory(columnaEstadoTransaccion -> new SimpleStringProperty(columnaEstadoTransaccion.getValue().getIdTransaccion()));
         columnaAsociadoTransaccion.setCellValueFactory(columnaAsociadoTransaccion -> new SimpleStringProperty(columnaAsociadoTransaccion.getValue().getAsociado().getNombre()));
-        columnaTipoTransaccion.setCellValueFactory(columnaTipoTransaccion -> new SimpleStringProperty(columnaTipoTransaccion.getValue().getCobro().getClass().getSimpleName()));
+        columnaTipoTransaccion.setCellValueFactory(columnaTipoTransaccion -> new SimpleStringProperty(columnaTipoTransaccion.getValue().getTipoCobro()));
         columnaEstadoTransaccion.setCellValueFactory(columnaEstadoTransaccion -> new SimpleStringProperty(columnaEstadoTransaccion.getValue().getEstado().toString()));
         tablaTransacciones.setItems(GestorTransacciones.getInstance().getTransaccionesTotales());
 

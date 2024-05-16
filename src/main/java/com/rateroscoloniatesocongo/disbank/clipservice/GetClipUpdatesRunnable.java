@@ -12,12 +12,12 @@ import java.net.http.HttpResponse;
 
 public class GetClipUpdatesRunnable implements Runnable {
 
-    private static final String UUID = ConfigReader.getField("webhook.uuid");
+    private static final String WEBHOOK_UUID = ConfigReader.getField("webhook.uuid");
 
     private HttpResponse<String> peticionUltimoRequest() throws IOException, InterruptedException {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://webhook.site/token/" + UUID + "/request/latest/"))
+                .uri(URI.create("https://webhook.site/token/" + WEBHOOK_UUID + "/request/latest/"))
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
 
@@ -29,14 +29,17 @@ public class GetClipUpdatesRunnable implements Runnable {
     }
 
     private void checarClipUpdate(JSONObject jsonObject) {
-        ControladorClip.getInstance().actualizarTransaccion(jsonObject.getString("merch_inv_id"),
-                jsonObject.getJSONObject("payment_request_detail").getString("status_description").equals("Completed") ?
-                Transaccion.Estado.PAGADA : Transaccion.Estado.FALLIDA);
+        String idTransaccion = jsonObject.getString("merch_inv_id");
+        if(!idTransaccion.isBlank()) {
+            ControladorClip.getInstance().actualizarTransaccion(idTransaccion,
+                    jsonObject.getJSONObject("payment_request_detail").getString("status_description").equals("Completed") ?
+                            Transaccion.Estado.PAGADA : Transaccion.Estado.FALLIDA);
+        }
     }
 
     private void eliminarRequest(String toBeDeleted) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://webhook.site/token/" + UUID + "/request/" + toBeDeleted))
+                .uri(URI.create("https://webhook.site/token/" + WEBHOOK_UUID + "/request/" + toBeDeleted))
                 .method("DELETE", HttpRequest.BodyPublishers.noBody())
                 .build();
         try {

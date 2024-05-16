@@ -174,11 +174,13 @@ public class ControladorTelegram {
      *  Saca el asociado vinculado a dicho chatID y le crea una VistaTelegram para el resto de la ejecución, hasta su corte
      * <p>
      *  */
-    protected void registrarNuevaInteraccion(String chatID){
-
+    protected void registrarNuevaInteraccion(String chatID) {
         Asociado asociado = BaseDatos.buscarPorChatId(chatID);
-        chats.put(asociado, new VistaTelegram(chatID));
-        chatIds.put(chatID, asociado);
+
+        if(asociado != null) {
+            chats.put(asociado, new VistaTelegram(chatID));
+            chatIds.put(chatID, asociado);
+        }
     }
 
 
@@ -239,7 +241,7 @@ public class ControladorTelegram {
     protected JSONArray getUpdates() throws ErrorEnConexionException{
         JSONArray respuesta;
         respuesta = VistaTelegram.recibirActualizacion(offset);
-        if(respuesta.length() == 0)
+        if(respuesta.isEmpty())
             return null;
         JSONObject ultimoRecibido = respuesta.getJSONObject(respuesta.length()-1);
         offset = ultimoRecibido.getInt("update_id") +1;
@@ -254,13 +256,14 @@ public class ControladorTelegram {
      *
      *  @return Asociado de la lista de chats que está vinculado a ese chatID
      *  */
-    protected Asociado buscarAsociado(String chatID){
+    protected Asociado buscarAsociado(String chatID) {
         return chatIds.get(chatID);
     }
 
     protected void registrarNuevoAsociado(String chatID) throws SolicitudNoEncontradaException{
         BaseDatos.setChatId(BaseDatos.getAsociadoPendiente(), chatID);
-        BaseDatos.setAsociadoPendiente(0);
+        BaseDatos.setAsociadoPendiente(-1);
+        Avisador.mandarAviso("hola" + chatID);
     }
 
     //Metodos privados
