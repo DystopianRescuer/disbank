@@ -41,10 +41,7 @@ public class BaseDatos {
      * @return asociado buscado o null si no esta registrado.
      */
     public static Asociado buscarPorChatId(String chatId){
-        if(chatIdAsociado.containsKey(chatId)){
-            return chatIdAsociado.get(chatId);
-        }
-        return null;
+        return chatIdAsociado.get(chatId);
     }
 
     /**
@@ -79,11 +76,13 @@ public class BaseDatos {
 
     /**
      * Metodo que agrega un asociado a la bd.
-     * @param a. asociado que se agregara. (Asociado)
+     * @param a asociado que se agregara. (Asociado)
      */
     public static void agregarAsociado(String nombre, String cuenta, String banco, String nombreComercio, String usuarioTelegram){
         Asociado asociado = new Asociado(nombre, cuenta, banco, nombreComercio, usuarioTelegram);
         asociados.add(asociado);
+        asociado.setId(1);
+        setAsociadoPendiente(1);
     }
 
     /**
@@ -95,7 +94,7 @@ public class BaseDatos {
         asociados.remove(a); 
     }
 
-    public static int getAsociadoPendiente() throws SolicitudNoEncontradaException{
+    public static int getAsociadoPendiente() throws SolicitudNoEncontradaException {
         if (asociadoPendiente == 0){
             throw new SolicitudNoEncontradaException("No hay solicitud de registro pendiente");
         }

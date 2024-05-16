@@ -71,11 +71,13 @@ public class DaemonTelegram extends Thread{
     /**
      *  Decide que hacer con el mensaje que llegó por medio de una Update en el run() previo
      *  */
-    private void actuar(String chatID, String mensaje) throws ErrorEnConexionException{
+    private void actuar(String chatID, String mensaje) throws ErrorEnConexionException {
         Asociado asociado = controlador.buscarAsociado(chatID);
 
-        if(asociado == null){
-            switch(mensaje){
+        if(asociado == null) {
+            Avisador.mandarAviso("a");
+            controlador.registrarNuevaInteraccion(chatID);
+            switch(mensaje) {
                 case "/start":
                     try{
                         controlador.registrarNuevoAsociado(chatID);
@@ -86,7 +88,7 @@ public class DaemonTelegram extends Thread{
                 case "marco":
                     JSONObject a = new VistaTelegram(chatID).enviarMensaje("polo");
             }
-        }else{
+        } else {
             switch(mensaje){
                 case "Iniciar ventas":
                     controlador.registrarNuevaInteraccion(chatID);

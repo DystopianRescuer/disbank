@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -20,7 +21,7 @@
         <Button fx:id="botonCorte" defaultButton="true" lineSpacing="2.0" mnemonicParsing="false" onAction="#onCorteRequest" prefHeight="44.0" prefWidth="138.0" text="Corte del día" textAlignment="CENTER" textFill="WHITE" underline="true" />
     </VBox>
     <VBox layoutX="220.0" layoutY="21.0" prefHeight="380.0" prefWidth="346.0">
-        <Label text="Transacciones de hoy">
+        <Label text="Transacciones en tiempo real">
             <font>
                 <Font name="Ubuntu Bold" size="17.0" />
             </font>
@@ -44,13 +45,6 @@
          </columns></TableView>
     </VBox>
     <Pane layoutX="575.0" layoutY="23.0">
-        <VBox fx:id="panelInfo" prefHeight="369.0" prefWidth="259.0" style="-fx-background-color: #f4f5f5;">
-            <Label prefHeight="30.0" prefWidth="272.0" text="Información">
-                <font>
-                    <Font name="Ubuntu Bold" size="19.0" />
-                </font>
-            </Label>
-        </VBox>
         <VBox fx:id="panelRegistroAsociado" alignment="TOP_CENTER" prefHeight="369.0" prefWidth="259.0" spacing="10.0" style="-fx-background-color: #f4f5f5;">
             <Label prefHeight="22.0" prefWidth="194.0" text="Registro de Asociado">
                 <font>
@@ -77,17 +71,30 @@
                     <Font name="Ubuntu Bold" size="19.0" />
                 </font>
             </Label>
-            <TableView fx:id="listaAsociados" prefHeight="287.0" prefWidth="259.0">
+            <TableView fx:id="listaAsociados" editable="true" prefHeight="287.0" prefWidth="259.0">
                 <columns>
                     <TableColumn fx:id="columnaIdAsociado" editable="false" prefWidth="40.0" text="Id" />
-                    <TableColumn fx:id="columnaNombreAsociado" editable="false" prefWidth="134.0" text="Nombre" />
-                    <TableColumn fx:id="columnaPuestoAsociado" editable="false" prefWidth="82.0" text="Puesto" />
+                    <TableColumn fx:id="columnaNombreAsociado" prefWidth="134.0" text="Nombre" />
+                    <TableColumn fx:id="columnaPuestoAsociado" prefWidth="82.0" text="Puesto" />
                 </columns>
                 <VBox.margin>
                     <Insets top="30.0" />
                 </VBox.margin>
             </TableView>
          <Button fx:id="eliminarAsociadoBoton" disable="true" mnemonicParsing="false" prefHeight="24.0" prefWidth="94.0" text="Eliminar" />
+        </VBox>
+        <VBox fx:id="panelInfo" prefHeight="380.0" prefWidth="259.0" style="-fx-background-color: #f4f5f5;">
+            <Label prefHeight="26.0" prefWidth="259.0" text="Información">
+                <font>
+                    <Font name="Ubuntu Bold" size="19.0" />
+                </font>
+            </Label>
+            <VBox prefHeight="169.0" prefWidth="259.0">
+                <PieChart fx:id="ventasTipo" prefHeight="169.0" prefWidth="259.0" title="Ventas por tipo"/>
+            </VBox>
+            <VBox prefHeight="186.0" prefWidth="259.0">
+                <PieChart fx:id="ventasEstado" title="Venta por estado"/>
+            </VBox>
         </VBox>
     </Pane>
 </AnchorPane>
