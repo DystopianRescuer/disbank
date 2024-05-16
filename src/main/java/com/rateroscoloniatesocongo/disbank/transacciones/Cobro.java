@@ -2,7 +2,13 @@ package com.rateroscoloniatesocongo.disbank.transacciones;
 
 import java.util.Optional;
 
+/**
+ *  Las clases que implementen esta interfaz deben de poder dar todos los siguientes metodos, los cuales sirven para construir la
+ *  peticion a la API de Clip.
+ *  */
 public interface Cobro {
+
+    String getCantidad();
 
     String getAPI();
 

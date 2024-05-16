@@ -35,7 +35,7 @@ public class Transaccion {
         return asociado;
     }
 
-    public String getId() {
+    public String getIdTransaccion() {
         return this.id;
     }
 
@@ -47,8 +47,20 @@ public class Transaccion {
         this.estado = estado;
     }
 
-    public Cobro getCobro() {
-        return cobro;
+    public String getAPI(){
+        return cobro.getAPI();
+    }
+
+    public String getID(){
+        return cobro.getID();
+    }
+
+    public Optional<String> getRespuestaKey() {
+        return cobro.getRespuestaKey();
+    }
+
+    public String getBody(){
+        return cobro.getBody();
     }
 
     public boolean esLogVacio() {
@@ -65,4 +77,12 @@ public class Transaccion {
         }
         this.log += log + "\n";
     }
+
+    @Override
+    public String toString() {
+        return "ID: " + getIdTransaccion() + ": Transaccion por "+ cobro.getCantidad() + "\n" +
+            "Estado: " + estado;
+    }
+
+
 }

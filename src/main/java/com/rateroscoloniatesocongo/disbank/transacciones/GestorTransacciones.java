@@ -1,5 +1,6 @@
 package com.rateroscoloniatesocongo.disbank.transacciones;
 
+import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
 import com.rateroscoloniatesocongo.disbank.clipservice.ControladorClip;
 import com.rateroscoloniatesocongo.disbank.clipservice.excepciones.TransaccionNoRegistradaException;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
@@ -79,16 +80,18 @@ public class GestorTransacciones {
     public void detener() {
         iniciado = false;
         Cortador cortador = new Cortador();
-        cortador.cortar();
+        cortador.corteDiario();
         instance = null;
     }
 
     /**
      * Metodo para solicitar nueva transaccion a controladorClip
+     * Es ejecutado principalmente por el controladorTelegram. El cual es el que genera el Cobro. Luego, se construye el resto
+     * del objeto Transaccion con ayuda del controladorClip.
      *
-     * @param asociado
-     * @param cobro
-     * @return
+     * @param asociado el asociado que está solicitando la transaccion
+     * @param cobro el objeto Cobro que compondrá a la nueva transaccion
+     * @return Una
      */
     public String nuevaTransaccion(Asociado asociado, Cobro cobro) {
         // Crea el objeto transacción
@@ -100,15 +103,16 @@ public class GestorTransacciones {
             //mandar mensaje a telegram de que no se pudo registrar la transaccion
             return "No se pudo registrar la transaccion."; // este es mientras hacemos el pquete
         } catch (IOException | InterruptedException e) {
-            // TODO
+            Avisador.mandarErrorFatal(e.getMessage());
         }
         // Si esto ocurrió correctamente entonces registra la transacción en pendientes
         pendientes.add(transaccion);
         try{
             controladorTelegram.enviarMensaje(MensajeFactory.nuevoMensaje("Cobro", asociado, transaccion));
         }catch (ErrorEnConexionException e) {
-            // TODO error en la terminal admin
+            Avisador.mandarErrorFatal(e.getMessage());
         }
+        asociado.agregarTransaccionDia(transaccion);
         transaccionesTotales.add(transaccion);
         return "";
     }
@@ -121,11 +125,13 @@ public class GestorTransacciones {
      * @param transaccion
      */
     public void actualizarEstado(Transaccion transaccion) {
-        // Checa el estado de la transaccion
-        // Si todo sale bien va y le avisa a telegram que todo salio bien para que le avise al usuario
-        // Actualiza lo que deba actualizar en base de datos
-        // Quita de su lista dependientes
-        // Esto de momento, checar/pensar si falta algo más
+        try{
+            controladorTelegram.enviarMensaje(MensajeFactory.nuevoMensaje("Estado", transaccion.getAsociado(), transaccion));
+        }catch(ErrorEnConexionException e){
+            Avisador.mandarErrorFatal(e.getMessage());
+
+        }
+        pendientes.remove(transaccion);
     }
 
     /**
@@ -136,7 +142,7 @@ public class GestorTransacciones {
      */
     public Transaccion getTransaccionPorId(String id) {
         for (Transaccion t : pendientes) {
-            if (t.getId().equals(id)) {
+            if (t.getIdTransaccion().equals(id)) {
                 return t;
             }
         }

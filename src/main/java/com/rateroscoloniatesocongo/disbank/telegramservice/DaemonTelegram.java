@@ -3,6 +3,7 @@ package com.rateroscoloniatesocongo.disbank.telegramservice;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.SolicitudNoEncontradaException;
+import com.rateroscoloniatesocongo.disbank.util.Avisador;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,8 +42,11 @@ public class DaemonTelegram extends Thread{
             try{
                 updates = controlador.getUpdates();
             }catch (ErrorEnConexionException e){
-                //TODO : Pensar en como implementar un posible error en conexion con la API
+                Avisador.mandarErrorFatal(e.getMessage());
             }
+
+            if(updates == null)
+                continue;
 
             for(int i = 0; i<updates.length() ; i++){
                 JSONObject update = updates.getJSONObject(i);
@@ -52,12 +56,12 @@ public class DaemonTelegram extends Thread{
                     continue;
 
                 //Obteniendo chatID y texto del mensaje
-                String chatID = mensaje.getJSONObject("chat").getString("id");
+                String chatID = String.valueOf(mensaje.getJSONObject("chat").getLong("id"));
                 String text = mensaje.getString("text");
                 try{
                     actuar(chatID, text);
                 }catch (ErrorEnConexionException e){
-                    //TODO : IDEM;
+                    Avisador.mandarErrorFatal(e.getMessage());
                 }
 
             }
@@ -71,17 +75,16 @@ public class DaemonTelegram extends Thread{
         Asociado asociado = controlador.buscarAsociado(chatID);
 
         if(asociado == null){
-            if(!mensaje.equals("/start")) {
-            }
-            else{
-                if(mensaje.equals("marco")){
-                    new VistaTelegram(chatID).enviarMensaje("polo");
-                }
-                try{
-                    controlador.registrarNuevoAsociado(chatID);
-                }catch(SolicitudNoEncontradaException e){
-                    new VistaTelegram(chatID).enviarMensaje(ControladorTelegram.noRegistroPendiente);
-                }
+            switch(mensaje){
+                case "/start":
+                    try{
+                        controlador.registrarNuevoAsociado(chatID);
+                    }catch(SolicitudNoEncontradaException e){
+                        new VistaTelegram(chatID).enviarMensaje(ControladorTelegram.noRegistroPendiente);
+                    }
+                    break;
+                case "marco":
+                    JSONObject a = new VistaTelegram(chatID).enviarMensaje("polo");
             }
         }else{
             switch(mensaje){

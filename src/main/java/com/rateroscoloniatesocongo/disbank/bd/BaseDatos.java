@@ -1,10 +1,10 @@
 package com.rateroscoloniatesocongo.disbank.bd;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
+import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.SolicitudNoEncontradaException;
 import com.sun.javafx.collections.ImmutableObservableList;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -24,6 +24,16 @@ public class BaseDatos {
     public static ObservableList<Asociado> asociados = FXCollections.observableArrayList();
     /**Map que relaciona el ChatId con su Asociado */
     public static HashMap<String, Asociado> chatIdAsociado = new HashMap<>();
+    //Para tener claro cual es el nuevo asociado pendiente de asignacion de chatID
+    public static int asociadoPendiente;
+
+    public static void guarda(){
+
+    }
+
+    public static void carga(){
+
+    }
 
     /**
      * Busca y regresa un asociado mediante su chatId
@@ -83,6 +93,17 @@ public class BaseDatos {
     public static void borrarAsociado(Asociado a){
         chatIdAsociado.remove(a.getChatId());
         asociados.remove(a); 
+    }
+
+    public static int getAsociadoPendiente() throws SolicitudNoEncontradaException{
+        if (asociadoPendiente == 0){
+            throw new SolicitudNoEncontradaException("No hay solicitud de registro pendiente");
+        }
+        return asociadoPendiente;
+    }
+
+    public static void setAsociadoPendiente(int asociadoPendiente) {
+        BaseDatos.asociadoPendiente = asociadoPendiente;
     }
 
 }
