@@ -15,13 +15,14 @@ public class GetClipUpdatesRunnable implements Runnable {
     private static final String WEBHOOK_UUID = ConfigReader.getField("webhook.uuid");
 
     private HttpResponse<String> peticionUltimoRequest() throws IOException, InterruptedException {
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://webhook.site/token/" + WEBHOOK_UUID + "/request/latest/"))
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
+        System.out.println(request);
 
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println(response);
         if(response.statusCode() == 200) {
             return response;
         }
@@ -29,6 +30,7 @@ public class GetClipUpdatesRunnable implements Runnable {
     }
 
     private void checarClipUpdate(JSONObject jsonObject) {
+        System.out.println("fefrrferf");
         String idTransaccion = jsonObject.getString("merch_inv_id");
         if(!idTransaccion.isBlank()) {
             ControladorClip.getInstance().actualizarTransaccion(idTransaccion,
@@ -51,6 +53,7 @@ public class GetClipUpdatesRunnable implements Runnable {
 
     @Override
     public void run() {
+        System.out.println("Inicio run Clip Updates Checker");
         // Pide el último request, si consigue un código 200 entonces lo guarda y pide a la API eliminar ese request y acaba la ejecución
         HttpResponse<String> response;
         JSONObject fullRequest;
@@ -58,14 +61,17 @@ public class GetClipUpdatesRunnable implements Runnable {
         try {
             while ((response = peticionUltimoRequest()) != null) {
                 fullRequest = new JSONObject(response.body());
+                System.out.println("Request = " + fullRequest);
 
                 // Pasa el mensaje de Clip al método que lo procesa
-                checarClipUpdate(fullRequest.getJSONObject("content"));
+//                checarClipUpdate(fullRequest.getJSONObject("content"));
 
                 // Una vez procesado, elimina el request de la cola de Webhook.site
-                eliminarRequest(fullRequest.getString("uuid"));
+//                eliminarRequest(fullRequest.getString("uuid"));
+                System.out.println("eliminar request");
             }
         } catch (IOException | InterruptedException e) {
+            System.out.println("hola");
             throw new RuntimeException(e);
         }
     }

@@ -14,5 +14,7 @@ public abstract class Mensaje {
 
     public abstract String darMensaje();
 
-    public Asociado getAsociado;
+    public Asociado getAsociado() {
+        return asociado;
+    }
 }

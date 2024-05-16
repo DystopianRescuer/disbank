@@ -2,6 +2,7 @@ package com.rateroscoloniatesocongo.disbank;
 
 import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
+import com.rateroscoloniatesocongo.disbank.util.Avisador;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -28,11 +29,5 @@ public class DisBank extends Application {
         stage.setTitle("Disbank - Panel de Control");
         stage.setScene(scene);
         stage.show();
-    }
-
-    @Override
-    public void stop() throws Exception {
-        super.stop();
-        System.exit(0);
     }
 }
