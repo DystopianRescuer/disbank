@@ -75,9 +75,13 @@ public class DaemonTelegram extends Thread{
         Asociado asociado = controlador.buscarAsociado(chatID);
 
         if(asociado == null) {
-            Avisador.mandarAviso("a");
+            Avisador.mandarAviso("Mensaje: " + mensaje + "sin asociado");
             controlador.registrarNuevaInteraccion(chatID);
             switch(mensaje) {
+                case "Iniciar ventas":
+                    controlador.registrarNuevaInteraccion(chatID);
+                    break;
+
                 case "/start":
                     try{
                         controlador.registrarNuevoAsociado(chatID);
@@ -89,11 +93,8 @@ public class DaemonTelegram extends Thread{
                     JSONObject a = new VistaTelegram(chatID).enviarMensaje("polo");
             }
         } else {
+            Avisador.mandarAviso("Mensaje: " + mensaje + "con asociado");
             switch(mensaje){
-                case "Iniciar ventas":
-                    controlador.registrarNuevaInteraccion(chatID);
-                    break;
-
                 case "Cerrar ventas":
                     controlador.cortePersonal(asociado);
                     break;
