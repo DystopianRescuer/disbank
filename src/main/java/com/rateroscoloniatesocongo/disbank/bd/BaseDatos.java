@@ -1,7 +1,6 @@
 package com.rateroscoloniatesocongo.disbank.bd;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,10 +11,7 @@ import java.util.Iterator;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.SolicitudNoEncontradaException;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
-import com.sun.javafx.collections.ImmutableObservableList;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import java.util.List;
 
