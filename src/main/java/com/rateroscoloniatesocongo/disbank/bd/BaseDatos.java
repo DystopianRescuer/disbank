@@ -21,14 +21,9 @@ public class BaseDatos {
     // Cada cosa de aquí es estática
 
     /**Lista de asociados registrados*/
-    public static ObservableList<Asociado> asociados;
+    public static ObservableList<Asociado> asociados = FXCollections.observableArrayList();
     /**Map que relaciona el ChatId con su Asociado */
     public static HashMap<String, Asociado> chatIdAsociado = new HashMap<>();
-
-    private BaseDatos(){
-        asociados = FXCollections.observableArrayList();
-        chatIdAsociado = new HashMap<>();
-    }
 
     /**
      * Busca y regresa un asociado mediante su chatId

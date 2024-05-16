@@ -6,6 +6,7 @@ import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
 import javafx.beans.property.Property;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
@@ -84,19 +85,16 @@ public class PanelControlController {
     @FXML
     public void initialize() {
         // Inicialización de la tabla de transacciones
-        columnaIdTransaccion.setCellValueFactory(new PropertyValueFactory<>("id"));
-        columnaAsociadoTransaccion.setCellValueFactory(new PropertyValueFactory<>("estado"));
-        columnaTipoTransaccion.setCellValueFactory(new PropertyValueFactory<>(""));
-        columnaEstadoTransaccion.setCellValueFactory(new PropertyValueFactory<>(""));
-
-        // Ejemplo, implementalo así
-        columnaEstadoTransaccion.setCellValueFactory(columnaEstadoTransaccion -> new SimpleStringProperty(columnaEstadoTransaccion.getValue().getLog()));
+        columnaIdTransaccion.setCellValueFactory(columnaEstadoTransaccion -> new SimpleStringProperty(columnaEstadoTransaccion.getValue().getId()));
+        columnaAsociadoTransaccion.setCellValueFactory(columnaAsociadoTransaccion -> new SimpleStringProperty(columnaAsociadoTransaccion.getValue().getAsociado().getNombre()));
+        columnaTipoTransaccion.setCellValueFactory(columnaTipoTransaccion -> new SimpleStringProperty(columnaTipoTransaccion.getValue().getCobro().getClass().getSimpleName()));
+        columnaEstadoTransaccion.setCellValueFactory(columnaEstadoTransaccion -> new SimpleStringProperty(columnaEstadoTransaccion.getValue().getEstado().toString()));
         tablaTransacciones.setItems(GestorTransacciones.getInstance().getTransaccionesTotales());
 
         // Inicialización de la tabla de asociados
-        columnaIdAsociado.setCellValueFactory(new PropertyValueFactory<>(""));
-        columnaNombreAsociado.setCellValueFactory(new PropertyValueFactory<>(""));
-        columnaPuestoAsociado.setCellValueFactory(new PropertyValueFactory<>(""));
+        columnaIdAsociado.setCellValueFactory(columnaIdAsociado -> new SimpleIntegerProperty(columnaIdAsociado.getValue().getId()).asString());
+        columnaNombreAsociado.setCellValueFactory(columnaNombreAsociado -> new SimpleStringProperty(columnaNombreAsociado.getValue().getNombre()));
+        columnaPuestoAsociado.setCellValueFactory(columnaPuestoAsociado -> new SimpleStringProperty(columnaPuestoAsociado.getValue().getNombreComercio()));
         listaAsociados.setItems(BaseDatos.getAsociados());
     }
 

@@ -44,6 +44,10 @@ public class Asociado {
         transaccionesDia = new ArrayList<>();
     }
 
+    public String getNombreComercio() {
+        return nombreComercio;
+    }
+
     /**
      * Permite acceder al chat Id del asociado
      * @return chatId. chat id del asociado. (String)
