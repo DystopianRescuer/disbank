@@ -175,6 +175,7 @@ public class VistaTelegram {
         JSONObject payload = new JSONObject();
         payload.put("text", mensaje);
         payload.put("chat_id", chatId);
+        System.out.println(payload);
 
         //Envio de peticion
         URL url;

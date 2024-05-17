@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -114,6 +115,7 @@ public class GestorTransacciones {
         }
         asociado.agregarTransaccionDia(transaccion);
         transaccionesTotales.add(transaccion);
+        System.out.println(Arrays.toString(transaccionesTotales.toArray()));
         return "";
     }
 
@@ -125,11 +127,13 @@ public class GestorTransacciones {
      * @param transaccion
      */
     public void actualizarEstado(Transaccion transaccion) {
+        System.out.println("Actualizando estado desde Gestor de Transacciones");
         try{
             controladorTelegram.enviarMensaje(MensajeFactory.nuevoMensaje("Estado", transaccion.getAsociado(), transaccion));
+            System.out.println(transaccion.getEstado());
+            System.out.println(MensajeFactory.nuevoMensaje("Estado", transaccion.getAsociado(), transaccion).darMensaje());
         }catch(ErrorEnConexionException e){
             Avisador.mandarErrorFatal(e.getMessage());
-
         }
         pendientes.remove(transaccion);
     }

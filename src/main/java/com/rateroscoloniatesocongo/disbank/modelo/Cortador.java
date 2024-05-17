@@ -38,18 +38,17 @@ public class Cortador {
     public void corteDiario(){
         StringBuilder dumpTxt = new StringBuilder();
         Iterator<Asociado> iterador = BaseDatos.getIterador();
-        while(iterador.hasNext()){
+        while(iterador.hasNext()) {
             Asociado asociado = iterador.next();
             StringBuilder transacciones = extraerTransaccionesAsociado(asociado);
             enviarCorte(asociado, "CorteFinal", transacciones);
-            dumpTxt.append("Asociado: " + asociado.getNombre() + "\n");
+            dumpTxt.append("Asociado: ").append(asociado.getNombre()).append("\n");
             dumpTxt.append(transacciones);
         }
-
         String diaHoy = LocalDate.now() + ".txt";
         try (PrintWriter out = new PrintWriter("cortesDiarios/" + diaHoy)){
-            out.println(dumpTxt.toString());
-        }catch(Exception e){
+            out.println(dumpTxt);
+        } catch(Exception e){
             Avisador.mandarError(e.getMessage());
         }
 

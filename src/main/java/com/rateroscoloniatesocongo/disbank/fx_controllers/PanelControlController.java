@@ -1,7 +1,9 @@
 package com.rateroscoloniatesocongo.disbank.fx_controllers;
 
 import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
+import com.rateroscoloniatesocongo.disbank.clipservice.GetClipUpdatesRunnable;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
+import com.rateroscoloniatesocongo.disbank.transacciones.CobroFisico;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
@@ -68,7 +70,7 @@ public class PanelControlController {
         // Crea un cortador y lo pone a chambear
         botonCorte.setDisable(true);
         GestorTransacciones.getInstance().detener();
-        Avisador.mandarAviso("Corte de día realizado.");
+        Avisador.mandarAviso("Corte del día realizado.");
     }
 
     @FXML
