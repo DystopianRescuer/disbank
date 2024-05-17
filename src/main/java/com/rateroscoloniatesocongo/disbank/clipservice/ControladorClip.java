@@ -73,6 +73,8 @@ public class ControladorClip {
         transaccion.setEstado(estado);
         GestorTransacciones.getInstance().actualizarEstado(transaccion);
         System.out.println("Terminando de actualizar");
+
+
     }
 
     // Pone a un Scheduler a correr cada 10 segundos un hilo que checa si hay actualizaciones
