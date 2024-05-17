@@ -35,6 +35,10 @@ public class Transaccion {
         return asociado;
     }
 
+    public String getCantidad() {
+        return cobro.getCantidad();
+    }
+
     public String getIdTransaccion() {
         return this.id;
     }
