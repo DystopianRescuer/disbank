@@ -26,63 +26,12 @@ import java.util.List;
 public class BaseDatos {
     // Cada cosa de aquí es estática
 
-    public static String rutaBD;
     /**Lista de asociados registrados*/
-    public static ObservableList<Asociado> asociados;
+    public static ObservableList<Asociado> asociados = FXCollections.observableArrayList();
     /**Map que relaciona el ChatId con su Asociado */
-    public static HashMap<String, Asociado> chatIdAsociado;
+    public static HashMap<String, Asociado> chatIdAsociado = new HashMap<>();
     //Para tener claro cual es el nuevo asociado pendiente de asignacion de chatID
     public static int asociadoPendiente;
-
-    public static String getRutaBD() {
-        return rutaBD;
-    }
-
-    public static void setRutaBD(String rutaBD) {
-        BaseDatos.rutaBD = rutaBD;
-    }
-
-    private static void guarda(){
-        FileOutputStream fis;
-        ObjectOutputStream ois= null;
-        try{
-            fis = new FileOutputStream(rutaBD);
-            ois = new ObjectOutputStream(fis);
-        }catch(IOException s){
-            s.printStackTrace();
-            Avisador.mandarError(s.getMessage());
-        }
-
-        try{
-            ois.writeObject(asociados);
-            ois.writeObject(chatIdAsociado);
-        }catch(Exception e){
-            e.printStackTrace();
-            Avisador.mandarError(e.getMessage());
-        }
-    }
-
-    private static void carga(){
-        if(asociados != null || chatIdAsociado != null)
-            return;
-        FileInputStream fis;
-        ObjectInputStream ois= null;
-        try{
-            fis = new FileInputStream(rutaBD);
-            ois = new ObjectInputStream(fis);
-        }catch(IOException s){
-            s.printStackTrace();
-            Avisador.mandarError(s.getMessage());
-        }
-
-        try{
-            BaseDatos.asociados = (ObservableList<Asociado>) FXCollections.observableList((List<Asociado>)ois.readObject());
-            BaseDatos.chatIdAsociado = (HashMap<String, Asociado>) ois.readObject();
-        }catch(Exception e){
-            e.printStackTrace();
-            Avisador.mandarError(e.getLocalizedMessage());
-        }
-    }
 
     /**
      * Busca y regresa un asociado mediante su chatId
@@ -90,7 +39,6 @@ public class BaseDatos {
      * @return asociado buscado o null si no esta registrado.
      */
     public static Asociado buscarPorChatId(String chatId){
-        carga();
         return chatIdAsociado.get(chatId);
     }
 
@@ -102,21 +50,17 @@ public class BaseDatos {
      *         false en otro caso
      */
     public static boolean setChatId(int idAsociado, String chatId){
-        carga();
         for(Asociado a : asociados){
             if(a.getId() == idAsociado){
                 a.setChatId(chatId);
                 chatIdAsociado.put(chatId, a);
-                guarda();
                 return true;
             }
         }
-        guarda();
         return false;
     }
 
     public static ObservableList<Asociado> getAsociados() {
-        carga();
         return asociados;
     }
 
@@ -125,7 +69,6 @@ public class BaseDatos {
      * @return iterator.
      */
     public static Iterator<Asociado> getIterador(){
-        carga();
         return asociados.iterator();
     }
 
@@ -134,12 +77,10 @@ public class BaseDatos {
      * @param a asociado que se agregara. (Asociado)
      */
     public static void agregarAsociado(String nombre, String cuenta, String banco, String nombreComercio, String usuarioTelegram){
-        carga();
         Asociado asociado = new Asociado(nombre, cuenta, banco, nombreComercio, usuarioTelegram);
         asociado.setId(asociados.indexOf(asociados.getLast()) + 1);
         asociados.add(asociado.getId(), asociado);
         setAsociadoPendiente(asociado.getId());
-        guarda();
     }
 
     /**
@@ -147,10 +88,8 @@ public class BaseDatos {
      * @param a asociado que se quiere borrar. (Asociado)
      */
     public static void borrarAsociado(Asociado a){
-        carga();
         chatIdAsociado.remove(a.getChatId());
         asociados.remove(a.getId());
-        guarda();
     }
 
     public static int getAsociadoPendiente() throws SolicitudNoEncontradaException {
@@ -161,9 +100,7 @@ public class BaseDatos {
     }
 
     public static void setAsociadoPendiente(int asociadoPendiente) {
-        carga();
         BaseDatos.asociadoPendiente = asociadoPendiente;
-        guarda();
     }
 
 }
