@@ -8,3 +8,4 @@ config.properties
 config/config.properties
 config/test.properties
 test.properties
+database/database.ser
