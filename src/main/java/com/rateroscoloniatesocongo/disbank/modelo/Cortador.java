@@ -2,8 +2,10 @@ package com.rateroscoloniatesocongo.disbank.modelo;
 
 import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
 import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
+import com.rateroscoloniatesocongo.disbank.telegramservice.VistaTelegram;
 import com.rateroscoloniatesocongo.disbank.clipservice.ControladorClip;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
+import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.Mensaje;
 import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.MensajeFactory;
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
@@ -51,7 +53,6 @@ public class Cortador {
             Avisador.mandarError(e.getMessage());
         }
 
-        BaseDatos.guarda();
     }
 
     /**
@@ -91,8 +92,19 @@ public class Cortador {
      *  @param mensajeFinal un StringBuilder con la información de transacciones del corte
      *  */
     private void enviarCorte(Asociado asociado, String tipoCorte, StringBuilder mensajeFinal) {
+        Mensaje mensaje = MensajeFactory.nuevoMensaje(tipoCorte, asociado, mensajeFinal.toString());
+        //Guard clause
+        if(tipoCorte.equals("CorteFinal")){
+            try{
+                new VistaTelegram(mensaje.getAsociado().getChatId()).enviarMensaje(mensaje.darMensaje());
+            }catch(ErrorEnConexionException e){
+                Avisador.mandarError(e.getMessage());
+            }
+            return;
+        }
+
         try{
-            controladorTelegram.enviarMensaje(MensajeFactory.nuevoMensaje(tipoCorte, asociado, mensajeFinal.toString()));
+            controladorTelegram.enviarMensaje(mensaje);
         }catch(ErrorEnConexionException e){
             Avisador.mandarError(e.getMessage());
         }
