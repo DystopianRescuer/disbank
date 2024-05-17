@@ -1,6 +1,7 @@
 package com.rateroscoloniatesocongo.disbank.clipservice;
 
 import com.rateroscoloniatesocongo.disbank.clipservice.excepciones.TransaccionNoRegistradaException;
+import com.rateroscoloniatesocongo.disbank.fx_controllers.PanelControlController;
 import com.rateroscoloniatesocongo.disbank.transacciones.Cobro;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
@@ -74,7 +75,7 @@ public class ControladorClip {
         GestorTransacciones.getInstance().actualizarEstado(transaccion);
         System.out.println("Terminando de actualizar");
 
-
+        PanelControlController.refrescarTablaTransacciones();
     }
 
     // Pone a un Scheduler a correr cada 10 segundos un hilo que checa si hay actualizaciones

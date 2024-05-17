@@ -43,7 +43,6 @@ public class GetClipUpdatesRunnable implements Runnable {
     }
 
     private void eliminarRequest(String toBeDeleted) {
-        System.out.println("Eliminando request con id" + toBeDeleted);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://webhook.site/token/" + WEBHOOK_UUID + "/request/" + toBeDeleted))
                 .method("DELETE", HttpRequest.BodyPublishers.noBody())

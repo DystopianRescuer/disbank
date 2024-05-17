@@ -7,6 +7,7 @@ import com.rateroscoloniatesocongo.disbank.transacciones.CobroFisico;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -16,6 +17,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 public class PanelControlController {
+
+    private static TableView<Transaccion> transacciones;
 
     @FXML
     public Button botonCorte;
@@ -36,7 +39,7 @@ public class PanelControlController {
     @FXML
     public Button eliminarAsociadoBoton;
     @FXML
-    public TableColumn<Transaccion, String> columnaIdTransaccion, columnaAsociadoTransaccion, columnaTipoTransaccion, columnaEstadoTransaccion;
+    public TableColumn<Transaccion, String> columnaIdTransaccion, columnaAsociadoTransaccion, columnaTipoTransaccion, columnaEstadoTransaccion, columnaCantidadTransaccion;
     @FXML
     public TableColumn<Asociado, String> columnaIdAsociado, columnaNombreAsociado, columnaPuestoAsociado;
     public PieChart ventasTipo, ventasEstado;
@@ -92,6 +95,7 @@ public class PanelControlController {
         columnaAsociadoTransaccion.setCellValueFactory(columnaAsociadoTransaccion -> new SimpleStringProperty(columnaAsociadoTransaccion.getValue().getAsociado().getNombre()));
         columnaTipoTransaccion.setCellValueFactory(columnaTipoTransaccion -> new SimpleStringProperty(columnaTipoTransaccion.getValue().getTipoCobro()));
         columnaEstadoTransaccion.setCellValueFactory(columnaEstadoTransaccion -> new SimpleStringProperty(columnaEstadoTransaccion.getValue().getEstado().toString()));
+        columnaCantidadTransaccion.setCellValueFactory(columnaCantidadTransaccion -> new SimpleStringProperty(columnaCantidadTransaccion.getValue().getCantidad()));
         tablaTransacciones.setItems(GestorTransacciones.getInstance().getTransaccionesTotales());
 
         // Inicialización de la tabla de asociados
@@ -99,10 +103,16 @@ public class PanelControlController {
         columnaNombreAsociado.setCellValueFactory(columnaNombreAsociado -> new SimpleStringProperty(columnaNombreAsociado.getValue().getNombre()));
         columnaPuestoAsociado.setCellValueFactory(columnaPuestoAsociado -> new SimpleStringProperty(columnaPuestoAsociado.getValue().getNombreComercio()));
         listaAsociados.setItems(BaseDatos.getAsociados());
+
+        PanelControlController.transacciones = this.tablaTransacciones;
     }
 
     private boolean estaEnBlanco(TextField textField) {
         return textField == null || textField.getText().isBlank();
+    }
+
+    public static void refrescarTablaTransacciones() {
+        transacciones.refresh();
     }
 
 }
