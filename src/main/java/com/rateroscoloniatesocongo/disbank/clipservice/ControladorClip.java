@@ -70,12 +70,16 @@ public class ControladorClip {
     synchronized void actualizarTransaccion(String id, Transaccion.Estado estado) {
         System.out.println("Actualizando " + id + " en estado " + estado.toString());
         Transaccion transaccion = GestorTransacciones.getInstance().getTransaccionPorId(id);
-        System.out.println("Objeto transaccion encontrado: " + transaccion);
-        transaccion.setEstado(estado);
-        GestorTransacciones.getInstance().actualizarEstado(transaccion);
-        System.out.println("Terminando de actualizar");
 
-        PanelControlController.refrescarTablaTransacciones();
+        if(transaccion != null) {
+            System.out.println("Objeto transaccion encontrado: " + transaccion);
+            transaccion.setEstado(estado);
+            GestorTransacciones.getInstance().actualizarEstado(transaccion);
+            System.out.println("Terminando de actualizar");
+            PanelControlController.refrescarTablaTransacciones();
+        } else {
+            System.out.println("Transaccion a actualizar no encontrada");
+        }
     }
 
     // Pone a un Scheduler a correr cada 10 segundos un hilo que checa si hay actualizaciones
