@@ -17,7 +17,6 @@ public class DisBank extends Application {
 
     public static void main(String[] args) {
         ConfigReader.setRuta(RUTA_CONFIG);
-        BaseDatos.setRutaBD(ConfigReader.getField("database"));
         GestorTransacciones.getInstance().iniciar();
         launch();
     }
