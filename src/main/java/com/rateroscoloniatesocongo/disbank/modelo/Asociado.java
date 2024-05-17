@@ -1,4 +1,5 @@
 package com.rateroscoloniatesocongo.disbank.modelo;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
@@ -9,7 +10,7 @@ import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
  * @version Version 1.
  */
 
-public class Asociado {
+public class Asociado implements Serializable{
     /** id del chat de telegram del asociado*/
     String chatId;
     /** nombre del asociado*/

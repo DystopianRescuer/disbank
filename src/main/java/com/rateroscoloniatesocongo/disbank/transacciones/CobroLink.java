@@ -19,7 +19,7 @@ public class CobroLink implements Cobro {
 
         this.urlDefault = ConfigReader.getField("clip.url.default");
         this.urlSuccess = ConfigReader.getField("clip.url.success");
-        this.urlError = ConfigReader.getField("clip.urs.error");
+        this.urlError = ConfigReader.getField("clip.url.error");
     }
 
     @Override
