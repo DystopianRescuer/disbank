@@ -1,21 +1,13 @@
 package com.rateroscoloniatesocongo.disbank.bd;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.SolicitudNoEncontradaException;
-import com.rateroscoloniatesocongo.disbank.util.Avisador;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import java.util.List;
 
-@SuppressWarnings("unchecked")
 
 /**
  * Proyecto 2 del curso Modelado y Programacion
@@ -78,7 +70,8 @@ public class BaseDatos {
      */
     public static void agregarAsociado(String nombre, String cuenta, String banco, String nombreComercio, String usuarioTelegram){
         Asociado asociado = new Asociado(nombre, cuenta, banco, nombreComercio, usuarioTelegram);
-        asociado.setId(asociados.indexOf(asociados.getLast()) + 1);
+        int index = asociados.isEmpty() ? 0 : asociados.indexOf(asociados.getLast()) + 1;
+        asociado.setId(index);
         asociados.add(asociado.getId(), asociado);
         setAsociadoPendiente(asociado.getId());
     }
