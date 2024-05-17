@@ -86,7 +86,7 @@ public class BaseDatos {
     }
 
     public static int getAsociadoPendiente() throws SolicitudNoEncontradaException {
-        if (asociadoPendiente == 0){
+        if (asociadoPendiente == -1){
             throw new SolicitudNoEncontradaException("No hay solicitud de registro pendiente");
         }
         return asociadoPendiente;
