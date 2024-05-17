@@ -77,7 +77,7 @@ public class Cortador {
     private StringBuilder extraerTransaccionesAsociado(Asociado asociado) {
         StringBuilder mensajeFinal = new StringBuilder();
         for(Transaccion e : asociado.transaccionesDia){
-            mensajeFinal.append(e.toString());
+            mensajeFinal.append(e.toString() + "\n");
         }
         return mensajeFinal;
     }
