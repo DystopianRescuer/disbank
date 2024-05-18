@@ -45,15 +45,13 @@ public class DaemonTelegram extends Thread {
                 Avisador.mandarErrorFatal(e.getMessage());
             }
 
-            if (updates == null)
-                continue;
+            if (updates == null) continue;
 
             for (int i = 0; i < updates.length(); i++) {
                 JSONObject update = updates.getJSONObject(i);
                 JSONObject mensaje = update.optJSONObject("message");
                 //Guard clause para cualquier otra update que no sea un mensaje
-                if (mensaje == null)
-                    continue;
+                if (mensaje == null) continue;
 
                 //Obteniendo chatID y texto del mensaje
                 String chatID = String.valueOf(mensaje.getJSONObject("chat").getLong("id"));

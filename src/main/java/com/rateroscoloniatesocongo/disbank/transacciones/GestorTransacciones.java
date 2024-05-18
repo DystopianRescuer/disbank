@@ -91,18 +91,14 @@ public class GestorTransacciones {
      *
      * @param asociado el asociado que está solicitando la transaccion
      * @param cobro    el objeto Cobro que compondrá a la nueva transaccion
-     * @return Una
      */
-    public String nuevaTransaccion(Asociado asociado, Cobro cobro) {
+    public void nuevaTransaccion(Asociado asociado, Cobro cobro) throws TransaccionNoRegistradaException {
         // Crea el objeto transacción
         Transaccion transaccion = new Transaccion(asociado, cobro);
         // Se la da a Clip y espera la respuesta positiva de este
         try {
             transaccion.setLink(controladorClip.solicitarTransaccion(transaccion));
-        } catch (TransaccionNoRegistradaException e) {
-            //mandar mensaje a telegram de que no se pudo registrar la transaccion
-            return "No se pudo registrar la transaccion."; // este es mientras hacemos el pquete
-        } catch (IOException | InterruptedException e) {
+        }catch (IOException | InterruptedException e) {
             Avisador.mandarErrorFatal(e.getMessage());
         }
         // Si esto ocurrió correctamente entonces registra la transacción en pendientes
@@ -115,9 +111,12 @@ public class GestorTransacciones {
         asociado.agregarTransaccionDia(transaccion);
         transaccionesTotales.add(transaccion);
         System.out.println(Arrays.toString(transaccionesTotales.toArray()));
-        return "";
     }
 
+    /**
+     * Regresa la lista de Transacciones de todo el día
+     * @return la lista de transacciones de todo el día
+     */
     public ObservableList<Transaccion> getTransaccionesTotales() {
         return transaccionesTotales;
     }
