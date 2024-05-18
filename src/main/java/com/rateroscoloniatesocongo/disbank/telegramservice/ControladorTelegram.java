@@ -136,6 +136,10 @@ public class ControladorTelegram {
         return daemon;
     }
 
+    public static void matarInstancia(){
+        ControladorTelegram.instance = null;
+    }
+
     //Metodos para el hilo daemon
 
     /**

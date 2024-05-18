@@ -47,6 +47,11 @@ public class VistaTelegram {
         this.chatId = chatId;
     }
 
+    //Metodo debug
+    public static void resetStatico(){
+        VistaTelegram.tokenBot = null;
+    }
+
     /**
      * Ajusta el tokenBot al token especificado y prueba la conexión inicial
      *
