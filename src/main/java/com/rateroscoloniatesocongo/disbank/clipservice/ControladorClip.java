@@ -2,7 +2,6 @@ package com.rateroscoloniatesocongo.disbank.clipservice;
 
 import com.rateroscoloniatesocongo.disbank.clipservice.excepciones.TransaccionNoRegistradaException;
 import com.rateroscoloniatesocongo.disbank.fx_controllers.PanelControlController;
-import com.rateroscoloniatesocongo.disbank.transacciones.Cobro;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
@@ -16,7 +15,6 @@ import java.net.http.HttpResponse;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 public class ControladorClip {
@@ -37,7 +35,7 @@ public class ControladorClip {
     // Hace la petición a la API de Clip para la nueva transacción
     public Optional<String> solicitarTransaccion(Transaccion transaccion) throws IOException, InterruptedException, TransaccionNoRegistradaException {
 
-        if(!escuchadorIniciado) {
+        if (!escuchadorIniciado) {
             iniciarEscuchador();
         }
 
@@ -58,7 +56,7 @@ public class ControladorClip {
             throw new TransaccionNoRegistradaException("Respuesta: " + response.statusCode() + ". Response body: " + body);
         }
 
-        if(transaccion.getRespuestaKey().isPresent()) {
+        if (transaccion.getRespuestaKey().isPresent()) {
             return Optional.of(jsonResponse.getString(transaccion.getRespuestaKey().get()));
         }
 
@@ -71,7 +69,7 @@ public class ControladorClip {
         System.out.println("Actualizando " + id + " en estado " + estado.toString());
         Transaccion transaccion = GestorTransacciones.getInstance().getTransaccionPorId(id);
 
-        if(transaccion != null) {
+        if (transaccion != null) {
             System.out.println("Objeto transaccion encontrado: " + transaccion);
             transaccion.setEstado(estado);
             GestorTransacciones.getInstance().actualizarEstado(transaccion);
@@ -92,7 +90,7 @@ public class ControladorClip {
     }
 
     public static ControladorClip getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new ControladorClip(ConfigReader.getField("clip.apikey"));
         }
         return instance;

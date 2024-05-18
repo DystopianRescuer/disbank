@@ -1,6 +1,5 @@
 package com.rateroscoloniatesocongo.disbank.transacciones;
 
-import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
 import com.rateroscoloniatesocongo.disbank.clipservice.ControladorClip;
 import com.rateroscoloniatesocongo.disbank.clipservice.excepciones.TransaccionNoRegistradaException;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
@@ -31,7 +30,7 @@ public class GestorTransacciones {
     private static GestorTransacciones instance;
 
 
-    private ObservableList<Transaccion> transaccionesTotales;
+    private final ObservableList<Transaccion> transaccionesTotales;
     /**
      * Lista de transacciones pendientes
      */
@@ -91,7 +90,7 @@ public class GestorTransacciones {
      * del objeto Transaccion con ayuda del controladorClip.
      *
      * @param asociado el asociado que está solicitando la transaccion
-     * @param cobro el objeto Cobro que compondrá a la nueva transaccion
+     * @param cobro    el objeto Cobro que compondrá a la nueva transaccion
      * @return Una
      */
     public String nuevaTransaccion(Asociado asociado, Cobro cobro) {
@@ -108,9 +107,9 @@ public class GestorTransacciones {
         }
         // Si esto ocurrió correctamente entonces registra la transacción en pendientes
         pendientes.add(transaccion);
-        try{
+        try {
             controladorTelegram.enviarMensaje(MensajeFactory.nuevoMensaje("Cobro", asociado, transaccion));
-        }catch (ErrorEnConexionException e) {
+        } catch (ErrorEnConexionException e) {
             Avisador.mandarErrorFatal(e.getMessage());
         }
         asociado.agregarTransaccionDia(transaccion);
@@ -124,15 +123,17 @@ public class GestorTransacciones {
     }
 
     /**
-     * @param transaccion
+     * Actualiza el estado de una transaccion
+     *
+     * @param transaccion transaccion a actualizar
      */
     public void actualizarEstado(Transaccion transaccion) {
         System.out.println("Actualizando estado desde Gestor de Transacciones");
-        try{
+        try {
             controladorTelegram.enviarMensaje(MensajeFactory.nuevoMensaje("Estado", transaccion.getAsociado(), transaccion));
             System.out.println(transaccion.getEstado());
             System.out.println(MensajeFactory.nuevoMensaje("Estado", transaccion.getAsociado(), transaccion).darMensaje());
-        }catch(ErrorEnConexionException e){
+        } catch (ErrorEnConexionException e) {
             Avisador.mandarErrorFatal(e.getMessage());
         }
         pendientes.remove(transaccion);

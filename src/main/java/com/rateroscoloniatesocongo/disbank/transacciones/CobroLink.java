@@ -24,7 +24,7 @@ public class CobroLink implements Cobro {
 
     @Override
     public String getCantidad() {
-        return "$"+cantidad + " " + CURRENCY;
+        return "$" + cantidad + " " + CURRENCY;
     }
 
     @Override
@@ -45,12 +45,12 @@ public class CobroLink implements Cobro {
     @Override
     public String getBody() {
         return String.format("{\"amount\":%f,\"currency\":\"%s\"," +
-                "\"purchase_description\":\"%s\"," +
-                "\"redirection_url\":{\"success\":\"%s\"," +
-                "\"error\":\"%s\"," +
-                "\"default\":\"%s\"}," +
-                "\"metadata\":{\"me_reference_id\":\"%s\"},\"override_settings\":{\"currency\":{\"show_currency_code\":true}," +
-                "\"payment_method\":[\"CARD\"],\"locale\":\"es-MX\",\"enable_tip\":false}}",
+                        "\"purchase_description\":\"%s\"," +
+                        "\"redirection_url\":{\"success\":\"%s\"," +
+                        "\"error\":\"%s\"," +
+                        "\"default\":\"%s\"}," +
+                        "\"metadata\":{\"me_reference_id\":\"%s\"},\"override_settings\":{\"currency\":{\"show_currency_code\":true}," +
+                        "\"payment_method\":[\"CARD\"],\"locale\":\"es-MX\",\"enable_tip\":false}}",
                 this.cantidad, CURRENCY, this.mensaje, urlSuccess, urlError, urlDefault, ID);
     }
 }

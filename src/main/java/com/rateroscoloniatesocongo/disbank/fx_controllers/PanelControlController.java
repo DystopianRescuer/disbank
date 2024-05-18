@@ -1,13 +1,10 @@
 package com.rateroscoloniatesocongo.disbank.fx_controllers;
 
 import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
-import com.rateroscoloniatesocongo.disbank.clipservice.GetClipUpdatesRunnable;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
-import com.rateroscoloniatesocongo.disbank.transacciones.CobroFisico;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -86,6 +83,12 @@ public class PanelControlController {
         BaseDatos.agregarAsociado(nombre.getText(), clabe.getText(), banco.getText(), nombreComercio.getText(), telegramUser.getText());
         registrandoUsuario.setVisible(false);
         Avisador.mandarAviso("Usuario registrado exitosamente");
+
+        nombre.clear();
+        clabe.clear();
+        banco.clear();
+        nombreComercio.clear();
+        telegramUser.clear();
     }
 
     @FXML

@@ -1,11 +1,8 @@
 package com.rateroscoloniatesocongo.disbank;
 
-import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
-import com.rateroscoloniatesocongo.disbank.util.Avisador;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

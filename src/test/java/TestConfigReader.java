@@ -1,12 +1,11 @@
-import java.io.OutputStream;
-
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
-
 import org.junit.Assert;
 import org.junit.Test;
+
 import java.io.FileOutputStream;
-import java.util.Properties;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Properties;
 import java.util.Random;
 
 /**
@@ -14,26 +13,27 @@ import java.util.Random;
  */
 public class TestConfigReader {
 
-    Random random;
+    final Random random;
 
-    public TestConfigReader(){
+    public TestConfigReader() {
         random = new Random();
     }
 
-    private String randomString(){
+    private String randomString() {
         return String.valueOf(random.nextFloat());
     }
+
     /**
-     *  Verifica que no se pueda llamar antes de inicializar el ConfigReader
-     *  */
+     * Verifica que no se pueda llamar antes de inicializar el ConfigReader
+     */
     @Test
     public void TestGetField() {
         Assert.assertNull(ConfigReader.getField("aa"));
     }
 
     /**
-     *  Verifica que se esten obteniendo los campos adecuadamente
-     *  */
+     * Verifica que se esten obteniendo los campos adecuadamente
+     */
     @Test
     public void TestGetField2() {
         //Valores aleatorios pero guardados

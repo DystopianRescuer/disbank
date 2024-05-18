@@ -6,7 +6,7 @@ import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion.Estado;
 /**
  * Le da el estado de una transaccion al cliente, para esto se construye con la ID de la transaccion y el estado de la misma
  */
-public class MensajeEstado extends Mensaje{
+public class MensajeEstado extends Mensaje {
 
     private final String mensaje;
 
@@ -15,7 +15,7 @@ public class MensajeEstado extends Mensaje{
     public static final String transaccionFallida = "La transaccion con id %s ha fallado. Contacta a un cobrador para más detalles.";
 
 
-    MensajeEstado(Asociado asociado, String idTransaccion, Estado estadoTransaccion){
+    MensajeEstado(Asociado asociado, String idTransaccion, Estado estadoTransaccion) {
         this.asociado = asociado;
         String tmp = switch (estadoTransaccion) {
             case PENDIENTE -> transaccionPendiente;

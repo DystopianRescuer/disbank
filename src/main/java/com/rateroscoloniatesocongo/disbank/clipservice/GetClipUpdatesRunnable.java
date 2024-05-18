@@ -36,7 +36,6 @@ public class GetClipUpdatesRunnable implements Runnable {
             ControladorClip.getInstance().actualizarTransaccion(idTransaccion,
                     jsonObject.getString("status").equals("PAID") ?
                             Transaccion.Estado.PAGADA : Transaccion.Estado.FALLIDA);
-            System.out.println("Termino de checarClipUpdate");
         } catch (JSONException e) {
             // Si esto pasa es porque el JSON no trae formato de respuesta de Clip, solo se ignora y el siguiente paso lo borrará
         }
@@ -47,18 +46,18 @@ public class GetClipUpdatesRunnable implements Runnable {
                 .uri(URI.create("https://webhook.site/token/" + WEBHOOK_UUID + "/request/" + toBeDeleted))
                 .method("DELETE", HttpRequest.BodyPublishers.noBody())
                 .build();
-        System.out.println("Request eliminado con id" + toBeDeleted);
         try {
             HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
         } catch (IOException | InterruptedException e) {
             System.out.println(e.getLocalizedMessage());
         }
+        System.out.println("Request eliminado con id: " + toBeDeleted);
     }
 
     public void eliminarTodoRequest() {
         try {
             JSONArray jsonArray = getLastUpdates();
-            if(jsonArray != null) {
+            if (jsonArray != null) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     eliminarRequest(jsonArray.getJSONObject(i).getString("uuid"));
                 }
@@ -72,15 +71,12 @@ public class GetClipUpdatesRunnable implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Inicio run Clip Updates Checker");
-        // Pide el último request, si consigue un código 200 entonces lo guarda y pide a la API eliminar ese request y acaba la ejecución
-        HttpResponse<String> response;
+        System.out.println("GetClipUpdates ran");
         JSONObject fullRequest;
-
         try {
             JSONArray updates = getLastUpdates();
-            if(updates != null) {
-                for (int i = 0; i < updates.length(); i++){
+            if (updates != null) {
+                for (int i = 0; i < updates.length(); i++) {
                     fullRequest = updates.getJSONObject(i);
 
                     // Pasa el mensaje de Clip al método que lo procesa
@@ -95,7 +91,6 @@ public class GetClipUpdatesRunnable implements Runnable {
         } catch (JSONException e) {
             e.printStackTrace(System.out);
         }
-        System.out.println("Saliendo del run");
     }
 
 }
