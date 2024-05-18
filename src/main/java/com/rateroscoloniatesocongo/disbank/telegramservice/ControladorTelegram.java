@@ -1,6 +1,7 @@
 package com.rateroscoloniatesocongo.disbank.telegramservice;
 
 import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
+import com.rateroscoloniatesocongo.disbank.clipservice.excepciones.TransaccionNoRegistradaException;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.modelo.Cortador;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ConexionYaIniciadaException;
@@ -59,11 +60,9 @@ public class ControladorTelegram {
     private static ControladorTelegram instance;
 
     public final JSONObject getMe;
-    private final String tokenBot;
     private final HashMap<Asociado, VistaTelegram> chats;
     private final HashMap<String, Asociado> chatIds;
     private int offset;
-    private GestorTransacciones gestorTransacciones;
     private final Thread daemon;
 
     //Mensajes rapidos
@@ -74,7 +73,6 @@ public class ControladorTelegram {
      * Singleton
      */
     private ControladorTelegram(String tokenBot) throws ConexionYaIniciadaException, ErrorEnConexionException {
-        this.tokenBot = tokenBot;
         getMe = VistaTelegram.setTokenBot(tokenBot);
         chats = new HashMap<>();
         offset = 0;
@@ -95,8 +93,7 @@ public class ControladorTelegram {
      * @throws ErrorEnConexionException cuando existe un error en la conexion a Telegram
      */
     public static ControladorTelegram getInstance() throws ErrorEnConexionException {
-        if (instance != null)
-            return instance;
+        if (instance != null) return instance;
 
         try {
             instance = new ControladorTelegram(ConfigReader.getField("telegram.key"));
@@ -149,17 +146,13 @@ public class ControladorTelegram {
      * @param asociado    el asociado al cual está vinculado el cobro (de quien proviene la solicitud)
      */
     protected void generarNuevaTransaccion(double cobro, String tipoDeCobro, Asociado asociado) {
-
-        String resultado = GestorTransacciones.getInstance()
-                .nuevaTransaccion(asociado, CobroFactory
-                        .generaCobro(tipoDeCobro, cobro));
-
-        if (resultado.equals("No se pudo registrar la transaccion")) {
+        try {
+            GestorTransacciones.getInstance().nuevaTransaccion(asociado, CobroFactory.generaCobro(tipoDeCobro, cobro));
+        } catch (TransaccionNoRegistradaException e) {
             try {
-                buscarVistaTelegram(asociado)
-                        .enviarMensaje(resultado);
-            } catch (ErrorEnConexionException e) {
-                Avisador.mandarErrorFatal(e.getMessage());
+                buscarVistaTelegram(asociado).enviarMensaje("No se pudo registrar la transacción");
+            } catch (ErrorEnConexionException e1) {
+                Avisador.mandarErrorFatal(e1.getMessage());
             }
         }
     }
@@ -239,8 +232,7 @@ public class ControladorTelegram {
     protected JSONArray getUpdates() throws ErrorEnConexionException {
         JSONArray respuesta;
         respuesta = VistaTelegram.recibirActualizacion(offset);
-        if (respuesta.isEmpty())
-            return null;
+        if (respuesta.isEmpty()) return null;
         JSONObject ultimoRecibido = respuesta.getJSONObject(respuesta.length() - 1);
         offset = ultimoRecibido.getInt("update_id") + 1;
 
