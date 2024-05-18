@@ -4,9 +4,9 @@ import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.SolicitudNoEncontradaException;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * <p>
  * Está destinado a correr durante toda la ejecución, recibiendo las Updates del bot mediante long polling y destinandolas a
  * los metodos asignados para este motivo del {@link ControladorTelegram}
- *
+ * <p>
  * Tiene acceso privilegiado a varios métodos del ControladorTelegram que están destinados a funcionar exclusivamente para esta
  * clase.
  * <p>
@@ -28,39 +28,37 @@ import java.util.regex.Pattern;
  */
 public class DaemonTelegram extends Thread {
 
-    ControladorTelegram controlador;
+    final ControladorTelegram controlador;
 
-    DaemonTelegram(ControladorTelegram controlador){
+    DaemonTelegram(ControladorTelegram controlador) {
         this.controlador = controlador;
     }
 
 
     @Override
-    public void run(){
-        while(true){
+    public void run() {
+        while (true) {
             JSONArray updates = null;
-            try{
+            try {
                 updates = controlador.getUpdates();
-            }catch (ErrorEnConexionException e){
+            } catch (ErrorEnConexionException e) {
                 Avisador.mandarErrorFatal(e.getMessage());
             }
 
-            if(updates == null)
-                continue;
+            if (updates == null) continue;
 
-            for(int i = 0; i<updates.length() ; i++){
+            for (int i = 0; i < updates.length(); i++) {
                 JSONObject update = updates.getJSONObject(i);
                 JSONObject mensaje = update.optJSONObject("message");
                 //Guard clause para cualquier otra update que no sea un mensaje
-                if(mensaje == null)
-                    continue;
+                if (mensaje == null) continue;
 
                 //Obteniendo chatID y texto del mensaje
                 String chatID = String.valueOf(mensaje.getJSONObject("chat").getLong("id"));
                 String text = mensaje.getString("text");
-                try{
+                try {
                     actuar(chatID, text);
-                }catch (ErrorEnConexionException e){
+                } catch (ErrorEnConexionException e) {
                     Avisador.mandarErrorFatal(e.getMessage());
                 }
 
@@ -69,21 +67,21 @@ public class DaemonTelegram extends Thread {
     }
 
     /**
-     *  Decide que hacer con el mensaje que llegó por medio de una Update en el run() previo
-     *  */
+     * Decide que hacer con el mensaje que llegó por medio de una Update en el run() previo
+     */
     private void actuar(String chatID, String mensaje) throws ErrorEnConexionException {
         Asociado asociado = controlador.buscarAsociado(chatID);
 
-        if(asociado == null) {
-            switch(mensaje) {
+        if (asociado == null) {
+            switch (mensaje) {
                 case "Iniciar ventas":
                     controlador.registrarNuevaInteraccion(chatID);
                     break;
 
                 case "/start":
-                    try{
+                    try {
                         controlador.registrarNuevoAsociado(chatID);
-                    }catch(SolicitudNoEncontradaException e){
+                    } catch (SolicitudNoEncontradaException e) {
                         new VistaTelegram(chatID).enviarMensaje(ControladorTelegram.noRegistroPendiente);
                     }
                     break;
@@ -92,12 +90,12 @@ public class DaemonTelegram extends Thread {
             }
         } else {
             Avisador.mandarAviso("Mensaje: " + mensaje + "con asociado");
-            switch(mensaje){
+            switch (mensaje) {
                 case "Cerrar ventas":
                     controlador.cortePersonal(asociado);
                     break;
 
-                case  "Comandos":
+                case "Comandos":
                     controlador.darComandos(asociado);
                     break;
 
@@ -106,11 +104,11 @@ public class DaemonTelegram extends Thread {
                     break;
 
                 default:
-                    if(asociado.recibiendoAyuda){
+                    if (asociado.recibiendoAyuda) {
                         controlador.mensajeAyuda(asociado, mensaje);
-                    }else{
+                    } else {
                         String[] detallesCobro = buscarCobro(mensaje);
-                        if(detallesCobro != null){
+                        if (detallesCobro != null) {
                             controlador.generarNuevaTransaccion(Double.parseDouble(detallesCobro[0]), detallesCobro[1], asociado);
                             return;
                         }
@@ -123,7 +121,7 @@ public class DaemonTelegram extends Thread {
 
     }
 
-    private String[] buscarCobro(String mensaje){
+    private String[] buscarCobro(String mensaje) {
         Pattern pattern = Pattern.compile("Cobrar \\$([0-9]+\\.[0-9]{2}) con (.*)");
         Matcher matcher = pattern.matcher(mensaje);
 

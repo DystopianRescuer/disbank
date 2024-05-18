@@ -1,12 +1,13 @@
 package com.rateroscoloniatesocongo.disbank.transacciones;
 
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
+
 import java.util.Optional;
 
 public class Transaccion {
 
     public enum Estado {
-        PENDIENTE, PAGADA, FALLIDA;
+        PENDIENTE, PAGADA, FALLIDA
     }
 
     private final Asociado asociado;
@@ -14,7 +15,7 @@ public class Transaccion {
     private final Cobro cobro;
     private Estado estado;
     private Optional<String> link;
-    private String id;
+    private final String id;
 
     public Transaccion(Asociado asociado, Cobro cobro) {
         this.asociado = asociado;
@@ -35,6 +36,10 @@ public class Transaccion {
         return asociado;
     }
 
+    public String getCantidad() {
+        return cobro.getCantidad();
+    }
+
     public String getIdTransaccion() {
         return this.id;
     }
@@ -47,7 +52,7 @@ public class Transaccion {
         this.estado = estado;
     }
 
-    public String getAPI(){
+    public String getAPI() {
         return cobro.getAPI();
     }
 
@@ -55,7 +60,7 @@ public class Transaccion {
         return cobro.getRespuestaKey();
     }
 
-    public String getBody(){
+    public String getBody() {
         return cobro.getBody();
     }
 
@@ -80,8 +85,8 @@ public class Transaccion {
 
     @Override
     public String toString() {
-        return "ID: " + getIdTransaccion() + ": Transaccion por "+ cobro.getCantidad() + "\n" +
-            "Estado: " + estado;
+        return "ID: " + getIdTransaccion() + ": Transaccion por " + cobro.getCantidad() + "\n" +
+                "Estado: " + estado;
     }
 
 

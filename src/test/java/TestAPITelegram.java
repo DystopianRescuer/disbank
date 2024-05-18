@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.VistaTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ConexionYaIniciadaException;
@@ -12,14 +10,16 @@ import org.json.JSONObject;
 import org.junit.Assert;
 
 
+import java.util.Scanner;
+
 /**
- *  Pruebas unitarias para los metodos de la {@link com.rateroscoloniatesocongo.disbank.telegramservice.VistaTelegram}
- *  y ControladorTelegram
+ * Pruebas unitarias para los metodos de la {@link com.rateroscoloniatesocongo.disbank.telegramservice.VistaTelegram}
+ * y ControladorTelegram
  * <p>
- *  1. TestSetTokenBot
- *  2. TestRecibirActualizacion
- *  3.
- *  */
+ * 1. TestSetTokenBot
+ * 2. TestRecibirActualizacion
+ * 3.
+ */
 public class TestAPITelegram {
 
     VistaTelegram vistaTelegram;
@@ -33,7 +33,7 @@ public class TestAPITelegram {
     }
 
     /**
-     *  Inicializa ControladorTelegram para cada prueba
+     * Inicializa ControladorTelegram para cada prueba
      * <p>
      *  La vista ejemplo se construye con el numero guardado en NumeroTest.txt
      *  Y el ControladorTelegram se construye con el token de la configuracion
@@ -41,6 +41,7 @@ public class TestAPITelegram {
      *  */
     private void setUpReal() {
         nullearTodo();
+
         ConfigReader.setRuta("config/config.properties");
         try{
             controladorTelegram = ControladorTelegram.getInstance();
@@ -65,6 +66,7 @@ public class TestAPITelegram {
             VistaTelegram.setTokenBot(ConfigReader.getField("telegram.key"));
         }catch(Exception e){
             Assert.fail();
+
         }
         String tokenBot = ConfigReader.getField("telegram.key");
         Assert.assertEquals(tokenBot, VistaTelegram.getTokenBot());

@@ -1,6 +1,7 @@
 package com.rateroscoloniatesocongo.disbank.telegramservice;
 
 import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
+import com.rateroscoloniatesocongo.disbank.clipservice.excepciones.TransaccionNoRegistradaException;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.modelo.Cortador;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ConexionYaIniciadaException;
@@ -12,7 +13,6 @@ import com.rateroscoloniatesocongo.disbank.transacciones.CobroFactory;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
 import com.rateroscoloniatesocongo.disbank.util.ConfigReader;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -54,27 +54,25 @@ import java.util.HashMap;
  * Asi mismo, tambien tiene su coleccion de mensajes rapidos como Strings finales, los cuales no sirven para otra cosa más que para
  * que el {@link DaemonTelegram} pueda usarlos en esos casos en los que, por la complejidad de la respuesta, no es necesario
  * crear un objeto Mensaje
- *
  */
 public class ControladorTelegram {
 
     private static ControladorTelegram instance;
 
     public final JSONObject getMe;
-    private final String tokenBot;
     private final HashMap<Asociado, VistaTelegram> chats;
     private final HashMap<String, Asociado> chatIds;
     private int offset;
-    private GestorTransacciones gestorTransacciones;
     private final Thread daemon;
 
     //Mensajes rapidos
     public static final String noRegistroPendiente = "No te encuentras registrado como asociado, ve con el administrador de Disbank para más detalles";
     public static final String instruccionNoReconocida = "La instruccion enviada no es reconocida, escribe Comandos para la lista de comandos";
 
-    /** Singleton */
+    /**
+     * Singleton
+     */
     private ControladorTelegram(String tokenBot) throws ConexionYaIniciadaException, ErrorEnConexionException {
-        this.tokenBot = tokenBot;
         getMe = VistaTelegram.setTokenBot(tokenBot);
         chats = new HashMap<>();
         offset = 0;
@@ -87,40 +85,36 @@ public class ControladorTelegram {
     //Metodos para el resto del backend
 
     /**
-     *  Obtiene la instancia singleton del controlador. La crea con el token del ConfigReader si no existe
-
-     *  Metodo para el backend
+     * Obtiene la instancia singleton del controlador. La crea con el token del ConfigReader si no existe
+     * <p>
+     * Metodo para el backend
      *
-     *  @return la instancia singleton del controlador
-     *
-     *  @throws ErrorEnConexionException cuando existe un error en la conexion a Telegram
-     *  */
-    public static ControladorTelegram getInstance() throws ErrorEnConexionException{
-        if(instance != null)
-            return instance;
+     * @return la instancia singleton del controlador
+     * @throws ErrorEnConexionException cuando existe un error en la conexion a Telegram
+     */
+    public static ControladorTelegram getInstance() throws ErrorEnConexionException {
+        if (instance != null) return instance;
 
-        try{
+        try {
             instance = new ControladorTelegram(ConfigReader.getField("telegram.key"));
-        }catch(ConexionYaIniciadaException e){
+        } catch (ConexionYaIniciadaException e) {
             Avisador.mandarErrorFatal(e.getMessage());
         }
 
         return instance;
     }
 
-     /**
-     *  Envia un mensaje con las especificaciones dadas desde el objeto Mensaje
+    /**
+     * Envia un mensaje con las especificaciones dadas desde el objeto Mensaje
      * <p>
-     *  En situaciones optimas, este es el unico metodo necesario para enviar mensajes a los asociados desde cualquier parte
-     *  del programa, excepto en algunos casos donde no fue considerado conveniente por la obvia inmediatez de algunos eventos
-     *  cuyos mensajes se pueden manejar ahi mismo (hay algunos ejemplos en {@link DaemonTelegram})
+     * En situaciones optimas, este es el unico metodo necesario para enviar mensajes a los asociados desde cualquier parte
+     * del programa, excepto en algunos casos donde no fue considerado conveniente por la obvia inmediatez de algunos eventos
+     * cuyos mensajes se pueden manejar ahi mismo (hay algunos ejemplos en {@link DaemonTelegram})
      * <p>
-     *  Metodo para el backend y para el mismo controlador
+     * Metodo para el backend y para el mismo controlador
      *
-     *
-     *  @throws ErrorEnConexionException si existe un error en la conexion a Telegram
-     *
-     *  */
+     * @throws ErrorEnConexionException si existe un error en la conexion a Telegram
+     */
     public void enviarMensaje(Mensaje mensaje) throws ErrorEnConexionException {
         VistaTelegram enviador = buscarVistaTelegram(mensaje.getAsociado());
         enviador.enviarMensaje(mensaje.darMensaje());
@@ -138,7 +132,7 @@ public class ControladorTelegram {
 
     //Metodos debug
 
-    public Thread getDaemon(){
+    public Thread getDaemon() {
         return daemon;
     }
 
@@ -149,38 +143,34 @@ public class ControladorTelegram {
     //Metodos para el hilo daemon
 
     /**
-     *  Genera una nueva transaccion con los detalles dados y la envía al GestorTransacciones para esperar su respuesta
+     * Genera una nueva transaccion con los detalles dados y la envía al GestorTransacciones para esperar su respuesta
      *
-     *  @param cobro         cantidad monetaria a cobrar
-     *  @param tipoDeCobro   tipo de cobro a pedir (terminal o link)
-     *  @param asociado      el asociado al cual está vinculado el cobro (de quien proviene la solicitud)
-     *  */
-    protected void generarNuevaTransaccion(double cobro, String tipoDeCobro, Asociado asociado){
-
-        String resultado = GestorTransacciones.getInstance()
-            .nuevaTransaccion(asociado, CobroFactory
-                              .generaCobro(tipoDeCobro, cobro));
-
-        if(resultado.equals("No se pudo registrar la transaccion")){
-            try{
-                buscarVistaTelegram(asociado)
-                .enviarMensaje(resultado);
-            }catch (ErrorEnConexionException e){
-                Avisador.mandarErrorFatal(e.getMessage());
+     * @param cobro       cantidad monetaria a cobrar
+     * @param tipoDeCobro tipo de cobro a pedir (terminal o link)
+     * @param asociado    el asociado al cual está vinculado el cobro (de quien proviene la solicitud)
+     */
+    protected void generarNuevaTransaccion(double cobro, String tipoDeCobro, Asociado asociado) {
+        try {
+            GestorTransacciones.getInstance().nuevaTransaccion(asociado, CobroFactory.generaCobro(tipoDeCobro, cobro));
+        } catch (TransaccionNoRegistradaException e) {
+            try {
+                buscarVistaTelegram(asociado).enviarMensaje("No se pudo registrar la transacción");
+            } catch (ErrorEnConexionException e1) {
+                Avisador.mandarErrorFatal(e1.getMessage());
             }
         }
     }
 
     /**
-     *  Registra una nueva interaccion con un chatID que no se encuentra registrado en los chats actuales.
+     * Registra una nueva interaccion con un chatID que no se encuentra registrado en los chats actuales.
      * <p>
-     *  Saca el asociado vinculado a dicho chatID y le crea una VistaTelegram para el resto de la ejecución, hasta su corte
+     * Saca el asociado vinculado a dicho chatID y le crea una VistaTelegram para el resto de la ejecución, hasta su corte
      * <p>
-     *  */
+     */
     protected void registrarNuevaInteraccion(String chatID) {
         Asociado asociado = BaseDatos.buscarPorChatId(chatID);
 
-        if(asociado != null) {
+        if (asociado != null) {
             chats.put(asociado, new VistaTelegram(chatID));
             chatIds.put(chatID, asociado);
         }
@@ -188,11 +178,11 @@ public class ControladorTelegram {
 
 
     /**
-     *  Realiza el corte personal del asociado registrado al chatID.
+     * Realiza el corte personal del asociado registrado al chatID.
      * <p>
-     *  Esto solamente significa, hasta el momento, que dejamos de guardar su VistaTelegram, por motivos de optimizacion
-     *  */
-    protected void cortePersonal(Asociado asociado){
+     * Esto solamente significa, hasta el momento, que dejamos de guardar su VistaTelegram, por motivos de optimizacion
+     */
+    protected void cortePersonal(Asociado asociado) {
         Cortador cortador = new Cortador();
         cortador.cortePersonal(asociado);
         chats.remove(asociado);
@@ -200,74 +190,71 @@ public class ControladorTelegram {
     }
 
     /**
-     *  Le da la lista de comandos al usuario que la solicita
+     * Le da la lista de comandos al usuario que la solicita
      *
-     *  @param chatID que la solicita
-     *
-     *  */
-    protected void darComandos(Asociado asociado){
-        try{
+     * @param asociado que la solicita
+     */
+    protected void darComandos(Asociado asociado) {
+        try {
             Mensaje mensaje = MensajeFactory.nuevoMensaje("Comandos", asociado);
             System.out.println(mensaje.getAsociado());
             System.out.println(mensaje.darMensaje());
             enviarMensaje(mensaje);
-        }catch(ErrorEnConexionException e){
+        } catch (ErrorEnConexionException e) {
             e.printStackTrace();
             Avisador.mandarErrorFatal(e.getMessage());
         }
     }
 
     /**
-     *  Manda solicitud de ayuda del chatID que la solicita
+     * Manda solicitud de ayuda del chatID que la solicita
      *
-     *  @param chatID que la solicita
-     *  */
-    protected void pedirAyuda(Asociado asociado){
+     * @param asociado que la solicita
+     */
+    protected void pedirAyuda(Asociado asociado) {
         asociado.recibiendoAyuda = true;
         //TODO: Implementar chat personal con el admin
     }
 
-    protected void mensajeAyuda(Asociado asociado, String mensaje){
+    protected void mensajeAyuda(Asociado asociado, String mensaje) {
         //TODO: IDEM
-        try{
+        try {
             buscarVistaTelegram(asociado).enviarMensaje(mensaje);
-        }catch(ErrorEnConexionException e){
+        } catch (ErrorEnConexionException e) {
             Avisador.mandarErrorFatal(e.getMessage());
         }
     }
 
     /**
-     *  Retorna un arreglo JSON con las actualizaciones recibidas del bot desde la ultima llamada al metodo
+     * Retorna un arreglo JSON con las actualizaciones recibidas del bot desde la ultima llamada al metodo
      * <p>
-     *  Está destinado para ser usado desde el hilo daemon encargado del controlador.
+     * Está destinado para ser usado desde el hilo daemon encargado del controlador.
      *
-     *  @return ArregloJSON con las actualizaciones recibidas del bot desde la ultima llamada al metodo
-     *
-     *  @throws ErrorEnConexionException si no se pudo establecer la conexión adecuadamente
-     *  */
-    protected JSONArray getUpdates() throws ErrorEnConexionException{
+     * @return ArregloJSON con las actualizaciones recibidas del bot desde la ultima llamada al metodo
+     * @throws ErrorEnConexionException si no se pudo establecer la conexión adecuadamente
+     */
+    protected JSONArray getUpdates() throws ErrorEnConexionException {
         JSONArray respuesta;
         respuesta = VistaTelegram.recibirActualizacion(offset);
-        if(respuesta.isEmpty())
-            return null;
-        JSONObject ultimoRecibido = respuesta.getJSONObject(respuesta.length()-1);
-        offset = ultimoRecibido.getInt("update_id") +1;
+        if (respuesta.isEmpty()) return null;
+        JSONObject ultimoRecibido = respuesta.getJSONObject(respuesta.length() - 1);
+        offset = ultimoRecibido.getInt("update_id") + 1;
 
         return respuesta;
     }
 
     /**
-     *  Busca el asociado vinculado a ese chatID. Necesitamos que el hilo daemon acceda al resto de metodos con esta información
+     * Busca el asociado vinculado a ese chatID. Necesitamos que el hilo daemon acceda al resto de metodos con esta información
      * <p>
-     *  Está destinado para ser usado desde el hilo daemon del controlador
+     * Está destinado para ser usado desde el hilo daemon del controlador
      *
-     *  @return Asociado de la lista de chats que está vinculado a ese chatID
-     *  */
+     * @return Asociado de la lista de chats que está vinculado a ese chatID
+     */
     protected Asociado buscarAsociado(String chatID) {
         return chatIds.get(chatID);
     }
 
-    protected void registrarNuevoAsociado(String chatID) throws SolicitudNoEncontradaException{
+    protected void registrarNuevoAsociado(String chatID) throws SolicitudNoEncontradaException {
         BaseDatos.setChatId(BaseDatos.getAsociadoPendiente(), chatID);
         BaseDatos.setAsociadoPendiente(-1);
     }
@@ -275,13 +262,12 @@ public class ControladorTelegram {
     //Metodos privados
 
     /**
-     *  Retorna la vista telegram vinculada al asociado.
+     * Retorna la vista telegram vinculada al asociado.
      *
-     *  @param asociado  El asociado a usar como criterio de busqueda
-     *
-     *  @return VistaTelegram de la lista de chats que está vinculado a ese Asociado
-     *  */
-    private VistaTelegram buscarVistaTelegram(Asociado asociado){
+     * @param asociado El asociado a usar como criterio de busqueda
+     * @return VistaTelegram de la lista de chats que está vinculado a ese Asociado
+     */
+    private VistaTelegram buscarVistaTelegram(Asociado asociado) {
         return chats.get(asociado);
     }
 }

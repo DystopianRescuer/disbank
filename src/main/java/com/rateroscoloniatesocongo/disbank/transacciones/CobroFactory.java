@@ -7,10 +7,10 @@ package com.rateroscoloniatesocongo.disbank.transacciones;
  */
 public class CobroFactory {
 
-    public static Cobro generaCobro(String tipo, double cantidad){
+    public static Cobro generaCobro(String tipo, double cantidad) {
         return switch (tipo) {
             case "terminal" -> new CobroFisico(cantidad, "Cobro");
-            case "Link" -> new CobroLink(cantidad, "Cobro");
+            case "link" -> new CobroLink(cantidad, "Cobro");
             default -> throw new IllegalArgumentException(tipo + " no es un cobro válido");
         };
     }

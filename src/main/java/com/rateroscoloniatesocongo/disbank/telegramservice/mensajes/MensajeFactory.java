@@ -1,7 +1,6 @@
 package com.rateroscoloniatesocongo.disbank.telegramservice.mensajes;
 
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
-
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 
 
@@ -15,7 +14,7 @@ import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
  * construccion del mensaje:
  * <p>
  * - Cobro : Para cobros con tarjeta o por terminal, dependiendo de la modalidad se envía una ID de transaccion y (Opcional)un link
- *           de cobro
+ * de cobro
  * <p>
  * - Comandos : Para enviarle al asociado la lista de comandos que puede utilizar
  * <p>
@@ -31,27 +30,19 @@ import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
  * , esto para darle posible flexibilidad a futuro al código
  * <p>
  * Todos los metodos retornan un null si no son llamados con los argumentos correctos
- *
  */
 public class MensajeFactory {
 
-    public static Mensaje nuevoMensaje(String tipo, Asociado asociado, Object contenido){
-
-        if (tipo.equals("Cobro") || tipo.equals("Estado")) {
-            Transaccion transaccion = (Transaccion) contenido;
-            return switch (tipo){
-                case "Cobro" -> new MensajeCobro(asociado, transaccion.getLink(), transaccion.getIdTransaccion());
-                case "Estado" -> new MensajeEstado(asociado, transaccion.getIdTransaccion(), transaccion.getEstado());
-                default -> null;
-            };
-        }else{
-            //Futuros mensajes que reciban otro contenido
-        }
-        return null;
+    public static Mensaje nuevoMensaje(String tipo, Asociado asociado, Object contenido) {
+        Transaccion transaccion = (Transaccion) contenido;
+        return switch (tipo) {
+            case "Cobro" -> new MensajeCobro(asociado, transaccion.getLink(), transaccion.getIdTransaccion());
+            case "Estado" -> new MensajeEstado(asociado, transaccion.getIdTransaccion(), transaccion.getEstado());
+            default -> null;
+        };
     }
 
-    public static Mensaje nuevoMensaje(String tipo, Asociado asociado){
-
+    public static Mensaje nuevoMensaje(String tipo, Asociado asociado) {
         return switch (tipo) {
             case "Comandos" -> new MensajeComandos(asociado);
             case "Registro" -> new MensajeRegistro(asociado);
@@ -59,13 +50,11 @@ public class MensajeFactory {
         };
     }
 
-    public static Mensaje nuevoMensaje(String tipo, Asociado asociado, String contenido){
-
+    public static Mensaje nuevoMensaje(String tipo, Asociado asociado, String contenido) {
         return switch (tipo) {
             case "CorteFinal" -> new MensajeCorteFinal(asociado, contenido);
             case "CortePersonal" -> new MensajeCortePersonal(asociado, contenido);
             default -> null;
         };
-
     }
 }

@@ -1,6 +1,5 @@
 package com.rateroscoloniatesocongo.disbank.transacciones;
 
-import com.rateroscoloniatesocongo.disbank.bd.BaseDatos;
 import com.rateroscoloniatesocongo.disbank.clipservice.ControladorClip;
 import com.rateroscoloniatesocongo.disbank.clipservice.excepciones.TransaccionNoRegistradaException;
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
@@ -13,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class GestorTransacciones {
     private static GestorTransacciones instance;
 
 
-    private ObservableList<Transaccion> transaccionesTotales;
+    private final ObservableList<Transaccion> transaccionesTotales;
     /**
      * Lista de transacciones pendientes
      */
@@ -90,46 +90,50 @@ public class GestorTransacciones {
      * del objeto Transaccion con ayuda del controladorClip.
      *
      * @param asociado el asociado que está solicitando la transaccion
-     * @param cobro el objeto Cobro que compondrá a la nueva transaccion
-     * @return Una
+     * @param cobro    el objeto Cobro que compondrá a la nueva transaccion
      */
-    public String nuevaTransaccion(Asociado asociado, Cobro cobro) {
+    public void nuevaTransaccion(Asociado asociado, Cobro cobro) throws TransaccionNoRegistradaException {
         // Crea el objeto transacción
         Transaccion transaccion = new Transaccion(asociado, cobro);
         // Se la da a Clip y espera la respuesta positiva de este
         try {
             transaccion.setLink(controladorClip.solicitarTransaccion(transaccion));
-        } catch (TransaccionNoRegistradaException e) {
-            //mandar mensaje a telegram de que no se pudo registrar la transaccion
-            return "No se pudo registrar la transaccion."; // este es mientras hacemos el pquete
-        } catch (IOException | InterruptedException e) {
+        }catch (IOException | InterruptedException e) {
             Avisador.mandarErrorFatal(e.getMessage());
         }
         // Si esto ocurrió correctamente entonces registra la transacción en pendientes
         pendientes.add(transaccion);
-        try{
+        try {
             controladorTelegram.enviarMensaje(MensajeFactory.nuevoMensaje("Cobro", asociado, transaccion));
-        }catch (ErrorEnConexionException e) {
+        } catch (ErrorEnConexionException e) {
             Avisador.mandarErrorFatal(e.getMessage());
         }
         asociado.agregarTransaccionDia(transaccion);
         transaccionesTotales.add(transaccion);
-        return "";
+        System.out.println(Arrays.toString(transaccionesTotales.toArray()));
     }
 
+    /**
+     * Regresa la lista de Transacciones de todo el día
+     * @return la lista de transacciones de todo el día
+     */
     public ObservableList<Transaccion> getTransaccionesTotales() {
         return transaccionesTotales;
     }
 
     /**
-     * @param transaccion
+     * Actualiza el estado de una transaccion
+     *
+     * @param transaccion transaccion a actualizar
      */
     public void actualizarEstado(Transaccion transaccion) {
-        try{
+        System.out.println("Actualizando estado desde Gestor de Transacciones");
+        try {
             controladorTelegram.enviarMensaje(MensajeFactory.nuevoMensaje("Estado", transaccion.getAsociado(), transaccion));
-        }catch(ErrorEnConexionException e){
+            System.out.println(transaccion.getEstado());
+            System.out.println(MensajeFactory.nuevoMensaje("Estado", transaccion.getAsociado(), transaccion).darMensaje());
+        } catch (ErrorEnConexionException e) {
             Avisador.mandarErrorFatal(e.getMessage());
-
         }
         pendientes.remove(transaccion);
     }

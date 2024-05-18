@@ -1,55 +1,59 @@
 package com.rateroscoloniatesocongo.disbank.bd;
 
-import java.util.HashMap;
-import java.util.Iterator;
-
 import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.SolicitudNoEncontradaException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 
 /**
  * Proyecto 2 del curso Modelado y Programacion
  * Clase BaseDatos que modela la base de datos de disbank
+ *
  * @author Rateros Colonia Tesocongo
  * @version Version 1.
  */
 public class BaseDatos {
     // Cada cosa de aquí es estática
 
-    /**Lista de asociados registrados*/
-    public static ObservableList<Asociado> asociados = FXCollections.observableArrayList();
-    /**Map que relaciona el ChatId con su Asociado */
-    public static HashMap<String, Asociado> chatIdAsociado = new HashMap<>();
+    /**
+     * Lista de asociados registrados
+     */
+    public static final ObservableList<Asociado> asociados = FXCollections.observableArrayList();
+    /**
+     * Map que relaciona el ChatId con su Asociado
+     */
+    public static final HashMap<String, Asociado> chatIdAsociado = new HashMap<>();
     //Para tener claro cual es el nuevo asociado pendiente de asignacion de chatID
     public static int asociadoPendiente;
 
     /**
      * Busca y regresa un asociado mediante su chatId
-     * @param chatId
+     *
+     * @param chatId el id del chat del asociado a buscar
      * @return asociado buscado o null si no esta registrado.
      */
-    public static Asociado buscarPorChatId(String chatId){
+    public static Asociado buscarPorChatId(String chatId) {
         return chatIdAsociado.get(chatId);
     }
 
     /**
      * Le asocia su chatId a un asociado registrado por el admin
+     *
      * @param idAsociado id del asociado (int)
-     * @param chatId chatId que se le asignara al Asociado
-     * @return true si existe el asociado con id = idAsociado, 
-     *         false en otro caso
+     * @param chatId     chatId que se le asignara al Asociado
      */
-    public static boolean setChatId(int idAsociado, String chatId){
-        for(Asociado a : asociados){
-            if(a.getId() == idAsociado){
+    public static void setChatId(int idAsociado, String chatId) {
+        for (Asociado a : asociados) {
+            if (a.getId() == idAsociado) {
                 a.setChatId(chatId);
                 chatIdAsociado.put(chatId, a);
-                return true;
+                return;
             }
         }
-        return false;
     }
 
     public static ObservableList<Asociado> getAsociados() {
@@ -58,17 +62,23 @@ public class BaseDatos {
 
     /**
      * Regresa un iterador para iterar a los asociados
+     *
      * @return iterator.
      */
-    public static Iterator<Asociado> getIterador(){
+    public static Iterator<Asociado> getIterador() {
         return asociados.iterator();
     }
 
     /**
      * Metodo que agrega un asociado a la bd.
-     * @param a asociado que se agregara. (Asociado)
+     *
+     * @param nombre          nombre del Asociado
+     * @param cuenta          numero de cuenta del Asociado
+     * @param banco           nombre del banco del Asociado
+     * @param nombreComercio  nombre de su local/puesto
+     * @param usuarioTelegram usuario de Telegram
      */
-    public static void agregarAsociado(String nombre, String cuenta, String banco, String nombreComercio, String usuarioTelegram){
+    public static void agregarAsociado(String nombre, String cuenta, String banco, String nombreComercio, String usuarioTelegram) {
         Asociado asociado = new Asociado(nombre, cuenta, banco, nombreComercio, usuarioTelegram);
         int index = asociados.isEmpty() ? 0 : asociados.indexOf(asociados.getLast()) + 1;
         asociado.setId(index);
@@ -78,15 +88,16 @@ public class BaseDatos {
 
     /**
      * Borra el asociado de la bd.
+     *
      * @param a asociado que se quiere borrar. (Asociado)
      */
-    public static void borrarAsociado(Asociado a){
+    public static void borrarAsociado(Asociado a) {
         chatIdAsociado.remove(a.getChatId());
         asociados.remove(a.getId());
     }
 
     public static int getAsociadoPendiente() throws SolicitudNoEncontradaException {
-        if (asociadoPendiente == -1){
+        if (asociadoPendiente == -1) {
             throw new SolicitudNoEncontradaException("No hay solicitud de registro pendiente");
         }
         return asociadoPendiente;
