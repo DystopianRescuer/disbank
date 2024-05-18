@@ -5,12 +5,12 @@ import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 /**
  * El mensaje para el corte final del día
  */
-public class MensajeCorteFinal extends Mensaje{
+public class MensajeCorteFinal extends Mensaje {
 
     static final String mensaje = "Tu corte final del dia de hoy:\n %s";
-    String infoCorte;
+    final String infoCorte;
 
-	MensajeCorteFinal(Asociado asociado, String infoCorte){
+    MensajeCorteFinal(Asociado asociado, String infoCorte) {
         this.asociado = asociado;
         this.infoCorte = infoCorte;
     }
