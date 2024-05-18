@@ -1,8 +1,17 @@
 API Clip
-- Tests para agregar y borrar transacciones
+- Test para borrar requests del webhook
+- Test para recibir requests del webhook
+- Test para recibir confirmaciones de transacciones
+- Test para generar transacciones
 
 API Telegram
-- Test para el offset
-- Test para enviar mensajes
-- Test para recibir mensajes
-- Test para generar vista telegram
+- Test marcopolo
+
+Base Datos
+Antes que nada, un metodo que por reflexion la pueda resetear
+- TestBuscarPorChatID
+- TestSetChatID
+- TestAgregarAsociado
+- TestBorrarAsociado
+- TestBorrarYAgregarAsociado
+- TestGetAsociadoPendiente
