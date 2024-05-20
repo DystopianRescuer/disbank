@@ -55,6 +55,30 @@ public class TestAPITelegram {
         ConfigReader.setRuta("config/config.properties");
     }
 
+    private void vaciarUpdates(){
+        iniciarConfigReader();
+        try{
+            VistaTelegram.setTokenBot(ConfigReader.getField("telegram.key"));
+        }catch(Exception e){
+            Assert.fail();
+        }
+
+        JSONArray updates= null;
+        try{
+            updates = VistaTelegram.recibirActualizacion(0);
+        }catch(Exception e){
+            Assert.fail();
+        }
+
+        JSONObject ultimoUpdate = updates.getJSONObject(updates.length()-1);
+
+        try{
+            VistaTelegram.recibirActualizacion(ultimoUpdate.getInt("update_id"));
+        }catch(Exception e){
+            Assert.fail();
+        }
+    }
+
     /**
      * Para probar si el metodo setToken funciona correctamente
      *
@@ -114,25 +138,45 @@ public class TestAPITelegram {
      *  Verifica que la conexion con el bot funciona para recibir mensajes
      *  */
     @Test public void TestRecibirMensajes(){
+        Scanner standby = new Scanner(System.in);
         iniciarConfigReader();
         nullearTodo();
-        try{
-            VistaTelegram.setTokenBot(ConfigReader.getField("telegram.key"));
-        }catch(Exception e){
-            Assert.fail();
-        }
+        vaciarUpdates();
         System.out.println("Envia la letra a");
+        standby.next();
         JSONArray update=null;
         try{
             update = VistaTelegram.recibirActualizacion(0);
         }catch(Exception e){
             Assert.fail();
         }
+        System.out.println(update);
         String mensaje = update.getJSONObject(update.length()-1).getJSONObject("message").getString("text");
         Assert.assertTrue("a".equals(mensaje));
 
-        //PENDIENTE
-        //Repetir lo mismo para las letras b y c
+        System.out.println("Envia la letra b");
+        standby.next();
+        update=null;
+        try{
+            update = VistaTelegram.recibirActualizacion(0);
+        }catch(Exception e){
+            Assert.fail();
+        }
+        System.out.println(update);
+        mensaje = update.getJSONObject(update.length()-1).getJSONObject("message").getString("text");
+        Assert.assertTrue("b".equals(mensaje));
+
+        System.out.println("Envia la letra c");
+        standby.next();
+        update=null;
+        try{
+            update = VistaTelegram.recibirActualizacion(0);
+        }catch(Exception e){
+            Assert.fail();
+        }
+        System.out.println(update);
+        mensaje = update.getJSONObject(update.length()-1).getJSONObject("message").getString("text");
+        Assert.assertTrue("c".equals(mensaje));
     }
 
     /**
