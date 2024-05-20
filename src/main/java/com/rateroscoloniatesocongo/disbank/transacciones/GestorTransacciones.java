@@ -6,6 +6,7 @@ import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.modelo.Cortador;
 import com.rateroscoloniatesocongo.disbank.telegramservice.ControladorTelegram;
 import com.rateroscoloniatesocongo.disbank.telegramservice.excepciones.ErrorEnConexionException;
+import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.Mensaje;
 import com.rateroscoloniatesocongo.disbank.telegramservice.mensajes.MensajeFactory;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
 import javafx.collections.FXCollections;
@@ -127,11 +128,12 @@ public class GestorTransacciones {
      * @param transaccion transaccion a actualizar
      */
     public void actualizarEstado(Transaccion transaccion) {
-        System.out.println("Actualizando estado desde Gestor de Transacciones");
         try {
-            controladorTelegram.enviarMensaje(MensajeFactory.nuevoMensaje("Estado", transaccion.getAsociado(), transaccion));
+            Mensaje mensaje = MensajeFactory.nuevoMensaje("Estado", transaccion.getAsociado(), transaccion);
+            controladorTelegram.enviarMensaje(mensaje);
             System.out.println(transaccion.getEstado());
-            System.out.println(MensajeFactory.nuevoMensaje("Estado", transaccion.getAsociado(), transaccion).darMensaje());
+            System.out.println(mensaje);
+            Avisador.mandarMensajeRemoto(mensaje.darMensaje());
         } catch (ErrorEnConexionException e) {
             Avisador.mandarErrorFatal(e.getMessage());
         }
