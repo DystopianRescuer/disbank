@@ -137,7 +137,10 @@ public class ControladorTelegram {
     }
 
     public static void matarInstancia(){
-        ControladorTelegram.instance = null;
+        if(instance != null){
+            instance.daemon.interrupt();
+            ControladorTelegram.instance = null;
+        }
     }
 
     //Metodos para el hilo daemon
