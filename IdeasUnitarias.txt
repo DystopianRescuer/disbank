@@ -1,8 +1,0 @@
-API Clip
-- Tests para agregar y borrar transacciones
-
-API Telegram
-- Test para el offset
-- Test para enviar mensajes
-- Test para recibir mensajes
-- Test para generar vista telegram
