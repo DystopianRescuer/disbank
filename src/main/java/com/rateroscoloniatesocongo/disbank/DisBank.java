@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class DisBank extends Application {
+
     /**
      * Ruta del archivo de configuración
      */

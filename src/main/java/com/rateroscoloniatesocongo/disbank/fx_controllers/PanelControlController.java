@@ -5,6 +5,7 @@ import com.rateroscoloniatesocongo.disbank.modelo.Asociado;
 import com.rateroscoloniatesocongo.disbank.transacciones.GestorTransacciones;
 import com.rateroscoloniatesocongo.disbank.transacciones.Transaccion;
 import com.rateroscoloniatesocongo.disbank.util.Avisador;
+import com.rateroscoloniatesocongo.disbank.util.RemoteMessagePassing;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -12,6 +13,10 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.net.Socket;
 
 /**
  * Controlador de la vista del panel de control del programa
@@ -47,11 +52,12 @@ public class PanelControlController {
     @FXML
     public CheckBox comisionCheck;
     @FXML
-    public Button eliminarAsociadoBoton;
+    public Button eliminarAsociadoBoton, conectarTerminalButton;
     @FXML
     public TableColumn<Transaccion, String> columnaIdTransaccion, columnaAsociadoTransaccion, columnaTipoTransaccion, columnaEstadoTransaccion, columnaCantidadTransaccion;
     @FXML
     public TableColumn<Asociado, String> columnaIdAsociado, columnaNombreAsociado, columnaPuestoAsociado;
+    @FXML
     public PieChart ventasTipo, ventasEstado;
 
     /**
@@ -174,4 +180,16 @@ public class PanelControlController {
         transacciones.refresh();
     }
 
+    public void onConectarTerminalAttempt(ActionEvent actionEvent) {
+        conectarTerminalButton.setDisable(true);
+        String ip = JOptionPane.showInputDialog("Introduce la IP de la terminal");
+        try {
+            RemoteMessagePassing<String> server = new RemoteMessagePassing<>(new Socket(ip, 8080));
+            server.send("Conexión exitosa");
+            Avisador.setIP(ip);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Hubo un problema para conectar con la terminal");
+            conectarTerminalButton.setDisable(false);
+        }
+    }
 }
